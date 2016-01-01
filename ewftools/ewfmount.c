@@ -40,6 +40,10 @@
 #include <sys/resource.h>
 #endif
 
+#if defined( HAVE_GLOB_H )
+#include <glob.h>
+#endif
+
 #if !defined( WINAPI ) || defined( USE_CRT_FUNCTIONS )
 #if defined( TIME_WITH_SYS_TIME )
 #include <sys/time.h>
@@ -3085,13 +3089,13 @@ int main( int argc, char * const argv[] )
 	libcstring_system_character_t *mount_point             = NULL;
 	libcstring_system_character_t *option_extended_options = NULL;
 	libcstring_system_character_t *option_format           = NULL;
-	libcstring_system_character_t *program                = _LIBCSTRING_SYSTEM_STRING( "ewfmount" );
+	libcstring_system_character_t *program                 = _LIBCSTRING_SYSTEM_STRING( "ewfmount" );
 	libcstring_system_integer_t option                     = 0;
 	int number_of_filenames                                = 0;
 	int result                                             = 0;
 	int verbose                                            = 0;
 
-#if !defined( LIBCSYSTEM_HAVE_GLOB )
+#if !defined( HAVE_GLOB_H )
 	libcsystem_glob_t *glob                                = NULL;
 #endif
 
@@ -3217,7 +3221,7 @@ int main( int argc, char * const argv[] )
 	libewf_notify_set_verbose(
 	 verbose );
 
-#if !defined( LIBCSYSTEM_HAVE_GLOB )
+#if !defined( HAVE_GLOB_H )
 	if( libcsystem_glob_initialize(
 	     &glob,
 	     &error ) != 1 )
