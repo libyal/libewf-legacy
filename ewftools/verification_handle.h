@@ -155,7 +155,7 @@ struct verification_handle
 	 */
 	size_t process_buffer_size;
 
-	/* The nofication output stream
+	/* The notification output stream
 	 */
 	FILE *notify_stream;
 
