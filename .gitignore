@@ -1,16 +1,20 @@
 # Files to ignore by git
 #
-# Version: 20150725
+# Version: 20161030
 
 # Generic auto-generated build files
 *~
 *.a
+*.gcda
+*.gcno
+*.gcov
 *.la
 *.lai
 *.lib
 *.lineno
 *.lo
 *.log
+*.loT
 *.Plo
 *.Po
 *.o
@@ -35,12 +39,15 @@ stamp-h[1-9]
 /autom4te.cache/
 /build
 /compile
+/confdefs.h
+/config.cache
 /config.guess
 /config.log
 /config.rpath
 /config.status
 /config.sub
 /configure
+/conftest.c
 /depcomp
 /dist
 /install-sh
@@ -50,6 +57,7 @@ stamp-h[1-9]
 /test-driver
 /ylwrap
 /m4/codeset.m4
+/m4/extern-inline.m4
 /m4/fcntl-o.m4
 /m4/gettext.m4
 /m4/glibc2.m4
@@ -105,7 +113,6 @@ stamp-h[1-9]
 /common/config.h.in
 /common/types.h
 /dpkg/changelog
-/dpkg/copyright
 /include/libewf.h
 /include/libewf/definitions.h
 /include/libewf/features.h
@@ -158,6 +165,7 @@ stamp-h[1-9]
 /libcthreads
 /libfcache
 /libfdata
+/libfguid
 /libfvalue
 /libhmac
 /libmfdata

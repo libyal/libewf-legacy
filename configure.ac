@@ -109,6 +109,10 @@ AX_LIBMFDATA_CHECK_ENABLE
 
 dnl Check for zlib compression support
 AX_ZLIB_CHECK_ENABLE
+AX_ZLIB_CHECK_ADLER32
+AX_ZLIB_CHECK_COMPRESS2
+AX_ZLIB_CHECK_COMPRESSBOUND
+AX_ZLIB_CHECK_UNCOMPRESS
 
 dnl Check for bz2lib compression support
 AX_BZIP2_CHECK_ENABLE
@@ -250,7 +254,6 @@ AC_CONFIG_FILES([libsmdev/Makefile])
 AC_CONFIG_FILES([libsmraw/Makefile])
 AC_CONFIG_FILES([libcsystem/Makefile])
 AC_CONFIG_FILES([ewftools/Makefile])
-AC_CONFIG_FILES([ewftools-mt/Makefile])
 AC_CONFIG_FILES([ewf.net/Makefile])
 AC_CONFIG_FILES([pyewf/Makefile])
 AC_CONFIG_FILES([po/Makefile.in])
@@ -269,7 +272,6 @@ AC_CONFIG_FILES([libewf/libewf_definitions.h])
 dnl Have configure make distribution specific files
 AC_CONFIG_FILES([common/types.h])
 AC_CONFIG_FILES([dpkg/changelog])
-AC_CONFIG_FILES([dpkg/copyright])
 AC_CONFIG_FILES([ewf.net/ewf.net.rc])
 AC_CONFIG_FILES([libewf/libewf.rc])
 AC_CONFIG_FILES([pyewf/setup.py])

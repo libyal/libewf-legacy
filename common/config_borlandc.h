@@ -1,7 +1,7 @@
 /*
  * Configuration for the Borland/CodeGear C++ Builder compiler
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2017, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -22,5 +22,5 @@
 #if !defined( _CONFIG_BORLANDC_H )
 #define _CONFIG_BORLANDC_H
 
-#endif
+#endif /* !defined( _CONFIG_BORLANDC_H ) */
 

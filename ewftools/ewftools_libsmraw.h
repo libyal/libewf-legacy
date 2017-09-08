@@ -1,7 +1,7 @@
 /*
  * The internal libsmraw header
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2017, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -27,7 +27,6 @@
 #if defined( HAVE_LOCAL_LIBSMRAW )
 #include <libsmraw_definitions.h>
 #include <libsmraw_handle.h>
-#include <libsmraw_metadata.h>
 #include <libsmraw_support.h>
 #include <libsmraw_types.h>
 

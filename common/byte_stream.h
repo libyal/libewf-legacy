@@ -1,7 +1,7 @@
 /*
  * Byte stream functions
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2017, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -253,5 +253,5 @@ typedef union byte_stream_float64
 }
 #endif
 
-#endif
+#endif /* !defined( _BYTE_STREAM_H ) */
 

@@ -1,71 +1,164 @@
 #!/bin/sh
 # Script to generate ./configure using the autotools
 #
-# Version: 20130509
+# Version: 20170724
 
 EXIT_SUCCESS=0;
 EXIT_FAILURE=1;
 
-ACLOCAL="/usr/bin/aclocal";
-AUTOCONF="/usr/bin/autoconf";
-AUTOHEADER="/usr/bin/autoheader";
-AUTOMAKE="/usr/bin/automake";
-AUTOPOINT="/usr/bin/autopoint";
-AUTORECONF="/usr/bin/autoreconf";
-LIBTOOLIZE="/usr/bin/libtoolize";
+BINDIR="/usr/bin";
 
-if [ -x "${AUTORECONF}" ];
+if ! test -x "${BINDIR}/aclocal";
+then
+	BINDIR="/usr/local/bin";
+fi
+if ! test -x "${BINDIR}/aclocal";
+then
+	BINDIR="/usr/local/bin";
+fi
+if ! test -x "${BINDIR}/aclocal";
+then
+	# Default location of MacPorts installed binaries.
+	BINDIR="/opt/local/bin";
+fi
+if ! test -x "${BINDIR}/aclocal";
+then
+	# Default location of MSYS-MinGW installed binaries.
+	BINDIR="/mingw/bin";
+fi
+if ! test -x "${BINDIR}/aclocal";
+then
+	# Default location of 32-bit MSYS2-MinGW installed binaries.
+	BINDIR="/mingw32/bin";
+fi
+if ! test -x "${BINDIR}/aclocal";
+then
+	# Default location of 64-bit MSYS2-MinGW installed binaries.
+	BINDIR="/mingw64/bin";
+fi
+
+if ! test -x "${BINDIR}/aclocal";
+then
+	echo "Unable to find autotools";
+
+	exit ${EXIT_FAILURE};
+fi
+
+ACLOCAL="${BINDIR}/aclocal";
+AUTOCONF="${BINDIR}/autoconf";
+AUTOHEADER="${BINDIR}/autoheader";
+AUTOMAKE="${BINDIR}/automake";
+AUTOPOINT="${BINDIR}/autopoint";
+AUTORECONF="${BINDIR}/autoreconf";
+LIBTOOLIZE="${BINDIR}/libtoolize";
+PKGCONFIG="${BINDIR}/pkg-config";
+
+if test "${OSTYPE}" = "msys";
+then
+	# Work-around for autopoint failing to detect gettext version
+	# using func_trace (which is not available) on MSYS by writing
+	# the gettext version to intl/VERSION.
+	if ! test -d intl;
+	then
+		mkdir intl;
+	fi
+	GETTEXT_VERSION=`gettext --version | head -n1 | sed 's/^.* //'`;
+
+	echo "gettext-${GETTEXT_VERSION}" > intl/VERSION;
+
+elif ! test -x "${PKGCONFIG}";
+then
+	echo "Unable to find: pkg-config";
+
+	exit ${EXIT_FAILURE};
+fi
+
+if test -x "${AUTORECONF}";
 then
 	${AUTORECONF} --force --install
+	if test $? -ne 0;
+	then
+		exit $?;
+	fi
 else
-	if [ ! -x "${ACLOCAL}" ];
+	if ! test -x "${ACLOCAL}";
 	then
 		echo "Unable to find: aclocal";
 
-		echo ${EXIT_FAILURE};
+		exit ${EXIT_FAILURE};
 	fi
 
-	if [ ! -x "${AUTOCONF}" ];
+	if ! test -x "${AUTOCONF}";
 		then
 		echo "Unable to find: autoconf";
 
-		echo ${EXIT_FAILURE};
+		exit ${EXIT_FAILURE};
 	fi
 
-	if [ ! -x "${AUTOHEADER}" ];
+	if ! test -x "${AUTOHEADER}";
 	then
 		echo "Unable to find: autoheader";
 
-		echo ${EXIT_FAILURE};
+		exit ${EXIT_FAILURE};
 	fi
 
-	if [ ! -x "${AUTOMAKE}" ];
+	if ! test -x "${AUTOMAKE}";
 	then
 		echo "Unable to find: automake";
 
-		echo ${EXIT_FAILURE};
+		exit ${EXIT_FAILURE};
 	fi
 
-	if [ ! -x "${AUTOPOINT}" ];
+	if ! test -x "${AUTOPOINT}";
 	then
 		echo "Unable to find: autopoint";
 
-		echo ${EXIT_FAILURE};
+		exit ${EXIT_FAILURE};
 	fi
 
-	if [ ! -x "${LIBTOOLIZE}" ];
+	if ! test -x "${LIBTOOLIZE}";
 	then
 		echo "Unable to find: libtoolize";
 
-		echo ${EXIT_FAILURE};
+		exit ${EXIT_FAILURE};
 	fi
 
-	${AUTOPOINT} --force
-	${ACLOCAL} --force -I m4
-	${LIBTOOLIZE} --force
-	${AUTOHEADER} --force
-	${AUTOCONF} --force
-	${AUTOMAKE} --force --add-missing
+	${AUTOPOINT} --force;
+	if test $? -ne 0;
+	then
+		exit $?;
+	fi
+
+	${ACLOCAL} --force -I m4;
+	if test $? -ne 0;
+	then
+		exit $?;
+	fi
+
+	${LIBTOOLIZE} --force;
+	if test $? -ne 0;
+	then
+		exit $?;
+	fi
+
+	${AUTOHEADER} --force;
+	if test $? -ne 0;
+	then
+		exit $?;
+	fi
+
+	${AUTOCONF} --force;
+	if test $? -ne 0;
+	then
+		exit $?;
+	fi
+
+	${AUTOMAKE} --force --add-missing;
+	if test $? -ne 0;
+	then
+		exit $?;
+	fi
+
 fi
 
 exit ${EXIT_SUCCESS};

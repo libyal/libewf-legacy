@@ -1,39 +1,80 @@
 Source: libewf
-Section: unknown
 Priority: extra
 Maintainer: Joachim Metz <joachim.metz@gmail.com>
-Build-Depends: debhelper (>= 7), autotools-dev, zlib1g-dev, libssl-dev, libfuse-dev, python-dev
-Standards-Version: 3.8.3
-Homepage: http://code.google.com/p/libewf/
+Build-Depends: debhelper (>= 9), dh-autoreconf, pkg-config, zlib1g-dev, libssl-dev, libfuse-dev, python-dev, python3-dev
+Standards-Version: 3.9.5
+Section: libs
+Homepage: https://github.com/libyal/libewf
 
 Package: libewf
-Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Suggests: libewf-dbg
 Description: Library to access the Expert Witness Compression Format (EWF)
  libewf is a library to access the Expert Witness Compression Format (EWF).
- libewf allows you to read media information of EWF files in the SMART (EWF-S01)
- format and the EnCase (EWF-E01, EWF-L01, EWF2-Ex01 and EWF2-Lx01) formats.
- Supports files created by EnCase 1 to 7, linen 5 to 7 and FTK Imager.
+
+Package: libewf2
+Section: libs
+Architecture: any
+Depends: libewf (= ${binary:Version}), ${misc:Depends}
+Description: Library to access the Expert Witness Compression Format (EWF)
+ libewf is a library to access the Expert Witness Compression Format (EWF).
+
+Package: libewf-dbg
+Architecture: any
+Section: debug
+Depends: libewf (= ${binary:Version}), ${misc:Depends}
+Description: Debugging symbols for libewf
+ Debugging symbols for libewf.
 
 Package: libewf-dev
 Section: libdevel
 Architecture: any
-Depends: libewf (= ${Source-Version})
+Depends: libewf (= ${binary:Version}), ${misc:Depends}
 Description: Header files and libraries for developing applications for libewf
  Header files and libraries for developing applications for libewf.
 
 Package: libewf-tools
 Section: utils
 Architecture: any
-Depends: libewf (= ${Source-Version}), ${shlibs:Depends}
+Depends: libewf (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
 Description: Several tools for reading and writing EWF files
  Several tools for reading and writing EWF files.
+
+Package: libewf-tools-dbg
+Section: debug
+Architecture: any
+Depends: libewf-tools (= ${binary:Version}), ${misc:Depends}
+Description: Debugging symbols for libewf-tools
+ Debugging symbols for libewf-tools.
 
 Package: libewf-python
 Section: python
 Architecture: any
-Depends: libewf (= ${Source-Version}), ${shlibs:Depends}, ${python:Depends}
-Description: Python bindings for libewf
- Python bindings for libewf.
+Depends: libewf (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Suggests: libewf-python-dbg
+Description: Python 2 bindings for libewf
+ Python 2 bindings for libewf.
+
+Package: libewf-python-dbg
+Section: debug
+Architecture: any
+Depends: libewf-python (= ${binary:Version}), ${misc:Depends}
+Description: Debugging symbols for libewf-python
+ Debugging symbols for libewf-python.
+
+Package: libewf-python3
+Section: python
+Architecture: any
+Depends: libewf (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Suggests: libewf-python3-dbg
+Description: Python 3 bindings for libewf
+ Python 3 bindings for libewf.
+
+Package: libewf-python3-dbg
+Section: debug
+Architecture: any
+Depends: libewf-python3 (= ${binary:Version}), ${misc:Depends}
+Description: Debugging symbols for libewf-python3
+ Debugging symbols for libewf-python3.
 
