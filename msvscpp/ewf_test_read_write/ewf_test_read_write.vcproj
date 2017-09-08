@@ -2,11 +2,11 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="zlib_dll"
-	ProjectGUID="{33D32A22-B3DF-4963-B512-BAAC8FB4785D}"
-	RootNamespace="zlib_dll"
+	Name="ewf_test_read_write"
+	ProjectGUID="{298FAA87-9F70-4B2A-ABF1-07D91AB677B6}"
+	RootNamespace="ewf_test_read_write"
 	Keyword="Win32Proj"
-	TargetFrameworkVersion="196613"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -20,7 +20,7 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2"
+			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -41,14 +41,11 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
-				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;ZLIB_DLL"
+				AdditionalIncludeDirectories="..\..\include;..\..\common;..\..\libcstring;..\..\libcerror;..\..\libclocale;..\..\libcnotify;..\..\libuna;..\..\libcfile;..\..\libcsystem"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;HAVE_LOCAL_LIBCSTRING;HAVE_LOCAL_LIBCERROR;HAVE_LOCAL_LIBCLOCALE;HAVE_LOCAL_LIBCNOTIFY;HAVE_LOCAL_LIBUNA;HAVE_LOCAL_LIBCFILE;HAVE_LOCAL_LIBCSYSTEM;LIBEWF_DLL_IMPORT"
 				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				DebugInformationFormat="0"
+				WarningLevel="4"
+				CompileAs="1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -61,15 +58,14 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\zlib.dll"
 				LinkIncremental="1"
-				GenerateDebugInformation="false"
-				SubSystem="0"
-				OptimizeReferences="0"
-				EnableCOMDATFolding="0"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				ImportLibrary="$(TargetDir)zlib.lib"
+				AdditionalLibraryDirectories="&quot;$(OutDir)&quot;"
+				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="2"
+				DataExecutionPrevention="2"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -97,9 +93,8 @@
 			Name="VSDebug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2"
+			ConfigurationType="1"
 			CharacterSet="1"
-			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -119,15 +114,14 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;ZLIB_DLL"
+				AdditionalIncludeDirectories="..\..\include;..\..\common;..\..\libcstring;..\..\libcerror;..\..\libclocale;..\..\libcnotify;..\..\libuna;..\..\libcfile;..\..\libcsystem"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;HAVE_LOCAL_LIBCSTRING;HAVE_LOCAL_LIBCERROR;HAVE_LOCAL_LIBCLOCALE;HAVE_LOCAL_LIBCNOTIFY;HAVE_LOCAL_LIBUNA;HAVE_LOCAL_LIBCFILE;HAVE_LOCAL_LIBCSYSTEM;LIBEWF_DLL_IMPORT"
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="true"
 				RuntimeLibrary="3"
-				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
+				WarningLevel="4"
 				DebugInformationFormat="3"
+				CompileAs="1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -140,15 +134,15 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\zlib.dll"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;$(OutDir)&quot;"
 				GenerateDebugInformation="true"
-				SubSystem="0"
-				OptimizeReferences="0"
-				EnableCOMDATFolding="0"
+				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
 				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				ImportLibrary="$(TargetDir)zlib.lib"
+				DataExecutionPrevention="1"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -182,63 +176,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\..\zlib\adler32.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\compress.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\crc32.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\deflate.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\gzclose.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\gzlib.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\gzread.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\gzwrite.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\infback.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\inffast.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\inflate.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\inftrees.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\trees.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\uncompr.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\zutil.c"
+				RelativePath="..\..\tests\ewf_test_read_write.c"
 				>
 			</File>
 		</Filter>
@@ -248,47 +186,23 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\..\zlib\crc32.h"
+				RelativePath="..\..\tests\ewf_test_definitions.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\zlib\deflate.h"
+				RelativePath="..\..\tests\ewf_test_libcerror.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\zlib\gzguts.h"
+				RelativePath="..\..\tests\ewf_test_libcstring.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\zlib\inffast.h"
+				RelativePath="..\..\tests\ewf_test_libcsystem.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\zlib\inffixed.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\inflate.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\inftrees.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\trees.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\zconf.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\zlib.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\zlib\zutil.h"
+				RelativePath="..\..\tests\ewf_test_libewf.h"
 				>
 			</File>
 		</Filter>
@@ -297,10 +211,6 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-			<File
-				RelativePath="..\..\..\zlib\win32\zlib1.rc"
-				>
-			</File>
 		</Filter>
 	</Files>
 	<Globals>

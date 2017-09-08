@@ -1,14 +1,22 @@
 MSVSCPP_FILES = \
-	dokan_dll/dokan_dll.vcproj \
+	dokan/dokan.vcproj \
+	ewf.net/ewf.net.vcproj \
+	ewf_test_glob/ewf_test_glob.vcproj \
+	ewf_test_read/ewf_test_read.vcproj \
+	ewf_test_read_write/ewf_test_read_write.vcproj \
+	ewf_test_read_write_delta/ewf_test_read_write_delta.vcproj \
+	ewf_test_seek/ewf_test_seek.vcproj \
+	ewf_test_truncate/ewf_test_truncate.vcproj \
+	ewf_test_write/ewf_test_write.vcproj \
+	ewf_test_write_chunk/ewf_test_write_chunk.vcproj \
 	ewfacquire/ewfacquire.vcproj \
 	ewfacquirestream/ewfacquirestream.vcproj \
-	ewfacquirestream-mt/ewfacquirestream-mt.vcproj \
+	ewfdebug/ewfdebug.vcproj \
 	ewfexport/ewfexport.vcproj \
 	ewfinfo/ewfinfo.vcproj \
 	ewfmount/ewfmount.vcproj \
 	ewfrecover/ewfrecover.vcproj \
 	ewfverify/ewfverify.vcproj \
-	ewf.net/ewf.net_dll.vcproj \
 	libbfio/libbfio.vcproj \
 	libcaes/libcaes.vcproj \
 	libcdata/libcdata.vcproj \
@@ -22,7 +30,7 @@ MSVSCPP_FILES = \
 	libcstring/libcstring.vcproj \
 	libcsystem/libcsystem.vcproj \
 	libcthreads/libcthreads.vcproj \
-	libewf_dll/libewf_dll.vcproj \
+	libewf/libewf.vcproj \
 	libfcache/libfcache.vcproj \
 	libfdata/libfdata.vcproj \
 	libfvalue/libfvalue.vcproj \
@@ -33,20 +41,11 @@ MSVSCPP_FILES = \
 	libsmraw/libsmraw.vcproj \
 	libuna/libuna.vcproj \
 	pyewf/pyewf.vcproj \
-	zlib_dll/zlib_dll.vcproj \
+	zlib/zlib.vcproj \
 	libewf.sln
 
-SCRIPT_FILES = \
-	scripts/vs2008_x64.sh \
-	scripts/vs2008_x64_sln.sed \
-	scripts/vs2008_x64_vcproj.sed \
-	scripts/vs2010_x64.sh \
-	scripts/vs2010_x64_sln.sed \
-	scripts/vs2010_x64_vcxproj.sed
-
 EXTRA_DIST = \
-	$(MSVSCPP_FILES) \
-	$(SCRIPT_FILES)
+	$(MSVSCPP_FILES)
 
 MAINTAINERCLEANFILES = \
 	Makefile.in

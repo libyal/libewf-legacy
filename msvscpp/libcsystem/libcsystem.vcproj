@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="libcsystem"
-	ProjectGUID="{A2B861D5-6751-43A9-B085-8D48F8754AC5}"
+	ProjectGUID="{9293C42D-9CC9-446C-B783-718FFA1B6685}"
 	RootNamespace="libcsystem"
 	TargetFrameworkVersion="131072"
 	>
@@ -41,10 +41,8 @@
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..\..\include;..\..\common;..\..\libcstring;..\..\libcerror;..\..\libclocale;..\..\libcnotify;..\..\libuna"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_LOCAL_LIBCSTRING;HAVE_LOCAL_LIBCERROR;HAVE_LOCAL_LIBCLOCALE;HAVE_LOCAL_LIBCNOTIFY;HAVE_LOCAL_LIBUNA;HAVE_LOCAL_LIBCSYSTEM"
-				SmallerTypeCheck="false"
 				RuntimeLibrary="2"
 				WarningLevel="4"
-				WarnAsError="false"
 				CompileAs="1"
 			/>
 			<Tool
@@ -58,7 +56,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\libcsystem.lib"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
 				ModuleDefinitionFile=""
 				IgnoreAllDefaultLibraries="false"
 			/>
@@ -109,7 +107,6 @@
 				SmallerTypeCheck="true"
 				RuntimeLibrary="3"
 				WarningLevel="4"
-				WarnAsError="false"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -124,7 +121,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\libcsystem.lib"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
 				ModuleDefinitionFile=""
 				IgnoreAllDefaultLibraries="false"
 			/>
