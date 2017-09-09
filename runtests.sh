@@ -176,7 +176,7 @@ run_setup_py_tests()
 {
 	PYTHON=$1;
 
-	${PYTHON} setup.py build;
+	(cd pyewf && ${PYTHON} setup.py build);
 	RESULT=$?;
 
 	if test ${RESULT} -ne ${EXIT_SUCCESS};
@@ -194,14 +194,6 @@ echo "${CONFIGURE_HELP}" | grep -- '--enable-wide-character-type' > /dev/null;
 
 HAVE_ENABLE_WIDE_CHARACTER_TYPE=$?;
 
-echo "${CONFIGURE_HELP}" | grep -- '--with-zlib' > /dev/null;
-
-HAVE_WITH_ZLIB=$?;
-
-echo "${CONFIGURE_HELP}" | grep -- '--with-openssl' > /dev/null;
-
-HAVE_WITH_OPENSSL=$?;
-
 echo "${CONFIGURE_HELP}" | grep -- '--enable-python' > /dev/null;
 
 HAVE_ENABLE_PYTHON=$?;
@@ -216,42 +208,6 @@ RESULT=$?;
 if test ${RESULT} -ne ${EXIT_SUCCESS};
 then
 	exit ${EXIT_FAILURE};
-fi
-
-if test ${HAVE_WITH_ZLIB} -eq 0;
-then
-	# Test "./configure && make && make check" with fallback zlib implementation.
-
-	run_configure_make_check "--with-zlib=no";
-	RESULT=$?;
-
-	if test ${RESULT} -ne ${EXIT_SUCCESS};
-	then
-		exit ${EXIT_FAILURE};
-	fi
-fi
-
-if test ${HAVE_WITH_OPENSSL} -eq 0;
-then
-	# Test "./configure && make && make check" with fallback crypto implementation.
-
-	run_configure_make_check "--with-openssl=no";
-	RESULT=$?;
-
-	if test ${RESULT} -ne ${EXIT_SUCCESS};
-	then
-		exit ${EXIT_FAILURE};
-	fi
-
-	# Test "./configure && make && make check" with non-EVP openssl implementation.
-
-	run_configure_make_check "--enable-openssl-evp-cipher=no --enable-openssl-evp-md=no";
-	RESULT=$?;
-
-	if test ${RESULT} -ne ${EXIT_SUCCESS};
-	then
-		exit ${EXIT_FAILURE};
-	fi
 fi
 
 if test ${HAVE_ENABLE_PYTHON} -eq 0 && test -n "${PYTHON_CONFIG}";
@@ -273,65 +229,7 @@ then
 		fi
 		export PYTHON_VERSION=;
 
-		run_configure_make "--enable-python2";
-		RESULT=$?;
-
-		if test ${RESULT} -ne ${EXIT_SUCCESS};
-		then
-			exit ${EXIT_FAILURE};
-		fi
-
-		if test -f "setup.py" && ! run_setup_py_tests ${PYTHON2};
-		then
-			exit ${EXIT_FAILURE};
-		fi
-	fi
-
-	# Test with Python 3.
-	PYTHON3=`which python3 2> /dev/null`;
-
-        # Note that "test -x" on Mac OS X will succeed if the argument is not set.
-	if test ! -z ${PYTHON3} && test -x ${PYTHON3};
-	then
-		export PYTHON_VERSION=3;
-
-		run_configure_make_check_python "--enable-python";
-		RESULT=$?;
-
-		if test ${RESULT} -ne ${EXIT_SUCCESS};
-		then
-			exit ${EXIT_FAILURE};
-		fi
-		export PYTHON_VERSION=;
-
-		run_configure_make "--enable-python3";
-		RESULT=$?;
-
-		if test ${RESULT} -ne ${EXIT_SUCCESS};
-		then
-			exit ${EXIT_FAILURE};
-		fi
-
-		if test -f "setup.py" && ! run_setup_py_tests ${PYTHON3};
-		then
-			exit ${EXIT_FAILURE};
-		fi
-	fi
-
-	# Test with the default Python version.
-	if test -z ${PYTHON2} && test -z ${PYTHON3};
-	then
-		run_configure_make_check_python "--enable-python";
-		RESULT=$?;
-
-		if test ${RESULT} -ne ${EXIT_SUCCESS};
-		then
-			exit ${EXIT_FAILURE};
-		fi
-
-		PYTHON=`which python 2> /dev/null`;
-
-		if test -f "setup.py" && ! run_setup_py_tests ${PYTHON};
+		if test -f "pyewf/setup.py" && ! run_setup_py_tests ${PYTHON2};
 		then
 			exit ${EXIT_FAILURE};
 		fi

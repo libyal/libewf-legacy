@@ -307,8 +307,18 @@ int main( int argc, char * const argv[] )
 
 		goto on_error;
 	}
-	argv_filenames      = glob->result;
-	number_of_filenames = glob->number_of_results;
+	if( libcsystem_glob_get_results(
+	     glob,
+	     &number_of_filenames,
+	     (system_character_t ***) &argv_filenames,
+	     &error ) != 1 )
+	{
+		fprintf(
+		 stderr,
+		 "Unable to retrieve glob results.\n" );
+
+		goto on_error;
+	}
 #else
 	argv_filenames      = &( argv[ optind ] );
 	number_of_filenames = argc - optind;

@@ -31,7 +31,6 @@ environment:
     platform: Win32
     configuration: Release
   - TARGET: python27
-  - TARGET: python36
   - TARGET: cygwin
   - TARGET: cygwin64
   - TARGET: mingw
@@ -73,26 +72,19 @@ build_script:
     C:\Python27\python.exe ..\vstools\scripts\msvscpp-convert.py --output-format 2017 msvscpp\libewf.sln &&
     msbuild vs2017\libewf.sln /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" )
 - cmd: if [%TARGET%]==[python27] (
-    C:\Python27\python.exe pyewf\setup.py bdist_msi )
-- cmd: if [%TARGET%]==[python36] (
-    C:\Python36\python.exe pyewf\setup.py bdist_msi )
+    cd pyewf && C:\Python27\python.exe setup.py bdist_msi )
 - cmd: if [%TARGET%]==[cygwin] (
-    xcopy /q /s C:\projects\libewf C:\cygwin\home\appveyor\ &&
-    C:\cygwin\bin\bash -e -l -c "cd libewf" &&
-    C:\cygwin\bin\bash -e -l -c "./synclibs.sh && ./autogen.sh" )
+    xcopy /i /q /s C:\projects\libewf-legacy C:\cygwin\home\appveyor\libewf-legacy &&
+    C:\cygwin\bin\bash -e -l -c "cd libewf-legacy && ./synclibs.sh && ./autogen.sh" )
 - cmd: if [%TARGET%]==[cygwin64] (
-    xcopy /q /s C:\projects\libewf C:\cygwin64\home\appveyor\ &&
-    C:\cygwin64\bin\bash -e -l -c "cd libewf" &&
-    C:\cygwin64\bin\bash -e -l -c "./synclibs.sh && ./autogen.sh" )
+    xcopy /i /q /s C:\projects\libewf-legacy C:\cygwin64\home\appveyor\libewf-legacy &&
+    C:\cygwin64\bin\bash -e -l -c "cd libewf-legacy && ./synclibs.sh && ./autogen.sh" )
 - cmd: if [%TARGET%]==[mingw] (
-    xcopy /q /s C:\projects\libewf C:\MinGW\msys\1.0\home\appveyor\ &&
-    C:\MinGW\msys\1.0\bin\bash -e -l -c "cd libewf" &&
-    C:\MinGW\msys\1.0\bin\bash -e -l -c "sed 's/@VERSION@/0.29/g' m4/pkg.m4.in > m4/pkg.m4" &&
-    C:\MinGW\msys\1.0\bin\bash -e -l -c "./synclibs.sh && ./autogen.sh" )
+    xcopy /i /q /s C:\projects\libewf-legacy C:\MinGW\msys\1.0\home\appveyor\libewf-legacy &&
+    C:\MinGW\msys\1.0\bin\bash -e -l -c "cd libewf-legacy && sed 's/@VERSION@/0.29/g' m4/pkg.m4.in > m4/pkg.m4 && ./synclibs.sh && ./autogen.sh" )
 - cmd: if [%TARGET%]==[mingw-w64] (
-    xcopy /q /s C:\projects\libewf C:\msys64\home\appveyor\ &&
-    C:\msys64\usr\bin\bash -e -l -c "cd libewf" &&
-    C:\msys64\usr\bin\bash -e -l -c "./synclibs.sh && ./autogen.sh" )
+    xcopy /i /q /s C:\projects\libewf-legacy C:\msys64\home\appveyor\libewf-legacy &&
+    C:\msys64\usr\bin\bash -e -l -c "cd libewf-legacy && ./synclibs.sh && ./autogen.sh" )
 
 test_script:
 - cmd: rem Run tests
@@ -109,11 +101,11 @@ test_script:
 - ps: if ($env:TARGET -eq "vs2017") {
     .\runtests.ps1 }
 - cmd: if [%TARGET%]==[cygwin] (
-    C:\cygwin\bin\bash -e -l -c "./runtests.sh" )
+    C:\cygwin\bin\bash -e -l -c "cd libewf-legacy && ./runtests.sh" )
 - cmd: if [%TARGET%]==[cygwin64] (
-    C:\cygwin64\bin\bash -e -l -c "./runtests.sh" )
+    C:\cygwin64\bin\bash -e -l -c "cd libewf-legacy && ./runtests.sh" )
 - cmd: if [%TARGET%]==[mingw] (
-    C:\MinGW\msys\1.0\bin\bash -e -l -c "./runtests.sh" )
+    C:\MinGW\msys\1.0\bin\bash -e -l -c "cd libewf-legacy && ./runtests.sh" )
 - cmd: if [%TARGET%]==[mingw-w64] (
-    C:\msys64\usr\bin\bash -e -l -c "./runtests.sh" )
+    C:\msys64\usr\bin\bash -e -l -c "cd libewf-legacy && ./runtests.sh" )
 
