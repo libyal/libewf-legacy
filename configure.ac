@@ -271,7 +271,6 @@ AC_CONFIG_FILES([common/types.h])
 AC_CONFIG_FILES([dpkg/changelog])
 AC_CONFIG_FILES([ewf.net/ewf.net.rc])
 AC_CONFIG_FILES([libewf/libewf.rc])
-AC_CONFIG_FILES([pyewf/setup.py])
 AC_CONFIG_FILES([libewf.pc])
 AC_CONFIG_FILES([libewf.spec])
 dnl Have configure write its configuration

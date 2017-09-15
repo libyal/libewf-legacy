@@ -176,7 +176,7 @@ run_setup_py_tests()
 {
 	PYTHON=$1;
 
-	(cd pyewf && ${PYTHON} setup.py build);
+	${PYTHON} setup.py build;
 	RESULT=$?;
 
 	if test ${RESULT} -ne ${EXIT_SUCCESS};
@@ -229,7 +229,7 @@ then
 		fi
 		export PYTHON_VERSION=;
 
-		if test -f "pyewf/setup.py" && ! run_setup_py_tests ${PYTHON2};
+		if test -f "setup.py" && ! run_setup_py_tests ${PYTHON2};
 		then
 			exit ${EXIT_FAILURE};
 		fi

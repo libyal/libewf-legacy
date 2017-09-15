@@ -181,6 +181,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\libcsystem\libcsystem_extern.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\libcsystem\libcsystem_file_io.h"
 				>
 			</File>
@@ -234,6 +238,10 @@
 			</File>
 			<File
 				RelativePath="..\..\libcsystem\libcsystem_support.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libcsystem\libcsystem_types.h"
 				>
 			</File>
 			<File

@@ -74,7 +74,7 @@ build_script:
     C:\Python27\python.exe ..\vstools\scripts\msvscpp-convert.py --output-format 2017 msvscpp\libewf.sln &&
     msbuild vs2017\libewf.sln /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" )
 - cmd: if [%TARGET%]==[python27] (
-    cd pyewf && C:\Python27\python.exe setup.py bdist_msi )
+    C:\Python27\python.exe setup.py bdist_msi )
 - cmd: if [%TARGET%]==[cygwin] (
     xcopy /i /q /s C:\projects\libewf-legacy C:\cygwin\home\appveyor\libewf-legacy &&
     C:\cygwin\bin\bash -e -l -c "cd libewf-legacy && ./synclibs.sh && ./autogen.sh" )
