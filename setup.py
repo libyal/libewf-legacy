@@ -105,8 +105,8 @@ class custom_build_ext(build_ext):
           configure_arguments.append("--with-bzip2=no")
         elif line == b"--with-openssl":
           configure_arguments.append("--with-openssl=no")
-        elif line == b"--with-zlib":
-          configure_arguments.append("--with-zlib=no")
+        # elif line == b"--with-zlib":
+        #   configure_arguments.append("--with-zlib=no")
 
       command = "sh configure {0:s}".format(" ".join(configure_arguments))
       output = self._RunCommand(command)
