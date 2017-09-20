@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="libcsystem"
-	ProjectGUID="{9293C42D-9CC9-446C-B783-718FFA1B6685}"
+	ProjectGUID="{79B3AA8F-2A09-4486-9487-ACA7F9DF140E}"
 	RootNamespace="libcsystem"
 	TargetFrameworkVersion="131072"
 	>
@@ -39,8 +39,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\include;..\..\common;..\..\libcstring;..\..\libcerror;..\..\libclocale;..\..\libcnotify;..\..\libuna"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_LOCAL_LIBCSTRING;HAVE_LOCAL_LIBCERROR;HAVE_LOCAL_LIBCLOCALE;HAVE_LOCAL_LIBCNOTIFY;HAVE_LOCAL_LIBUNA;HAVE_LOCAL_LIBCSYSTEM"
+				AdditionalIncludeDirectories="..\..\include;..\..\common;..\..\libcerror;..\..\libclocale;..\..\libcnotify;..\..\libuna"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_LOCAL_LIBCERROR;HAVE_LOCAL_LIBCLOCALE;HAVE_LOCAL_LIBCNOTIFY;HAVE_LOCAL_LIBUNA;HAVE_LOCAL_LIBCSYSTEM"
 				RuntimeLibrary="2"
 				WarningLevel="4"
 				CompileAs="1"
@@ -101,8 +101,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\include;..\..\common;..\..\libcstring;..\..\libcerror;..\..\libclocale;..\..\libcnotify;..\..\libuna"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_LOCAL_LIBCSTRING;HAVE_LOCAL_LIBCERROR;HAVE_LOCAL_LIBCLOCALE;HAVE_LOCAL_LIBCNOTIFY;HAVE_LOCAL_LIBUNA;HAVE_LOCAL_LIBCSYSTEM"
+				AdditionalIncludeDirectories="..\..\include;..\..\common;..\..\libcerror;..\..\libclocale;..\..\libcnotify;..\..\libuna"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_LOCAL_LIBCERROR;HAVE_LOCAL_LIBCLOCALE;HAVE_LOCAL_LIBCNOTIFY;HAVE_LOCAL_LIBUNA;HAVE_LOCAL_LIBCSYSTEM"
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="true"
 				RuntimeLibrary="3"
@@ -151,6 +151,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\..\libcsystem\libcsystem_error.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\libcsystem\libcsystem_getopt.c"
 				>
 			</File>
@@ -181,15 +185,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\libcsystem\libcsystem_error.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\libcsystem\libcsystem_extern.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\libcsystem\libcsystem_file_io.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\libcsystem\libcsystem_file_stream.h"
 				>
 			</File>
 			<File
@@ -218,10 +222,6 @@
 			</File>
 			<File
 				RelativePath="..\..\libcsystem\libcsystem_libcnotify.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\libcsystem\libcsystem_libcstring.h"
 				>
 			</File>
 			<File

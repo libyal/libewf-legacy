@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="libcstring"
-	ProjectGUID="{A75A4C56-1934-4767-9850-C100B329E18E}"
+	ProjectGUID="{2EBB055B-7729-4832-A404-EBB0B866D849}"
 	RootNamespace="libcstring"
 	TargetFrameworkVersion="131072"
 	>
