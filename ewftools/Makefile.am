@@ -125,6 +125,7 @@ ewfacquirestream_LDADD = \
 	@LIBCRYPTO_LIBADD@ \
 	@LIBDL_LIBADD@ \
 	@LIBCSYSTEM_LIBADD@ \
+	@LIBUNA_LIBADD@ \
 	@LIBCSPLIT_LIBADD@ \
 	@LIBCDATETIME_LIBADD@ \
 	../libewf/libewf.la \
@@ -153,6 +154,7 @@ ewfdebug_SOURCES = \
 
 ewfdebug_LDADD = \
 	@LIBCSYSTEM_LIBADD@ \
+	@LIBUNA_LIBADD@ \
 	../libewf/libewf.la \
 	@LIBCNOTIFY_LIBADD@ \
 	@LIBCLOCALE_LIBADD@ \
@@ -236,6 +238,7 @@ ewfinfo_SOURCES = \
 ewfinfo_LDADD = \
 	@LIBUUID_LIBADD@ \
 	@LIBCSYSTEM_LIBADD@ \
+	@LIBUNA_LIBADD@ \
 	@LIBCSPLIT_LIBADD@ \
 	../libewf/libewf.la \
 	@LIBCNOTIFY_LIBADD@ \
@@ -269,6 +272,7 @@ ewfmount_LDADD = \
 	@LIBFUSE_LIBADD@ \
 	@LIBUUID_LIBADD@ \
 	@LIBCSYSTEM_LIBADD@ \
+	@LIBUNA_LIBADD@ \
 	../libewf/libewf.la \
 	@LIBCNOTIFY_LIBADD@ \
 	@LIBCLOCALE_LIBADD@ \
@@ -356,6 +360,7 @@ ewfverify_LDADD = \
 	@LIBDL_LIBADD@ \
 	@LIBCSYSTEM_LIBADD@ \
 	@LIBCPATH_LIBADD@ \
+	@LIBUNA_LIBADD@ \
 	@LIBCSPLIT_LIBADD@ \
 	@LIBCDATETIME_LIBADD@ \
 	../libewf/libewf.la \
