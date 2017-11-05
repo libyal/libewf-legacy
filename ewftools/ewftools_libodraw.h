@@ -1,7 +1,7 @@
 /*
  * The internal libodraw header
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2017, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -25,17 +25,25 @@
 #include <common.h>
 
 #if defined( HAVE_LOCAL_LIBODRAW )
+
 #include <libodraw_data_file.h>
 #include <libodraw_definitions.h>
 #include <libodraw_handle.h>
-#include <libodraw_metadata.h>
 #include <libodraw_support.h>
 #include <libodraw_types.h>
 
 #else
+
+/* If libtool DLL support is enabled set LIBODRAW_DLL_IMPORT
+ * before including libcerror.h
+ */
+#if defined( _WIN32 ) && defined( DLL_IMPORT ) && !defined( HAVE_STATIC_EXECUTABLES )
+#define LIBODRAW_DLL_IMPORT
+#endif
+
 #include <libodraw.h>
 
-#endif
+#endif /* defined( HAVE_LOCAL_LIBODRAW ) */
 
-#endif
+#endif /* !defined( _EWFTOOLS_LIBODRAW_H ) */
 
