@@ -1,7 +1,7 @@
 /*
  * Compression handling functions
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2017, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -31,24 +31,24 @@
 extern "C" {
 #endif
 
-int libewf_compress(
+int libewf_compress_data(
      uint8_t *compressed_data,
-     size_t *compressed_size,
-     uint8_t *uncompressed_data,
-     size_t uncompressed_size,
+     size_t *compressed_data_size,
      int8_t compression_level,
+     const uint8_t *uncompressed_data,
+     size_t uncompressed_data_size,
      libcerror_error_t **error );
 
-int libewf_decompress(
+int libewf_decompress_data(
+     const uint8_t *compressed_data,
+     size_t compressed_data_size,
      uint8_t *uncompressed_data,
-     size_t *uncompressed_size,
-     uint8_t *compressed_data,
-     size_t compressed_size,
+     size_t *uncompressed_data_size,
      libcerror_error_t **error );
 
 #if defined( __cplusplus )
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBEWF_COMPRESS_H ) */
 

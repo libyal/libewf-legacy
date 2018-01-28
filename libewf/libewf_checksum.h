@@ -1,7 +1,7 @@
 /*
- * EWF Adler-32 checksum handling
+ * Checksum functions
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2017, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -19,26 +19,37 @@
  * along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined( _EWF_CHECKSUM_H )
-#define _EWF_CHECKSUM_H
+#if !defined( _LIBEWF_CHECKSUM_H )
+#define _LIBEWF_CHECKSUM_H
 
 #include <common.h>
 #include <types.h>
 
-#if defined( HAVE_ZLIB ) || defined( ZLIB_DLL )
-#include <zlib.h>
-#endif
+#include "libewf_deflate.h"
+#include "libewf_libcerror.h"
 
 #if defined( __cplusplus )
 extern "C" {
 #endif
 
-#define ewf_checksum_calculate( buffer, size, previous_key ) \
-	(uint32_t) adler32( (uLong) previous_key, (const Bytef *) buffer, (uInt) size );
+#if defined( HAVE_ADLER32 ) && ( defined( HAVE_ZLIB ) || defined( ZLIB_DLL ) )
+
+int libewf_checksum_calculate_adler32(
+     uint32_t *checksum_value,
+     const uint8_t *buffer,
+     size_t size,
+     uint32_t initial_value,
+     libcerror_error_t **error );
+
+#else
+#define libewf_checksum_calculate_adler32( checksum_value, buffer, size, initial_value, error ) \
+	libewf_deflate_calculate_adler32( checksum_value, buffer, size, initial_value, error )
+
+#endif /* defined( HAVE_ADLER32 ) && ( defined( HAVE_ZLIB ) || defined( ZLIB_DLL ) ) */
 
 #if defined( __cplusplus )
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBEWF_CHECKSUM_H ) */
 

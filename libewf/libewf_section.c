@@ -24,12 +24,13 @@
 #include <memory.h>
 #include <types.h>
 
-#include "libewf_definitions.h"
+#include "libewf_checksum.h"
 #include "libewf_compression.h"
 #include "libewf_debug.h"
+#include "libewf_definitions.h"
 #include "libewf_hash_sections.h"
-#include "libewf_header_values.h"
 #include "libewf_header_sections.h"
+#include "libewf_header_values.h"
 #include "libewf_io_handle.h"
 #include "libewf_libbfio.h"
 #include "libewf_libcdata.h"
@@ -43,7 +44,6 @@
 #include "libewf_single_files.h"
 #include "libewf_unused.h"
 
-#include "ewf_checksum.h"
 #include "ewf_data.h"
 #include "ewf_definitions.h"
 #include "ewf_digest.h"
@@ -527,11 +527,22 @@ ssize_t libewf_section_start_read(
 		 "\n" );
 	}
 #endif
-	calculated_checksum = ewf_checksum_calculate(
-	                       (uint8_t *) &section_start,
-	                       sizeof( ewf_section_start_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) &section_start,
+	     sizeof( ewf_section_start_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		return( -1 );
+	}
 	if( stored_checksum != calculated_checksum )
 	{
 		libcerror_error_set(
@@ -746,11 +757,22 @@ ssize_t libewf_section_start_write(
 	 section_start.next_offset,
 	 section->end_offset );
 
-	calculated_checksum = ewf_checksum_calculate(
-	                       &section_start,
-	                       sizeof( ewf_section_start_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) &section_start,
+	     sizeof( ewf_section_start_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		return( -1 );
+	}
 	byte_stream_copy_from_uint32_little_endian(
 	 section_start.checksum,
 	 calculated_checksum );
@@ -886,11 +908,11 @@ ssize_t libewf_section_debug_read(
 
 		goto on_error;
 	}
-	result = libewf_decompress(
-	          uncompressed_data,
-	          &uncompressed_size,
+	result = libewf_decompress_data(
 	          data,
 	          (size_t) section->size,
+	          uncompressed_data,
+	          &uncompressed_size,
 	          error );
 
 	if( result == 0 )
@@ -1126,7 +1148,7 @@ ssize_t libewf_section_compressed_string_read(
 	}
 	/* On average the uncompressed string will be twice as large as the compressed string
 	 */
-	*uncompressed_string_size = 2 * (size_t) section_data_size;
+	*uncompressed_string_size = 4 * (size_t) section_data_size;
 
 	*uncompressed_string = (uint8_t *) memory_allocate(
 	                                    sizeof( uint8_t ) * *uncompressed_string_size );
@@ -1142,14 +1164,14 @@ ssize_t libewf_section_compressed_string_read(
 
 		goto on_error;
 	}
-	result = libewf_decompress(
-	          *uncompressed_string,
-	          uncompressed_string_size,
+	result = libewf_decompress_data(
 	          compressed_string,
 	          (size_t) section_data_size,
+	          *uncompressed_string,
+	          uncompressed_string_size,
 	          error );
 
-	while( ( result == -1 )
+	while( ( result == 0 )
 	    && ( *uncompressed_string_size > 0 ) )
 	{
 		libcerror_error_free(
@@ -1172,11 +1194,11 @@ ssize_t libewf_section_compressed_string_read(
 		}
 		*uncompressed_string = (uint8_t *) reallocation;
 
-		result = libewf_decompress(
-		          *uncompressed_string,
-		          uncompressed_string_size,
+		result = libewf_decompress_data(
 		          compressed_string,
 		          (size_t) section_data_size,
+		          *uncompressed_string,
+		          uncompressed_string_size,
 		          error );
 	}
 	if( result == -1 )
@@ -1296,15 +1318,15 @@ ssize_t libewf_section_write_compressed_string(
 
 		goto on_error;
 	}
-	result = libewf_compress(
+	result = libewf_compress_data(
 	          compressed_string,
 	          &compressed_string_size,
+	          compression_level,
 	          uncompressed_string,
 	          uncompressed_string_size,
-	          compression_level,
 	          error );
 
-	if( ( result == -1 )
+	if( ( result == 0 )
 	 && ( compressed_string_size > 0 ) )
 	{
 		libcerror_error_free(
@@ -1327,12 +1349,12 @@ ssize_t libewf_section_write_compressed_string(
 		}
 		compressed_string = (uint8_t *) reallocation;
 
-		result = libewf_compress(
+		result = libewf_compress_data(
 		          compressed_string,
 		          &compressed_string_size,
+		          compression_level,
 		          uncompressed_string,
 		          uncompressed_string_size,
-		          compression_level,
 		          error );
 	}
 	if( result == -1 )
@@ -1719,11 +1741,22 @@ ssize_t libewf_section_data_read(
 #endif
 	if( stored_checksum != 0 )
 	{
-		calculated_checksum = ewf_checksum_calculate(
-		                       data,
-		                       sizeof( ewf_data_t ) - sizeof( uint32_t ),
-		                       1 );
+		if( libewf_checksum_calculate_adler32(
+		     &calculated_checksum,
+		     (uint8_t *) data,
+		     sizeof( ewf_data_t ) - sizeof( uint32_t ),
+		     1,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+			 "%s: unable to calculate checksum.",
+			 function );
 
+			goto on_error;
+		}
 		if( stored_checksum != calculated_checksum )
 		{
 			libcerror_error_set(
@@ -2123,11 +2156,27 @@ ssize_t libewf_section_data_write(
 				return( -1 );
 			}
 		}
-		calculated_checksum = ewf_checksum_calculate(
-		                       *cached_data_section,
-		                       sizeof( ewf_data_t ) - sizeof( uint32_t ),
-		                       1 );
+		if( libewf_checksum_calculate_adler32(
+		     &calculated_checksum,
+		     (uint8_t *) *cached_data_section,
+		     sizeof( ewf_data_t ) - sizeof( uint32_t ),
+		     1,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+			 "%s: unable to calculate checksum.",
+			 function );
 
+			memory_free(
+			 *cached_data_section );
+
+			*cached_data_section = NULL;
+
+			return( -1 );
+		}
 		byte_stream_copy_from_uint32_little_endian(
 		 ( *cached_data_section )->checksum,
 		 calculated_checksum );
@@ -2279,11 +2328,22 @@ ssize_t libewf_section_digest_read(
 		 "\n" );
 	}
 #endif
-	calculated_checksum = ewf_checksum_calculate(
-	                       &digest,
-	                       sizeof( ewf_digest_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) &digest,
+	     sizeof( ewf_digest_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		return( -1 );
+	}
 	if( stored_checksum != calculated_checksum )
 	{
 		libcerror_error_set(
@@ -2524,11 +2584,22 @@ ssize_t libewf_section_digest_write(
 		 0 );
 	}
 #endif
-	calculated_checksum = ewf_checksum_calculate(
-	                       &digest,
-	                       sizeof( ewf_digest_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) &digest,
+	     sizeof( ewf_digest_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		return( -1 );
+	}
 	byte_stream_copy_from_uint32_little_endian(
 	 digest.checksum,
 	 calculated_checksum );
@@ -2684,11 +2755,22 @@ ssize_t libewf_section_error2_read(
 	 	 "\n" );
 	}
 #endif
-	calculated_checksum = ewf_checksum_calculate(
-	                       &error2_header,
-	                       sizeof( ewf_error2_header_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) &error2_header,
+	     sizeof( ewf_error2_header_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		goto on_error;
+	}
 	if( stored_checksum!= calculated_checksum)
 	{
 		libcerror_error_set(
@@ -2799,11 +2881,22 @@ ssize_t libewf_section_error2_read(
 			 "\n" );
 		}
 #endif
-		calculated_checksum = ewf_checksum_calculate(
-		                       error2_sectors,
-		                       error2_sectors_size,
-		                       1 );
+		if( libewf_checksum_calculate_adler32(
+		     &calculated_checksum,
+		     (uint8_t *) error2_sectors,
+		     error2_sectors_size,
+		     1,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+			 "%s: unable to calculate checksum.",
+			 function );
 
+			goto on_error;
+		}
 		if( stored_checksum != calculated_checksum )
 		{
 			libcerror_error_set(
@@ -3026,11 +3119,22 @@ ssize_t libewf_section_error2_write(
 	 error2_header.number_of_errors,
 	 number_of_errors );
 
-	calculated_checksum = ewf_checksum_calculate(
-	                       &error2_header,
-	                       sizeof( ewf_error2_header_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) &error2_header,
+	     sizeof( ewf_error2_header_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		goto on_error;
+	}
 	byte_stream_copy_from_uint32_little_endian(
 	 error2_header.checksum,
 	 calculated_checksum );
@@ -3120,11 +3224,22 @@ ssize_t libewf_section_error2_write(
 	}
 	total_write_count += write_count;
 
-	calculated_checksum = ewf_checksum_calculate(
-			       error2_sectors,
-			       error2_sectors_size,
-			       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) error2_sectors,
+	     error2_sectors_size,
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		goto on_error;
+	}
 	byte_stream_copy_from_uint32_little_endian(
 	 calculated_checksum_buffer,
 	 calculated_checksum );
@@ -3279,11 +3394,22 @@ ssize_t libewf_section_hash_read(
 		 "\n" );
 	}
 #endif
-	calculated_checksum = ewf_checksum_calculate(
-	                       &hash,
-	                       sizeof( ewf_hash_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) &hash,
+	     sizeof( ewf_hash_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		return( -1 );
+	}
 	if( stored_checksum != calculated_checksum )
 	{
 		libcerror_error_set(
@@ -3461,11 +3587,22 @@ ssize_t libewf_section_hash_write(
 		 0 );
 	}
 #endif
-	calculated_checksum = ewf_checksum_calculate(
-	                       &hash,
-	                       sizeof( ewf_hash_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) &hash,
+	     sizeof( ewf_hash_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		return( -1 );
+	}
 	byte_stream_copy_from_uint32_little_endian(
 	 hash.checksum,
 	 calculated_checksum );
@@ -4315,11 +4452,22 @@ ssize_t libewf_section_session_read(
 		 "\n" );
 	}
 #endif
-	calculated_checksum = ewf_checksum_calculate(
-	                       &session_header,
-	                       sizeof( ewf_session_header_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) &session_header,
+	     sizeof( ewf_session_header_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		goto on_error;
+	}
 	if( stored_checksum != calculated_checksum )
 	{
 		libcerror_error_set(
@@ -4430,11 +4578,22 @@ ssize_t libewf_section_session_read(
 			 "\n" );
 		}
 #endif
-		calculated_checksum = ewf_checksum_calculate(
-		                       session_entries,
-		                       session_entries_size,
-		                       1 );
+		if( libewf_checksum_calculate_adler32(
+		     &calculated_checksum,
+		     (uint8_t *) session_entries,
+		     session_entries_size,
+		     1,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+			 "%s: unable to calculate checksum.",
+			 function );
 
+			goto on_error;
+		}
 		if( stored_checksum != calculated_checksum )
 		{
 			libcerror_error_set(
@@ -5100,11 +5259,22 @@ ssize_t libewf_section_session_write(
 	 session_header.number_of_sessions,
 	 (uint32_t) number_of_sessions_entries );
 
-	calculated_checksum = ewf_checksum_calculate(
-	                       &session_header,
-	                       sizeof( ewf_session_header_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) &session_header,
+	     sizeof( ewf_session_header_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		goto on_error;
+	}
 	byte_stream_copy_from_uint32_little_endian(
 	 session_header.checksum,
 	 calculated_checksum );
@@ -5371,11 +5541,22 @@ ssize_t libewf_section_session_write(
 	}
 	total_write_count += write_count;
 
-	calculated_checksum = ewf_checksum_calculate(
-			       session_entries,
-			       session_entries_size,
-			       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) session_entries,
+	     session_entries_size,
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		goto on_error;
+	}
 	byte_stream_copy_from_uint32_little_endian(
 	 calculated_checksum_buffer,
 	 calculated_checksum );
@@ -5562,11 +5743,22 @@ ssize_t libewf_section_table_header_read(
 		 "\n" );
 	}
 #endif
-	calculated_checksum = ewf_checksum_calculate(
-	                       &table_header,
-	                       sizeof( ewf_table_header_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) &table_header,
+	     sizeof( ewf_table_header_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		return( -1 );
+	}
 	if( stored_checksum != calculated_checksum )
 	{
 		libcerror_error_set(
@@ -5749,11 +5941,22 @@ ssize_t libewf_section_table_write(
 	 table_header.base_offset,
 	 base_offset );
 
-	calculated_checksum = ewf_checksum_calculate(
-	                       &table_header,
-	                       sizeof( ewf_table_header_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) &table_header,
+	     sizeof( ewf_table_header_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		return( -1 );
+	}
 	byte_stream_copy_from_uint32_little_endian(
 	 table_header.checksum,
 	 calculated_checksum );
@@ -5800,11 +6003,22 @@ ssize_t libewf_section_table_write(
 
 	if( write_checksum != 0 )
 	{
-		calculated_checksum = ewf_checksum_calculate(
-		                       table_offsets,
-		                       table_offsets_size,
-		                       1 );
+		if( libewf_checksum_calculate_adler32(
+		     &calculated_checksum,
+		     (uint8_t *) table_offsets,
+		     table_offsets_size,
+		     1,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+			 "%s: unable to calculate checksum.",
+			 function );
 
+			return( -1 );
+		}
 		byte_stream_copy_from_uint32_little_endian(
 		 calculated_checksum_buffer,
 		 calculated_checksum );
@@ -6311,11 +6525,22 @@ ssize_t libewf_section_volume_e01_read(
 		 "\n" );
 	}
 #endif
-	calculated_checksum = ewf_checksum_calculate(
-	                       volume,
-	                       sizeof( ewf_volume_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) volume,
+	     sizeof( ewf_volume_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		goto on_error;
+	}
 	if( stored_checksum != calculated_checksum )
 	{
 		libcerror_error_set(
@@ -6570,11 +6795,22 @@ ssize_t libewf_section_volume_e01_write(
 		 volume->error_granularity,
 		 media_values->error_granularity );
 	}
-	calculated_checksum = ewf_checksum_calculate(
-	                       volume,
-	                       sizeof( ewf_volume_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) volume,
+	     sizeof( ewf_volume_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		goto on_error;
+	}
 	byte_stream_copy_from_uint32_little_endian(
 	 volume->checksum,
 	 calculated_checksum );
@@ -6833,11 +7069,22 @@ ssize_t libewf_section_volume_s01_read(
 	{
 		io_handle->format = LIBEWF_FORMAT_EWF;
 	}
-	calculated_checksum = ewf_checksum_calculate(
-	                       volume,
-	                       sizeof( ewf_volume_smart_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) volume,
+	     sizeof( ewf_volume_smart_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		goto on_error;
+	}
 	if( stored_checksum != calculated_checksum )
 	{
 		libcerror_error_set(
@@ -7044,11 +7291,22 @@ ssize_t libewf_section_volume_s01_write(
 		volume->signature[ 3 ] = (uint8_t) 'R';
 		volume->signature[ 4 ] = (uint8_t) 'T';
 	}
-	calculated_checksum = ewf_checksum_calculate(
-	                       volume,
-	                       sizeof( ewf_volume_smart_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) volume,
+	     sizeof( ewf_volume_smart_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		goto on_error;
+	}
 	byte_stream_copy_from_uint32_little_endian(
 	 volume->checksum,
 	 calculated_checksum );
@@ -7600,11 +7858,22 @@ ssize_t libewf_section_delta_chunk_read(
 	 	 "\n" );
 	}
 #endif
-	calculated_checksum = ewf_checksum_calculate(
-	                       &delta_chunk_header,
-	                       sizeof( ewfx_delta_chunk_header_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) &delta_chunk_header,
+	     sizeof( ewfx_delta_chunk_header_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		return( -1 );
+	}
 	if( stored_checksum != calculated_checksum )
 	{
 		libcerror_error_set(
@@ -7808,11 +8077,22 @@ ssize_t libewf_section_delta_chunk_write(
 	delta_chunk_header.padding[ 3 ] = (uint8_t) 'T';
 	delta_chunk_header.padding[ 4 ] = (uint8_t) 'A';
 
-	calculated_checksum = ewf_checksum_calculate(
-	                       &delta_chunk_header,
-	                       sizeof( ewfx_delta_chunk_header_t ) - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     (uint8_t *) &delta_chunk_header,
+	     sizeof( ewfx_delta_chunk_header_t ) - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
+		return( -1 );
+	}
 	byte_stream_copy_from_uint32_little_endian(
 	 delta_chunk_header.checksum,
 	 calculated_checksum );

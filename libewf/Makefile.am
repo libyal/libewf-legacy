@@ -26,7 +26,6 @@ AM_CPPFLAGS = \
 lib_LTLIBRARIES = libewf.la
 
 libewf_la_SOURCES = \
-	ewf_checksum.h \
 	ewf_data.h \
 	ewf_definitions.h \
 	ewf_digest.h \
@@ -41,6 +40,7 @@ libewf_la_SOURCES = \
 	ewf_volume_smart.h \
 	ewfx_delta_chunk.h \
 	libewf.c \
+	libewf_checksum.c libewf_checksum.h \
 	libewf_chunk_data.c libewf_chunk_data.h \
 	libewf_chunk_table.c libewf_chunk_table.h \
 	libewf_codepage.h \
@@ -49,6 +49,7 @@ libewf_la_SOURCES = \
 	libewf_date_time_values.c libewf_date_time_values.h \
 	libewf_debug.c libewf_debug.h \
 	libewf_definitions.h \
+	libewf_deflate.c libewf_deflate.h \
 	libewf_empty_block.c libewf_empty_block.h \
 	libewf_error.c libewf_error.h \
 	libewf_extern.h \

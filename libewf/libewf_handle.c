@@ -32,6 +32,7 @@
 #include <time.h>
 #endif
 
+#include "libewf_checksum.h"
 #include "libewf_chunk_data.h"
 #include "libewf_chunk_table.h"
 #include "libewf_compression.h"
@@ -59,7 +60,6 @@
 #include "libewf_unused.h"
 #include "libewf_write_io_handle.h"
 
-#include "ewf_checksum.h"
 #include "ewf_data.h"
 #include "ewf_definitions.h"
 #include "ewf_file_header.h"
@@ -4357,11 +4357,22 @@ ssize_t libewf_handle_prepare_read_chunk(
 			 checksum_buffer,
 			 chunk_checksum );
 		}
-		calculated_checksum = ewf_checksum_calculate(
-		                       chunk_buffer,
-		                       chunk_buffer_size,
-		                       1 );
+		if( libewf_checksum_calculate_adler32(
+		     &calculated_checksum,
+		     chunk_buffer,
+		     chunk_buffer_size,
+		     1,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+			 "%s: unable to calculate checksum.",
+			 function );
 
+			return( -1 );
+		}
 		if( chunk_checksum != calculated_checksum )
 		{
 			libcerror_error_set(
@@ -4412,11 +4423,11 @@ ssize_t libewf_handle_prepare_read_chunk(
 
 			return( -1 );
 		}
-		if( libewf_decompress(
-		     uncompressed_chunk_buffer,
-		     uncompressed_chunk_buffer_size,
+		if( libewf_decompress_data(
 		     chunk_buffer,
 		     chunk_buffer_size,
+		     uncompressed_chunk_buffer,
+		     uncompressed_chunk_buffer_size,
 		     error ) != 1 )
 		{
 			libcerror_error_set(
@@ -5357,12 +5368,12 @@ ssize_t libewf_handle_prepare_write_chunk(
 			}
 			else
 			{
-				result = libewf_compress(
+				result = libewf_compress_data(
 					  (uint8_t *) compressed_chunk_buffer,
 					  compressed_chunk_buffer_size,
+					  compression_level,
 					  (uint8_t *) chunk_buffer,
 					  chunk_buffer_size,
-					  compression_level,
 					  error );
 
 				if( result != 1 )
@@ -5386,11 +5397,22 @@ ssize_t libewf_handle_prepare_write_chunk(
 	}
 	if( *is_compressed == 0 )
 	{
-		*chunk_checksum = ewf_checksum_calculate(
-		                   chunk_buffer,
-		                   chunk_buffer_size,
-		                   1 );
+		if( libewf_checksum_calculate_adler32(
+		     chunk_checksum,
+		     chunk_buffer,
+		     chunk_buffer_size,
+		     1,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+			 "%s: unable to calculate checksum.",
+			 function );
 
+			return( -1 );
+		}
 		chunk_write_size = chunk_buffer_size;
 
 		*write_checksum = 1;

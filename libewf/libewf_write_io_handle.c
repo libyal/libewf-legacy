@@ -33,6 +33,7 @@
 #include <time.h>
 #endif
 
+#include "libewf_checksum.h"
 #include "libewf_chunk_data.h"
 #include "libewf_chunk_table.h"
 #include "libewf_compression.h"
@@ -55,7 +56,6 @@
 #include "libewf_unused.h"
 #include "libewf_write_io_handle.h"
 
-#include "ewf_checksum.h"
 #include "ewf_data.h"
 #include "ewf_definitions.h"
 #include "ewf_section.h"
@@ -1358,12 +1358,12 @@ int libewf_write_io_handle_set_compressed_zero_byte_empty_block(
 	{
 		compression_level = EWF_COMPRESSION_DEFAULT;
 	}
-	result = libewf_compress(
+	result = libewf_compress_data(
 		  compressed_zero_byte_empty_block,
 		  &( write_io_handle->compressed_zero_byte_empty_block_size ),
+		  compression_level,
 		  zero_byte_empty_block,
 		  (size_t) media_values->chunk_size,
-		  compression_level,
 		  error );
 
 	/* Check if the compressed buffer was too small
@@ -1400,12 +1400,12 @@ int libewf_write_io_handle_set_compressed_zero_byte_empty_block(
 		}
 		compressed_zero_byte_empty_block = (uint8_t *) reallocation;
 
-		result = libewf_compress(
+		result = libewf_compress_data(
 		          compressed_zero_byte_empty_block,
 		          &( write_io_handle->compressed_zero_byte_empty_block_size ),
+		          io_handle->compression_level,
 		          zero_byte_empty_block,
 		          (size_t) media_values->chunk_size,
-		          io_handle->compression_level,
 		          error );
 	}
 	if( result != 1 )

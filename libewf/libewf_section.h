@@ -35,7 +35,6 @@
 #include "libewf_media_values.h"
 #include "libewf_single_files.h"
 
-#include "ewf_checksum.h"
 #include "ewf_data.h"
 #include "ewf_section.h"
 #include "ewf_table.h"

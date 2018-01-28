@@ -24,14 +24,12 @@
 #include <memory.h>
 #include <types.h>
 
-#include "libewf_libcstring.h"
+#include "libewf_checksum.h"
+#include "libewf_debug.h"
 #include "libewf_libcerror.h"
 #include "libewf_libcnotify.h"
-
-#include "libewf_debug.h"
+#include "libewf_libcstring.h"
 #include "libewf_libuna.h"
-
-#include "ewf_checksum.h"
 
 /* Prints a dump of data
  * Returns 1 if successful or -1 on error
@@ -79,12 +77,22 @@ int libewf_debug_dump_data(
 
 		return( -1 );
 	}
-	calculated_checksum = ewf_checksum_calculate(
-	                       data,
-	                       data_size - sizeof( uint32_t ),
-	                       1 );
+	if( libewf_checksum_calculate_adler32(
+	     &calculated_checksum,
+	     data,
+	     data_size - sizeof( uint32_t ),
+	     1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to calculate checksum.",
+		 function );
 
-
+		return( -1 );
+	}
 	byte_stream_copy_to_uint32_little_endian(
 	 &( data[ data_size - sizeof( uint32_t ) ] ),
 	 stored_checksum );
