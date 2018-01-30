@@ -393,6 +393,15 @@ test_glob_sequence4()
 	return ${RESULT};
 }
 
+OPERATING_SYSTEM=`uname -o 2> /dev/null`;
+
+if test "${OPERATING_SYSTEM}" = "Cygwin";
+then
+	# The glob tests run very slow on Cygwin.
+
+	exit ${EXIT_IGNORE};
+fi
+
 EWF_TEST_GLOB="ewf_test_glob";
 
 if ! test -x ${EWF_TEST_GLOB};
