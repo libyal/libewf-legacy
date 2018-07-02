@@ -2,7 +2,7 @@ AC_PREREQ( 2.59 )
 
 AC_INIT(
  [libewf],
- [20140803],
+ [20140804],
  [joachim.metz@gmail.com])
 
 AC_CONFIG_SRCDIR(
@@ -153,7 +153,27 @@ dnl Check if libewf should be build with debug output
 AX_COMMON_CHECK_ENABLE_DEBUG_OUTPUT
 
 dnl Check if libewf python bindings (pyewf) should be build
+AX_PYTHON_CHECK_PYPREFIX
 AX_PYTHON_CHECK_ENABLE
+AX_PYTHON2_CHECK_ENABLE
+AX_PYTHON3_CHECK_ENABLE
+
+AS_IF(
+  [test "x${ac_cv_enable_python}" != xno || test "x${ac_cv_enable_python2}" != xno || test "x${ac_cv_enable_python3}" != xno],
+  [dnl Headers included in pyewf/pyewf_error.c
+  AC_CHECK_HEADERS([stdarg.h varargs.h])
+
+  AS_IF(
+    [test "x$ac_cv_header_stdarg_h" != xyes && test "x$ac_cv_header_varargs_h" != xyes],
+    [AC_MSG_FAILURE(
+      [Missing headers: stdarg.h and varargs.h],
+      [1])
+    ])
+  ])
+
+AM_CONDITIONAL(
+  HAVE_PYTHON_TESTS,
+  [test "x${ac_cv_enable_python}" != xno || test "x${ac_cv_enable_python2}" != xno || test "x${ac_cv_enable_python3}" != xno])
 
 dnl Check if libewf should be build with version 1 API
 AX_LIBEWF_CHECK_ENABLE_V1_API
@@ -253,6 +273,8 @@ AC_CONFIG_FILES([libcsystem/Makefile])
 AC_CONFIG_FILES([ewftools/Makefile])
 AC_CONFIG_FILES([ewf.net/Makefile])
 AC_CONFIG_FILES([pyewf/Makefile])
+AC_CONFIG_FILES([pyewf-python2/Makefile])
+AC_CONFIG_FILES([pyewf-python3/Makefile])
 AC_CONFIG_FILES([po/Makefile.in])
 AC_CONFIG_FILES([po/Makevars])
 AC_CONFIG_FILES([documents/Makefile])
@@ -317,6 +339,8 @@ Features:
    Wide character type support:              $ac_cv_enable_wide_character_type
    ewftools are build as static executables: $ac_cv_enable_static_executables
    Python (pyewf) support:                   $ac_cv_enable_python
+   Python version 2 (pyewf) support:         $ac_cv_enable_python2
+   Python version 3 (pyewf) support:         $ac_cv_enable_python3
    Verbose output:                           $ac_cv_enable_verbose_output
    Debug output:                             $ac_cv_enable_debug_output
    Version 1 API compatibility:              $ac_cv_enable_v1_api
