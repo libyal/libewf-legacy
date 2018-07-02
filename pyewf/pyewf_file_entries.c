@@ -56,10 +56,8 @@ PySequenceMethods pyewf_file_entries_sequence_methods = {
 };
 
 PyTypeObject pyewf_file_entries_type_object = {
-	PyObject_HEAD_INIT( NULL )
+	PyVarObject_HEAD_INIT( NULL, 0 )
 
-	/* ob_size */
-	0,
 	/* tp_name */
 	"pyewf._file_entries",
 	/* tp_basicsize */

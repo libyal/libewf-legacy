@@ -239,10 +239,8 @@ PyGetSetDef pyewf_handle_object_get_set_definitions[] = {
 };
 
 PyTypeObject pyewf_handle_type_object = {
-	PyObject_HEAD_INIT( NULL )
+	PyVarObject_HEAD_INIT( NULL, 0 )
 
-	/* ob_size */
-	0,
 	/* tp_name */
 	"pyewf.handle",
 	/* tp_basicsize */
