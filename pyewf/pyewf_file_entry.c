@@ -431,9 +431,10 @@ int pyewf_file_entry_init(
 void pyewf_file_entry_free(
       pyewf_file_entry_t *pyewf_file_entry )
 {
-	libcerror_error_t *error = NULL;
-	static char *function    = "pyewf_file_entry_free";
-	int result               = 0;
+	struct _typeobject *ob_type = NULL;
+	libcerror_error_t *error    = NULL;
+	static char *function       = "pyewf_file_entry_free";
+	int result                  = 0;
 
 	if( pyewf_file_entry == NULL )
 	{
@@ -444,20 +445,23 @@ void pyewf_file_entry_free(
 
 		return;
 	}
-	if( pyewf_file_entry->ob_type == NULL )
+	ob_type = Py_TYPE(
+	           pyewf_file_entry );
+
+	if( ob_type == NULL )
 	{
 		PyErr_Format(
 		 PyExc_TypeError,
-		 "%s: invalid file_entry - missing ob_type.",
+		 "%s: missing ob_type.",
 		 function );
 
 		return;
 	}
-	if( pyewf_file_entry->ob_type->tp_free == NULL )
+	if( ob_type->tp_free == NULL )
 	{
 		PyErr_Format(
 		 PyExc_TypeError,
-		 "%s: invalid file_entry - invalid ob_type - missing tp_free.",
+		 "%s: invalid ob_type - missing tp_free.",
 		 function );
 
 		return;
@@ -495,7 +499,7 @@ void pyewf_file_entry_free(
                 Py_DecRef(
                  (PyObject *) pyewf_file_entry->handle_object );
         }
-	pyewf_file_entry->ob_type->tp_free(
+	ob_type->tp_free(
 	 (PyObject*) pyewf_file_entry );
 }
 

@@ -466,9 +466,10 @@ int pyewf_handle_init(
 void pyewf_handle_free(
       pyewf_handle_t *pyewf_handle )
 {
-	libcerror_error_t *error = NULL;
-	static char *function    = "pyewf_handle_free";
-	int result               = 0;
+	struct _typeobject *ob_type = NULL;
+	libcerror_error_t *error    = NULL;
+	static char *function       = "pyewf_handle_free";
+	int result                  = 0;
 
 	if( pyewf_handle == NULL )
 	{
@@ -479,20 +480,23 @@ void pyewf_handle_free(
 
 		return;
 	}
-	if( pyewf_handle->ob_type == NULL )
+	ob_type = Py_TYPE(
+	           pyewf_handle );
+
+	if( ob_type == NULL )
 	{
 		PyErr_Format(
 		 PyExc_TypeError,
-		 "%s: invalid handle - missing ob_type.",
+		 "%s: missing ob_type.",
 		 function );
 
 		return;
 	}
-	if( pyewf_handle->ob_type->tp_free == NULL )
+	if( ob_type->tp_free == NULL )
 	{
 		PyErr_Format(
 		 PyExc_TypeError,
-		 "%s: invalid handle - invalid ob_type - missing tp_free.",
+		 "%s: invalid ob_type - missing tp_free.",
 		 function );
 
 		return;
@@ -525,7 +529,7 @@ void pyewf_handle_free(
 		libcerror_error_free(
 		 &error );
 	}
-	pyewf_handle->ob_type->tp_free(
+	ob_type->tp_free(
 	 (PyObject*) pyewf_handle );
 }
 
