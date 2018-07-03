@@ -20,7 +20,9 @@
  */
 
 #include <common.h>
+#include <narrow_string.h>
 #include <types.h>
+#include <wide_string.h>
 
 #if defined( HAVE_STDLIB_H )
 #include <stdlib.h>
@@ -513,6 +515,7 @@ PyObject *pyewf_file_entry_read_buffer(
 	PyObject *string_object     = NULL;
 	static char *function       = "pyewf_file_entry_read_buffer";
 	static char *keyword_list[] = { "size", NULL };
+	char *buffer                = NULL;
 	ssize_t read_count          = 0;
 	int read_size               = -1;
 
@@ -563,16 +566,26 @@ PyObject *pyewf_file_entry_read_buffer(
 
 		return( NULL );
 	}
+#if PY_MAJOR_VERSION >= 3
+	string_object = PyBytes_FromStringAndSize(
+	                 NULL,
+	                 read_size );
+
+	buffer = PyBytes_AsString(
+	          string_object );
+#else
 	string_object = PyString_FromStringAndSize(
 	                 NULL,
 	                 read_size );
 
+	buffer = PyString_AsString(
+	          string_object );
+#endif
 	Py_BEGIN_ALLOW_THREADS
 
 	read_count = libewf_file_entry_read_buffer(
 	              pyewf_file_entry->file_entry,
-	              PyString_AsString(
-	               string_object ),
+	              buffer,
 	              (size_t) read_size,
 	              &error );
 
@@ -596,9 +609,15 @@ PyObject *pyewf_file_entry_read_buffer(
 	}
 	/* Need to resize the string here in case read_size was not fully read.
 	 */
+#if PY_MAJOR_VERSION >= 3
+	if( _PyBytes_Resize(
+	     &string_object,
+	     (Py_ssize_t) read_count ) != 0 )
+#else
 	if( _PyString_Resize(
 	     &string_object,
 	     (Py_ssize_t) read_count ) != 0 )
+#endif
 	{
 		Py_DecRef(
 		 (PyObject *) string_object );
@@ -620,6 +639,7 @@ PyObject *pyewf_file_entry_read_random(
 	PyObject *string_object     = NULL;
 	static char *function       = "pyewf_file_entry_read_random";
 	static char *keyword_list[] = { "size", "offset", NULL };
+	char *buffer                = NULL;
 	off64_t read_offset         = 0;
 	ssize_t read_count          = 0;
 	int read_size               = 0;
@@ -683,16 +703,26 @@ PyObject *pyewf_file_entry_read_random(
 	}
 	/* Make sure the data fits into a memory buffer
 	 */
+#if PY_MAJOR_VERSION >= 3
+	string_object = PyBytes_FromStringAndSize(
+	                 NULL,
+	                 read_size );
+
+	buffer = PyBytes_AsString(
+	          string_object );
+#else
 	string_object = PyString_FromStringAndSize(
 	                 NULL,
 	                 read_size );
 
+	buffer = PyString_AsString(
+	          string_object );
+#endif
 	Py_BEGIN_ALLOW_THREADS
 
 	read_count = libewf_file_entry_read_random(
 	              pyewf_file_entry->file_entry,
-	              PyString_AsString(
-	               string_object ),
+	              buffer,
 	              (size_t) read_size,
 	              (off64_t) read_offset,
 	              &error );
@@ -717,9 +747,15 @@ PyObject *pyewf_file_entry_read_random(
 	}
 	/* Need to resize the string here in case read_size was not fully read.
 	 */
+#if PY_MAJOR_VERSION >= 3
+	if( _PyBytes_Resize(
+	     &string_object,
+	     (Py_ssize_t) read_count ) != 0 )
+#else
 	if( _PyString_Resize(
 	     &string_object,
 	     (Py_ssize_t) read_count ) != 0 )
+#endif
 	{
 		Py_DecRef(
 		 (PyObject *) string_object );
@@ -1526,6 +1562,7 @@ PyObject *pyewf_file_entry_get_number_of_sub_file_entries(
            PyObject *arguments PYEWF_ATTRIBUTE_UNUSED )
 {
 	libcerror_error_t *error       = NULL;
+	PyObject *integer_object       = NULL;
 	static char *function          = "pyewf_file_entry_get_number_of_sub_file_entries";
 	int number_of_sub_file_entries = 0;
 	int result                     = 0;
@@ -1563,8 +1600,14 @@ PyObject *pyewf_file_entry_get_number_of_sub_file_entries(
 
 		return( NULL );
 	}
-	return( PyInt_FromLong(
-	         (long) number_of_sub_file_entries ) );
+#if PY_MAJOR_VERSION >= 3
+	integer_object = PyLong_FromLong(
+	                  (long) number_of_sub_file_entries );
+#else
+	integer_object = PyInt_FromLong(
+	                  (long) number_of_sub_file_entries );
+#endif
+	return( integer_object );
 }
 
 /* Retrieves a specific sub file entry by index

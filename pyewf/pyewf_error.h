@@ -1,7 +1,7 @@
 /*
  * Error functions
  *
- * Copyright (c) 2008-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2008-2014, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -28,11 +28,23 @@
 #include "pyewf_libcerror.h"
 #include "pyewf_python.h"
 
-#define PYEWF_ERROR_STRING_SIZE		768
+#define PYEWF_ERROR_STRING_SIZE	2048
 
 #if defined( __cplusplus )
 extern "C" {
 #endif
+
+void pyewf_error_fetch(
+      libcerror_error_t **error,
+      int error_domain,
+      int error_code,
+      const char *format_string,
+      ... );
+
+void pyewf_error_fetch_and_raise(
+      PyObject *exception_object,
+      const char *format_string,
+      ... );
 
 void pyewf_error_raise(
       libcerror_error_t *error,
@@ -44,5 +56,5 @@ void pyewf_error_raise(
 }
 #endif
 
-#endif
+#endif /* !defined( _PYEWF_ERROR_H ) */
 

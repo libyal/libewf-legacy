@@ -423,16 +423,42 @@ on_error:
 	return( NULL );
 }
 
-/* Declarations for DLL import/export
+#if PY_MAJOR_VERSION >= 3
+
+/* The pyewf module definition
  */
-#ifndef PyMODINIT_FUNC
-#define PyMODINIT_FUNC void
-#endif
+PyModuleDef pyewf_module_definition = {
+	PyModuleDef_HEAD_INIT,
+
+	/* m_name */
+	"pyewf",
+	/* m_doc */
+	"Python libewf module (pyewf).",
+	/* m_size */
+	-1,
+	/* m_methods */
+	pyewf_module_methods,
+	/* m_reload */
+	NULL,
+	/* m_traverse */
+	NULL,
+	/* m_clear */
+	NULL,
+	/* m_free */
+	NULL,
+};
+
+#endif /* PY_MAJOR_VERSION >= 3 */
 
 /* Initializes the pyewf module
  */
+#if PY_MAJOR_VERSION >= 3
+PyMODINIT_FUNC PyInit_pyewf(
+                void )
+#else
 PyMODINIT_FUNC initpyewf(
                 void )
+#endif
 {
 	PyObject *module                       = NULL;
 	PyTypeObject *file_entries_type_object = NULL;
@@ -444,11 +470,23 @@ PyMODINIT_FUNC initpyewf(
 	 * This function must be called before grabbing the GIL
 	 * otherwise the module will segfault on a version mismatch
 	 */
+#if PY_MAJOR_VERSION >= 3
+	module = PyModule_Create(
+	          &pyewf_module_definition );
+#else
 	module = Py_InitModule3(
 	          "pyewf",
 	          pyewf_module_methods,
 	          "Python libewf module (pyewf)." );
-
+#endif
+	if( module == NULL )
+	{
+#if PY_MAJOR_VERSION >= 3
+		return( NULL );
+#else
+		return;
+#endif
+	}
 	PyEval_InitThreads();
 
 	gil_state = PyGILState_Ensure();
@@ -510,8 +548,20 @@ PyMODINIT_FUNC initpyewf(
 	"_file_entries",
 	(PyObject *) file_entries_type_object );
 
+#if PY_MAJOR_VERSION >= 3
+	return( module );
+#else
+	return;
+#endif
+
 on_error:
 	PyGILState_Release(
 	 gil_state );
+
+#if PY_MAJOR_VERSION >= 3
+	return( NULL );
+#else
+	return;
+#endif
 }
 

@@ -1,7 +1,7 @@
 /*
  * Python file object IO handle functions
  *
- * Copyright (c) 2008-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2008-2014, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -27,7 +27,6 @@
 
 #include "pyewf_libbfio.h"
 #include "pyewf_libcerror.h"
-#include "pyewf_libcstring.h"
 #include "pyewf_python.h"
 
 #if defined( __cplusplus )
@@ -138,5 +137,5 @@ int pyewf_file_object_io_handle_get_size(
 }
 #endif
 
-#endif
+#endif /* !defined( _PYEWF_FILE_OBJECT_IO_HANDLE_H ) */
 
