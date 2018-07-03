@@ -45,9 +45,12 @@ DPKG_FILES = \
 	dpkg/control \
 	dpkg/copyright \
 	dpkg/rules \
-	dpkg/libewf-dev.install \
 	dpkg/libewf.install \
-	dpkg/libewf-tools.install
+	dpkg/libewf-dev.install \
+	dpkg/libewf-python.install \
+	dpkg/libewf-python3.install \
+	dpkg/libewf-tools.install \
+	dpkg/source/format
 
 GETTEXT_FILES = \
 	config.rpath \
