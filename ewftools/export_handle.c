@@ -5093,12 +5093,14 @@ int export_handle_export_single_files(
      log_handle_t *log_handle,
      libcerror_error_t **error )
 {
-	libewf_file_entry_t *file_entry  = NULL;
-	process_status_t *process_status = NULL;
-	static char *function            = "export_handle_export_single_files";
-	size_t export_path_size          = 0;
-	int result                       = 0;
-	int status                       = PROCESS_STATUS_COMPLETED;
+	libewf_file_entry_t *file_entry    = NULL;
+	process_status_t *process_status   = NULL;
+	system_character_t *sanitized_name = NULL;
+	static char *function              = "export_handle_export_single_files";
+	size_t export_path_size            = 0;
+	size_t sanitized_name_size         = 0;
+	int result                         = 0;
+	int status                         = PROCESS_STATUS_COMPLETED;
 
 	if( export_handle == NULL )
 	{
@@ -5125,15 +5127,19 @@ int export_handle_export_single_files(
 	export_path_size = 1 + libcstring_system_string_length(
 	                        export_handle->target_path );
 
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
-	if( libcpath_path_sanitize_wide(
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
+	if( libcpath_path_get_sanitized_path_wide(
 	     export_handle->target_path,
-	     &export_path_size,
+	     export_path_length,
+	     &sanitized_name,
+	     &sanitized_name_size,
 	     error ) != 1 )
 #else
-	if( libcpath_path_sanitize(
+	if( libcpath_path_get_sanitized_path(
 	     export_handle->target_path,
-	     &export_path_size,
+	     export_path_length,
+	     &sanitized_name,
+	     &sanitized_name_size,
 	     error ) != 1 )
 #endif
 	{
@@ -5195,11 +5201,11 @@ int export_handle_export_single_files(
 	}
 #if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libcpath_path_make_directory_wide(
-	     export_handle->target_path,
+	     sanitized_name,
 	     error ) != 1 )
 #else
 	if( libcpath_path_make_directory(
-	     export_handle->target_path,
+	     sanitized_name,
 	     error ) != 1 )
 #endif
 	{
@@ -5209,21 +5215,21 @@ int export_handle_export_single_files(
 		 LIBCERROR_IO_ERROR_WRITE_FAILED,
 		 "%s: unable to create directory: %" PRIs_LIBCSTRING_SYSTEM "",
 		 function,
-		 export_handle->target_path );
+		 sanitized_name );
 
 		goto on_error;
 	}
 	log_handle_printf(
 	 log_handle,
 	 "Created directory: %" PRIs_LIBCSTRING_SYSTEM ".\n",
-	 export_handle->target_path );
+	 sanitized_name );
 
 	result = export_handle_export_file_entry(
 	          export_handle,
 	          file_entry,
-	          export_handle->target_path,
-	          export_path_size,
-	          export_path_size - 1,
+	          sanitized_name,
+	          sanitized_name_size,
+	          sanitized_name_size - 1,
 	          log_handle,
 	          error );
 
@@ -5238,6 +5244,11 @@ int export_handle_export_single_files(
 
 		goto on_error;
 	}
+	memory_free(
+	 sanitized_name );
+
+	sanitized_name = NULL;
+
 	if( export_handle->abort != 0 )
 	{
 		status = PROCESS_STATUS_ABORTED;
@@ -5303,6 +5314,11 @@ on_error:
 		 &file_entry,
 		 NULL );
 	}
+	if( sanitized_name != NULL )
+	{
+		memory_free(
+		 sanitized_name );
+	}
 	return( -1 );
 }
 
@@ -5320,8 +5336,10 @@ int export_handle_export_file_entry(
 {
 	libcstring_system_character_t *name        = NULL;
 	libcstring_system_character_t *target_path = NULL;
+	system_character_t *sanitized_name         = NULL;
 	static char *function                      = "export_handle_export_file_entry";
 	size_t name_size                           = 0;
+	size_t sanitized_name_size                 = 0;
 	size_t target_path_size                    = 0;
 	uint8_t file_entry_type                    = 0;
 	int result                                 = 0;
@@ -5425,15 +5443,20 @@ int export_handle_export_file_entry(
 
 			goto on_error;
 		}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
-		if( libcpath_path_sanitize_filename_wide(
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
+		if( libcpath_path_get_sanitized_filename_wide(
 		     name,
-		     &name_size,
+		     name_size - 1,
+		     export_path_length,
+		     &sanitized_name,
+		     &sanitized_name_size,
 		     error ) != 1 )
 #else
-		if( libcpath_path_sanitize_filename(
+		if( libcpath_path_get_sanitized_filename(
 		     name,
-		     &name_size,
+		     name_size - 1,
+		     &sanitized_name,
+		     &sanitized_name_size,
 		     error ) != 1 )
 #endif
 		{
@@ -5446,14 +5469,19 @@ int export_handle_export_file_entry(
 
 			goto on_error;
 		}
+		memory_free(
+		 name );
+
+		name = NULL;
+
 #if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
 		if( libcpath_path_join_wide(
 		     &target_path,
 		     &target_path_size,
 		     export_path,
 		     export_path_size - 1,
-		     name,
-		     name_size - 1,
+		     sanitized_nam,
+		     sanitized_nam_size - 1,
 		     error ) != 1 )
 #else
 		if( libcpath_path_join(
@@ -5461,8 +5489,8 @@ int export_handle_export_file_entry(
 		     &target_path_size,
 		     export_path,
 		     export_path_size - 1,
-		     name,
-		     name_size - 1,
+		     sanitized_nam,
+		     sanitized_nam_size - 1,
 		     error ) != 1 )
 #endif
 		{
@@ -5476,9 +5504,9 @@ int export_handle_export_file_entry(
 			goto on_error;
 		}
 		memory_free(
-		 name );
+		 sanitized_nam );
 
-		name = NULL;
+		sanitized_nam = NULL;
 
 		if( target_path == NULL )
 		{
@@ -5649,6 +5677,11 @@ on_error:
 	{
 		memory_free(
 		 target_path );
+	}
+	if( sanitized_nam != NULL )
+	{
+		memory_free(
+		 sanitized_nam );
 	}
 	if( name != NULL )
 	{
