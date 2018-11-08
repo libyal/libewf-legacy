@@ -5097,7 +5097,7 @@ int export_handle_export_single_files(
 	process_status_t *process_status   = NULL;
 	system_character_t *sanitized_name = NULL;
 	static char *function              = "export_handle_export_single_files";
-	size_t export_path_size            = 0;
+	size_t export_path_length          = 0;
 	size_t sanitized_name_size         = 0;
 	int result                         = 0;
 	int status                         = PROCESS_STATUS_COMPLETED;
@@ -5124,8 +5124,8 @@ int export_handle_export_single_files(
 
 		return( -1 );
 	}
-	export_path_size = 1 + libcstring_system_string_length(
-	                        export_handle->target_path );
+	export_path_length = libcstring_system_string_length(
+	                      export_handle->target_path );
 
 #if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libcpath_path_get_sanitized_path_wide(
@@ -5480,8 +5480,8 @@ int export_handle_export_file_entry(
 		     &target_path_size,
 		     export_path,
 		     export_path_size - 1,
-		     sanitized_nam,
-		     sanitized_nam_size - 1,
+		     sanitized_name,
+		     sanitized_name_size - 1,
 		     error ) != 1 )
 #else
 		if( libcpath_path_join(
@@ -5489,8 +5489,8 @@ int export_handle_export_file_entry(
 		     &target_path_size,
 		     export_path,
 		     export_path_size - 1,
-		     sanitized_nam,
-		     sanitized_nam_size - 1,
+		     sanitized_name,
+		     sanitized_name_size - 1,
 		     error ) != 1 )
 #endif
 		{
@@ -5504,9 +5504,9 @@ int export_handle_export_file_entry(
 			goto on_error;
 		}
 		memory_free(
-		 sanitized_nam );
+		 sanitized_name );
 
-		sanitized_nam = NULL;
+		sanitized_name = NULL;
 
 		if( target_path == NULL )
 		{
@@ -5678,10 +5678,10 @@ on_error:
 		memory_free(
 		 target_path );
 	}
-	if( sanitized_nam != NULL )
+	if( sanitized_name != NULL )
 	{
 		memory_free(
-		 sanitized_nam );
+		 sanitized_name );
 	}
 	if( name != NULL )
 	{
