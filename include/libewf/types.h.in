@@ -1,7 +1,7 @@
 /*
  * Type definitions for libewf
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2018, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -187,26 +187,26 @@ typedef int64_t off64_t;
  */
 #if !defined( __USE_UNIX98 )
 #define __USE_UNIX98
-#define LIBCSTRING_DEFINITION_UNIX98
+#define LIBEWF_DEFINITION_UNIX98
 #endif
 
 #include <wchar.h>
 
-#if defined( LIBCSTRING_DEFINITION_UNIX98 )
+#if defined( LIBEWF_DEFINITION_UNIX98 )
 #undef __USE_UNIX98
-#undef LIBCSTRING_DEFINITION_UNIX98
+#undef LIBEWF_DEFINITION_UNIX98
 #endif
 
 #endif
 
 /* The following type definitions hide internal data structures
  */
-typedef intptr_t libewf_handle_t;
 typedef intptr_t libewf_file_entry_t;
+typedef intptr_t libewf_handle_t;
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBEWF_TYPES_H ) */
 

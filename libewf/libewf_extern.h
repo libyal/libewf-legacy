@@ -1,7 +1,7 @@
 /*
  * The internal extern definition
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2018, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -28,20 +28,15 @@
  */
 #if !defined( HAVE_LOCAL_LIBEWF )
 
-/* If Cygwin libtool DLL support is enabled set LIBEWF_DLL_EXPORT
- * before including libewf/extern.h
- */
-#if defined( _WIN32 ) && defined( DLL_EXPORT )
-#define LIBEWF_DLL_EXPORT
-#endif
-
 #include <libewf/extern.h>
 
+#define LIBEWF_EXTERN_VARIABLE	LIBEWF_EXTERN
+
 #else
+#define LIBEWF_EXTERN		/* extern */
+#define LIBEWF_EXTERN_VARIABLE	extern
 
-#define LIBEWF_EXTERN  extern
+#endif /* !defined( HAVE_LOCAL_LIBEWF ) */
 
-#endif
-
-#endif
+#endif /* !defined( _LIBEWF_INTERNAL_EXTERN_H ) */
 

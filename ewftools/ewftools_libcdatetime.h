@@ -1,7 +1,7 @@
 /*
- * The internal libcdatetime header
+ * The libcdatetime header wrapper
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2018, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -19,8 +19,8 @@
  * along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined( _LIBEWFTOOLS_LIBCDATETIME_H )
-#define _LIBEWFTOOLS_LIBCDATETIME_H
+#if !defined( _EWFTOOLS_LIBCDATETIME_H )
+#define _EWFTOOLS_LIBCDATETIME_H
 
 #include <common.h>
 
@@ -38,13 +38,13 @@
 /* If libtool DLL support is enabled set LIBCDATETIME_DLL_IMPORT
  * before including libcdatetime.h
  */
-#if defined( _WIN32 ) && defined( DLL_IMPORT )
+#if defined( _WIN32 ) && defined( DLL_IMPORT ) && !defined( HAVE_STATIC_EXECUTABLES )
 #define LIBCDATETIME_DLL_IMPORT
 #endif
 
 #include <libcdatetime.h>
 
-#endif
+#endif /* defined( HAVE_LOCAL_LIBCDATETIME ) */
 
-#endif
+#endif /* !defined( _EWFTOOLS_LIBCDATETIME_H ) */
 

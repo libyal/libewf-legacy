@@ -1,7 +1,7 @@
 /*
  * Codepage definitions for libewf
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2018, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -118,5 +118,5 @@ enum LIBEWF_CODEPAGES
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBEWF_CODEPAGE_H ) */
 

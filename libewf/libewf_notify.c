@@ -1,7 +1,7 @@
 /*
  * Notification functions
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2018, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -20,17 +20,15 @@
  */
 
 #include <common.h>
+#include <file_stream.h>
 #include <types.h>
-
-#include "libewf_libcerror.h"
-#include "libewf_libcnotify.h"
 
 #if defined( HAVE_STDLIB_H ) || defined( WINAPI )
 #include <stdlib.h>
 #endif
 
-#include <stdio.h>
-
+#include "libewf_libcerror.h"
+#include "libewf_libcnotify.h"
 #include "libewf_notify.h"
 
 #if !defined( HAVE_LOCAL_LIBEWF )
@@ -118,5 +116,5 @@ int libewf_notify_stream_close(
 	return( 0 );
 }
 
-#endif
+#endif /* !defined( HAVE_LOCAL_LIBEWF ) */
 

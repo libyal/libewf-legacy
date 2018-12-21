@@ -1,7 +1,7 @@
 /*
- * The internal libhmac header
+ * The libhmac header wrapper
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2018, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -25,6 +25,7 @@
 #include <common.h>
 
 #if defined( HAVE_LOCAL_LIBHMAC )
+
 #include <libhmac_definitions.h>
 #include <libhmac_md5.h>
 #include <libhmac_sha1.h>
@@ -34,9 +35,17 @@
 #include <libhmac_types.h>
 
 #else
+
+/* If libtool DLL support is enabled set LIBHMAC_DLL_IMPORT
+ * before including libhmac.h
+ */
+#if defined( _WIN32 ) && defined( DLL_IMPORT ) && !defined( HAVE_STATIC_EXECUTABLES )
+#define LIBHMAC_DLL_IMPORT
+#endif
+
 #include <libhmac.h>
 
-#endif
+#endif /* defined( HAVE_LOCAL_LIBHMAC ) */
 
-#endif
+#endif /* !defined( _EWFTOOLS_LIBHMAC_H ) */
 

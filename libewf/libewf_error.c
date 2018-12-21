@@ -1,7 +1,7 @@
 /*
  * Error functions
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2018, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -20,13 +20,11 @@
  */
 
 #include <common.h>
+#include <file_stream.h>
 #include <types.h>
 
-#include "libewf_libcerror.h"
-
-#include <stdio.h>
-
 #include "libewf_error.h"
+#include "libewf_libcerror.h"
 
 #if !defined( HAVE_LOCAL_LIBEWF )
 
@@ -46,9 +44,13 @@ int libewf_error_fprint(
      libewf_error_t *error,
      FILE *stream )
 {
-	return( libcerror_error_fprint(
-	         (libcerror_error_t *) error,
-	         stream ) );
+	int print_count = 0;
+
+	print_count = libcerror_error_fprint(
+	               (libcerror_error_t *) error,
+	               stream );
+
+	return( print_count );
 }
 
 /* Prints a descriptive string of the error to the string
@@ -60,10 +62,14 @@ int libewf_error_sprint(
      char *string,
      size_t size )
 {
-	return( libcerror_error_sprint(
-	         (libcerror_error_t *) error,
-	         string,
-	         size ) );
+	int print_count = 0;
+
+	print_count = libcerror_error_sprint(
+	               (libcerror_error_t *) error,
+	               string,
+	               size );
+
+	return( print_count );
 }
 
 /* Prints a backtrace of the error to the stream
@@ -73,9 +79,13 @@ int libewf_error_backtrace_fprint(
      libewf_error_t *error,
       FILE *stream )
 {
-	return( libcerror_error_backtrace_fprint(
-	         (libcerror_error_t *) error,
-	         stream ) );
+	int print_count = 0;
+
+	print_count = libcerror_error_backtrace_fprint(
+	               (libcerror_error_t *) error,
+	               stream );
+
+	return( print_count );
 }
 
 /* Prints a backtrace of the error to the string
@@ -87,11 +97,15 @@ int libewf_error_backtrace_sprint(
      char *string,
      size_t size )
 {
-	return( libcerror_error_backtrace_sprint(
-	         (libcerror_error_t *) error,
-	         string,
-	         size ) );
+	int print_count = 0;
+
+	print_count = libcerror_error_backtrace_sprint(
+	               (libcerror_error_t *) error,
+	               string,
+	               size );
+
+	return( print_count );
 }
 
-#endif
+#endif /* !defined( HAVE_LOCAL_LIBEWF ) */
 

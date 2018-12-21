@@ -1,7 +1,7 @@
 /*
- * The internal libclocale header
+ * The libclocale header wrapper
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2018, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -38,13 +38,13 @@
 /* If libtool DLL support is enabled set LIBCLOCALE_DLL_IMPORT
  * before including libclocale.h
  */
-#if defined( _WIN32 ) && defined( DLL_IMPORT )
+#if defined( _WIN32 ) && defined( DLL_IMPORT ) && !defined( HAVE_STATIC_EXECUTABLES )
 #define LIBCLOCALE_DLL_IMPORT
 #endif
 
 #include <libclocale.h>
 
-#endif
+#endif /* defined( HAVE_LOCAL_LIBCLOCALE ) */
 
-#endif
+#endif /* !defined( _EWFTOOLS_LIBCLOCALE_H ) */
 

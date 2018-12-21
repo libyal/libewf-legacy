@@ -1,7 +1,7 @@
 /*
- * The internal libcpath header
+ * The libcpath header wrapper
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2018, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -36,13 +36,13 @@
 /* If libtool DLL support is enabled set LIBCPATH_DLL_IMPORT
  * before including libcpath.h
  */
-#if defined( _WIN32 ) && defined( DLL_IMPORT )
+#if defined( _WIN32 ) && defined( DLL_IMPORT ) && !defined( HAVE_STATIC_EXECUTABLES )
 #define LIBCPATH_DLL_IMPORT
 #endif
 
 #include <libcpath.h>
 
-#endif
+#endif /* defined( HAVE_LOCAL_LIBCPATH ) */
 
-#endif
+#endif /* !defined( _EWFTOOLS_LIBCPATH_H ) */
 
