@@ -1,38 +1,42 @@
 dnl Functions for libfdata
 dnl
-dnl Version: 20170905
+dnl Version: 20181117
 
 dnl Function to detect if libfdata is available
 dnl ac_libfdata_dummy is used to prevent AC_CHECK_LIB adding unnecessary -l<library> arguments
 AC_DEFUN([AX_LIBFDATA_CHECK_LIB],
-  [dnl Check if parameters were provided
-  AS_IF(
-    [test "x$ac_cv_with_libfdata" != x && test "x$ac_cv_with_libfdata" != xno && test "x$ac_cv_with_libfdata" != xauto-detect],
-    [AS_IF(
-      [test -d "$ac_cv_with_libfdata"],
-      [CFLAGS="$CFLAGS -I${ac_cv_with_libfdata}/include"
-      LDFLAGS="$LDFLAGS -L${ac_cv_with_libfdata}/lib"],
-      [AC_MSG_WARN([no such directory: $ac_cv_with_libfdata])
-      ])
-    ])
-
-  AS_IF(
-    [test "x$ac_cv_with_libfdata" = xno],
+  [AS_IF(
+    [test "x$ac_cv_enable_shared_libs" = xno || test "x$ac_cv_with_libfdata" = xno],
     [ac_cv_libfdata=no],
-    [dnl Check for a pkg-config file
+    [dnl Check if the directory provided as parameter exists
     AS_IF(
-      [test "x$cross_compiling" != "xyes" && test "x$PKGCONFIG" != "x"],
-      [PKG_CHECK_MODULES(
-        [libfdata],
-        [libfdata >= 20160325],
-        [ac_cv_libfdata=yes],
-        [ac_cv_libfdata=no])
+      [test "x$ac_cv_with_libfdata" != x && test "x$ac_cv_with_libfdata" != xauto-detect],
+      [AS_IF(
+        [test -d "$ac_cv_with_libfdata"],
+        [CFLAGS="$CFLAGS -I${ac_cv_with_libfdata}/include"
+        LDFLAGS="$LDFLAGS -L${ac_cv_with_libfdata}/lib"],
+        [AC_MSG_FAILURE(
+          [no such directory: $ac_cv_with_libfdata],
+          [1])
+        ])
+        ac_cv_libfdata=check],
+      [dnl Check for a pkg-config file
+      AS_IF(
+        [test "x$cross_compiling" != "xyes" && test "x$PKGCONFIG" != "x"],
+        [PKG_CHECK_MODULES(
+          [libfdata],
+          [libfdata >= 20181009],
+          [ac_cv_libfdata=yes],
+          [ac_cv_libfdata=check])
+        ])
+      AS_IF(
+        [test "x$ac_cv_libfdata" = xyes],
+        [ac_cv_libfdata_CPPFLAGS="$pkg_cv_libfdata_CFLAGS"
+        ac_cv_libfdata_LIBADD="$pkg_cv_libfdata_LIBS"])
       ])
 
     AS_IF(
-      [test "x$ac_cv_libfdata" = xyes],
-      [ac_cv_libfdata_CPPFLAGS="$pkg_cv_libfdata_CFLAGS"
-      ac_cv_libfdata_LIBADD="$pkg_cv_libfdata_LIBS"],
+      [test "x$ac_cv_libfdata" = xcheck],
       [dnl Check for headers
       AC_CHECK_HEADERS([libfdata.h])
 
@@ -49,7 +53,76 @@ AC_DEFUN([AX_LIBFDATA_CHECK_LIB],
           [ac_cv_libfdata=no])
 
         dnl Area functions
-        dnl TODO: add functions
+        AC_CHECK_LIB(
+          fdata,
+          libfdata_area_initialize,
+          [ac_cv_libfdata_dummy=yes],
+          [ac_cv_libfdata=no])
+        AC_CHECK_LIB(
+          fdata,
+          libfdata_area_free,
+          [ac_cv_libfdata_dummy=yes],
+          [ac_cv_libfdata=no])
+        AC_CHECK_LIB(
+          fdata,
+          libfdata_area_clone,
+          [ac_cv_libfdata_dummy=yes],
+          [ac_cv_libfdata=no])
+        AC_CHECK_LIB(
+          fdata,
+          libfdata_area_empty,
+          [ac_cv_libfdata_dummy=yes],
+          [ac_cv_libfdata=no])
+        AC_CHECK_LIB(
+          fdata,
+          libfdata_area_resize,
+          [ac_cv_libfdata_dummy=yes],
+          [ac_cv_libfdata=no])
+        AC_CHECK_LIB(
+          fdata,
+          libfdata_area_get_number_of_segments,
+          [ac_cv_libfdata_dummy=yes],
+          [ac_cv_libfdata=no])
+        AC_CHECK_LIB(
+          fdata,
+          libfdata_area_get_segment_by_index,
+          [ac_cv_libfdata_dummy=yes],
+          [ac_cv_libfdata=no])
+        AC_CHECK_LIB(
+          fdata,
+          libfdata_area_set_segment_by_index,
+          [ac_cv_libfdata_dummy=yes],
+          [ac_cv_libfdata=no])
+        AC_CHECK_LIB(
+          fdata,
+          libfdata_area_prepend_segment,
+          [ac_cv_libfdata_dummy=yes],
+          [ac_cv_libfdata=no])
+        AC_CHECK_LIB(
+          fdata,
+          libfdata_area_append_segment,
+          [ac_cv_libfdata_dummy=yes],
+          [ac_cv_libfdata=no])
+        AC_CHECK_LIB(
+          fdata,
+          libfdata_area_get_element_data_size,
+          [ac_cv_libfdata_dummy=yes],
+          [ac_cv_libfdata=no])
+        AC_CHECK_LIB(
+          fdata,
+          libfdata_area_get_element_value_at_offset,
+          [ac_cv_libfdata_dummy=yes],
+          [ac_cv_libfdata=no])
+        AC_CHECK_LIB(
+          fdata,
+          libfdata_area_set_element_value_at_offset,
+          [ac_cv_libfdata_dummy=yes],
+          [ac_cv_libfdata=no])
+        AC_CHECK_LIB(
+          fdata,
+          libfdata_area_get_size,
+          [ac_cv_libfdata_dummy=yes],
+          [ac_cv_libfdata=no])
 
         dnl Balanced tree functions
         dnl TODO: add functions
@@ -376,8 +449,13 @@ AC_DEFUN([AX_LIBFDATA_CHECK_LIB],
         dnl Vector list functions
         dnl TODO: add functions
 
-        ac_cv_libfdata_LIBADD="-lfdata"
-        ])
+        ac_cv_libfdata_LIBADD="-lfdata"])
+      ])
+    AS_IF(
+      [test "x$ac_cv_with_libfdata" != x && test "x$ac_cv_with_libfdata" != xauto-detect && test "x$ac_cv_libfdata" != xyes],
+      [AC_MSG_FAILURE(
+        [unable to find supported libfdata in directory: $ac_cv_with_libfdata],
+        [1])
       ])
     ])
 

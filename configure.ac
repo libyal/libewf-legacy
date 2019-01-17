@@ -8,15 +8,12 @@ AC_INIT(
 AC_CONFIG_SRCDIR(
  [include/libewf.h.in])
 
-AM_INIT_AUTOMAKE([gnu 1.6])
+AM_INIT_AUTOMAKE([gnu 1.6 tar-ustar])
 
 AC_CONFIG_MACRO_DIR([m4])
 
 dnl Check for host type
 AC_CANONICAL_HOST
-
-dnl Check for large file support
-AC_SYS_LARGEFILE
 
 dnl Check for libtool DLL support
 AC_LIBTOOL_WIN32_DLL
@@ -47,6 +44,9 @@ dnl Check for compiler language support
 AC_C_CONST
 AC_C_VOLATILE
 
+dnl Check for large file support
+AC_SYS_LARGEFILE
+
 dnl Check if shared library support should be disabled
 AX_COMMON_CHECK_DISABLE_SHARED_LIBS
 
@@ -55,6 +55,12 @@ AX_COMMON_CHECK_ENABLE_WINAPI
 
 dnl Check if wide character type should be enabled
 AX_COMMON_CHECK_ENABLE_WIDE_CHARACTER_TYPE
+
+dnl Check if verbose output should be enabled
+AX_COMMON_CHECK_ENABLE_VERBOSE_OUTPUT
+
+dnl Check if debug output should be enabled
+AX_COMMON_CHECK_ENABLE_DEBUG_OUTPUT
 
 dnl Check for type definitions
 AX_TYPES_CHECK_LOCAL
@@ -149,12 +155,6 @@ dnl Check for headers and functions used in tools
 dnl Check if ewftools should be build as static executables
 AX_COMMON_CHECK_ENABLE_STATIC_EXECUTABLES
 
-dnl Check if libewf should be build with verbose output
-AX_COMMON_CHECK_ENABLE_VERBOSE_OUTPUT
-
-dnl Check if libewf should be build with debug output
-AX_COMMON_CHECK_ENABLE_DEBUG_OUTPUT
-
 dnl Check if libewf python bindings (pyewf) should be build
 AX_PYTHON_CHECK_ENABLE
 
@@ -192,7 +192,7 @@ AS_IF(
  [test "x$enable_shared" = xyes],
  [AS_CASE(
   [$host],
-  [*cygwin* | *mingw*],
+  [*cygwin* | *mingw* | *msys*],
   [AC_DEFINE(
    [HAVE_DLLMAIN],
    [1],
@@ -234,12 +234,7 @@ AC_SUBST(
  [SPEC_DATE],
  [`date +"%a %b %e %Y" 2> /dev/null`])
 
-dnl Set the current working directory for PackageMaker files
-AC_SUBST(
- [PWD],
- [`pwd`])
-
-dnl Have configure make the Makefiles
+dnl Generate Makefiles
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([include/Makefile])
 AC_CONFIG_FILES([common/Makefile])
