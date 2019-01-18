@@ -5447,7 +5447,6 @@ int export_handle_export_file_entry(
 		if( libcpath_path_get_sanitized_filename_wide(
 		     name,
 		     name_size - 1,
-		     export_path_length,
 		     &sanitized_name,
 		     &sanitized_name_size,
 		     error ) != 1 )
@@ -6360,7 +6359,7 @@ int export_handle_checksum_errors_fprint(
 					{
 						fprintf(
 						 stream,
-						 " %s",
+						 " %" PRIs_LIBCSTRING_SYSTEM "",
 						 filename );
 
 						last_filename      = filename;
@@ -6374,7 +6373,7 @@ int export_handle_checksum_errors_fprint(
 					{
 						fprintf(
 						 stream,
-						 ", %s",
+						 ", %" PRIs_LIBCSTRING_SYSTEM "",
 						 filename );
 
 						memory_free(

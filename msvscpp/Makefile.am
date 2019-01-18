@@ -1,5 +1,4 @@
 MSVSCPP_FILES = \
-	dokan/dokan.vcproj \
 	ewf.net/ewf.net.vcproj \
 	ewf_test_glob/ewf_test_glob.vcproj \
 	ewf_test_read/ewf_test_read.vcproj \

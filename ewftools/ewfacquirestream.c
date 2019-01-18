@@ -31,16 +31,23 @@
 #include <stdlib.h>
 #endif
 
+#if defined( HAVE_IO_H ) || defined( WINAPI )
+#include <io.h>
+#endif
+
 #include "byte_size_string.h"
 #include "ewfcommon.h"
 #include "ewfinput.h"
-#include "ewfoutput.h"
+#include "ewftools_getopt.h"
 #include "ewftools_libcerror.h"
 #include "ewftools_libclocale.h"
 #include "ewftools_libcnotify.h"
 #include "ewftools_libcstring.h"
 #include "ewftools_libcsystem.h"
 #include "ewftools_libewf.h"
+#include "ewftools_output.h"
+#include "ewftools_signal.h"
+#include "ewftools_unused.h"
 #include "imaging_handle.h"
 #include "log_handle.h"
 #include "process_status.h"
@@ -183,12 +190,12 @@ void usage_fprint(
 /* Signal handler for ewfacquire
  */
 void ewfacquirestream_signal_handler(
-      libcsystem_signal_t signal LIBCSYSTEM_ATTRIBUTE_UNUSED )
+      ewftools_signal_t signal EWFTOOLS_ATTRIBUTE_UNUSED )
 {
 	libcerror_error_t *error = NULL;
 	static char *function   = "ewfacquirestream_signal_handler";
 
-	LIBCSYSTEM_UNREFERENCED_PARAMETER( signal )
+	EWFTOOLS_UNREFERENCED_PARAMETER( signal )
 
 	ewfacquirestream_abort = 1;
 
@@ -210,8 +217,13 @@ void ewfacquirestream_signal_handler(
 	}
 	/* Force stdin to close otherwise any function reading it will remain blocked
 	 */
-	if( libcsystem_file_io_close(
+#if defined( WINAPI ) && !defined( __CYGWIN__ )
+	if( _close(
 	     0 ) != 0 )
+#else
+	if( close(
+	     0 ) != 0 )
+#endif
 	{
 		libcnotify_printf(
 		 "%s: unable to close stdin.\n",
@@ -976,17 +988,17 @@ int main( int argc, char * const argv[] )
 
 		goto on_error;
 	}
-	if( libcsystem_initialize(
+	if( ewftools_output_initialize(
 	     _IONBF,
 	     &error ) != 1 )
 	{
-		ewfoutput_version_fprint(
+		ewftools_output_version_fprint(
 		 stdout,
 		 program );
 
 		fprintf(
 		 stderr,
-		 "Unable to initialize system values.\n" );
+		 "Unable to initialize output settings.\n" );
 
 		goto on_error;
 	}
@@ -1003,7 +1015,7 @@ int main( int argc, char * const argv[] )
 	     _O_BINARY ) == -1 )
 #endif
 	{
-		ewfoutput_version_fprint(
+		ewftools_output_version_fprint(
 		 stdout,
 		 program );
 
@@ -1017,7 +1029,7 @@ int main( int argc, char * const argv[] )
 		goto on_error;
 	}
 #endif
-	while( ( option = libcsystem_getopt(
+	while( ( option = ewftools_getopt(
 	                   argc,
 	                   argv,
 	                   _LIBCSTRING_SYSTEM_STRING( "A:b:B:c:C:d:D:e:E:f:hl:m:M:N:o:p:P:qsS:t:vVx2:" ) ) ) != (libcstring_system_integer_t) -1 )
@@ -1026,7 +1038,7 @@ int main( int argc, char * const argv[] )
 		{
 			case (libcstring_system_integer_t) '?':
 			default:
-				ewfoutput_version_fprint(
+				ewftools_output_version_fprint(
 				 stdout,
 				 program );
 
@@ -1091,7 +1103,7 @@ int main( int argc, char * const argv[] )
 				break;
 
 			case (libcstring_system_integer_t) 'h':
-				ewfoutput_version_fprint(
+				ewftools_output_version_fprint(
 				 stdout,
 				 program );
 
@@ -1161,11 +1173,11 @@ int main( int argc, char * const argv[] )
 				break;
 
 			case (libcstring_system_integer_t) 'V':
-				ewfoutput_version_fprint(
+				ewftools_output_version_fprint(
 				 stdout,
 				 program );
 
-				ewfoutput_copyright_fprint(
+				ewftools_output_copyright_fprint(
 				 stdout );
 
 				return( EXIT_SUCCESS );
@@ -1181,7 +1193,7 @@ int main( int argc, char * const argv[] )
 				break;
 		}
 	}
-	ewfoutput_version_fprint(
+	ewftools_output_version_fprint(
 	 stdout,
 	 program );
 
@@ -1696,7 +1708,7 @@ int main( int argc, char * const argv[] )
 
 		goto on_error;
 	}
-	if( libcsystem_signal_attach(
+	if( ewftools_signal_attach(
 	     ewfacquirestream_signal_handler,
 	     &error ) != 1 )
 	{
@@ -1778,7 +1790,7 @@ int main( int argc, char * const argv[] )
 			goto on_error;
 		}
 	}
-	if( libcsystem_signal_detach(
+	if( ewftools_signal_detach(
 	     &error ) != 1 )
 	{
 		fprintf(

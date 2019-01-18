@@ -1,7 +1,7 @@
 /*
- * Output functions
+ * System character string functions
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2019, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -19,33 +19,40 @@
  * along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined( _EWFOUTPUT_H )
-#define _EWFOUTPUT_H
+#if !defined( _EWFTOOLS_SYSTEM_STRING_H )
+#define _EWFTOOLS_SYSTEM_STRING_H
 
 #include <common.h>
-#include <file_stream.h>
 #include <types.h>
 
-#include "ewftools_libcstring.h"
+#include "ewftools_libcerror.h"
 
 #if defined( __cplusplus )
 extern "C" {
 #endif
 
-void ewfoutput_copyright_fprint(
-      FILE *stream );
+int ewftools_system_string_decimal_copy_to_64_bit(
+     const system_character_t *string,
+     size_t string_size,
+     uint64_t *value_64bit,
+     libcerror_error_t **error );
 
-void ewfoutput_version_fprint(
-      FILE *stream,
-      const libcstring_system_character_t *program );
+int ewftools_string_size_to_utf8_string(
+     const system_character_t *string,
+     size_t string_size,
+     size_t *utf8_string_size,
+     libcerror_error_t **error );
 
-void ewfoutput_version_detailed_fprint(
-      FILE *stream,
-      const libcstring_system_character_t *program );
+int ewftools_string_copy_to_utf8_string(
+     const system_character_t *string,
+     size_t string_size,
+     uint8_t *utf8_string,
+     size_t utf8_string_size,
+     libcerror_error_t **error );
 
 #if defined( __cplusplus )
 }
 #endif
 
-#endif
+#endif /* !defined( _EWFTOOLS_SYSTEM_STRING_H ) */
 

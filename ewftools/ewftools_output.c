@@ -1,7 +1,7 @@
 /*
  * Output functions
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2019, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -22,27 +22,8 @@
 #include <common.h>
 #include <file_stream.h>
 #include <memory.h>
+#include <system_string.h>
 #include <types.h>
-
-#if defined( HAVE_STDLIB_H ) || defined( WINAPI )
-#include <stdlib.h>
-#endif
-
-#if defined( HAVE_STRING_H ) || defined( WINAPI )
-#include <string.h>
-#endif
-
-#if defined( HAVE_LOCAL_LIBBFIO )
-#include <libbfio_definitions.h>
-#elif defined( HAVE_LIBBFIO )
-#include <libbfio.h>
-#endif
-
-#if defined( HAVE_LOCAL_LIBFVALUE )
-#include <libfvalue_definitions.h>
-#elif defined( HAVE_LIBFVALUE )
-#include <libfvalue.h>
-#endif
 
 #if defined( HAVE_ZLIB ) || defined( ZLIB_DLL )
 #include <zlib.h>
@@ -56,49 +37,117 @@
 #include <uuid/uuid.h>
 #endif
 
-#include "ewfoutput.h"
+#include "ewftools_i18n.h"
+#include "ewftools_libbfio.h"
 #include "ewftools_libcerror.h"
 #include "ewftools_libclocale.h"
 #include "ewftools_libcnotify.h"
-#include "ewftools_libcstring.h"
-#include "ewftools_libcsystem.h"
 #include "ewftools_libewf.h"
+#include "ewftools_libfvalue.h"
 #include "ewftools_libhmac.h"
 #include "ewftools_libodraw.h"
 #include "ewftools_libsmdev.h"
 #include "ewftools_libsmraw.h"
 #include "ewftools_libuna.h"
+#include "ewftools_output.h"
+
+/* Initializes output settings
+ * Returns 1 if successful or -1 on error
+ */
+int ewftools_output_initialize(
+     int stdio_mode,
+     libcerror_error_t **error )
+{
+	static char *function = "ewftools_output_initialize";
+
+	if( ( stdio_mode != _IOFBF )
+	 && ( stdio_mode != _IOLBF )
+	 && ( stdio_mode != _IONBF ) )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_UNSUPPORTED_VALUE,
+		 "%s: unsupported standard IO mode.",
+		 function );
+
+		return( -1 );
+	}
+#if !defined( __BORLANDC__ )
+	if( setvbuf(
+	     stdout,
+	     NULL,
+	     stdio_mode,
+	     0 ) != 0 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to set IO mode of stdout.",
+		 function );
+
+		return( -1 );
+	}
+	if( setvbuf(
+	     stderr,
+	     NULL,
+	     stdio_mode,
+	     0 ) != 0 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to set IO mode of stderr.",
+		 function );
+
+		return( -1 );
+	}
+#endif /* !defined( __BORLANDC__ ) */
+
+	return( 1 );
+}
 
 /* Prints the executable version information
  */
-void ewfoutput_copyright_fprint(
+void ewftools_output_copyright_fprint(
       FILE *stream )
 {
-	static char *function = "ewfoutput_copyright_fprint";
-
 	if( stream == NULL )
 	{
-		libcnotify_printf(
-		 "%s: invalid stream.\n",
-		 function );
-
 		return;
 	}
+	/* TRANSLATORS: This is a proper name.
+	 */
 	fprintf(
 	 stream,
-	 "Copyright (c) 2006-2014, Joachim Metz <%s>.\n"
-	 "This is free software; see the source for copying conditions. There is NO\n"
-	 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n",
+	 _( "Copyright (C) 2006-2019, %s.\n" ),
+	 _( "Joachim Metz" ) );
+
+	fprintf(
+	 stream,
+	 _( "This is free software; see the source for copying conditions. There is NO\n"
+	    "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n" ) );
+
+	/* TRANSLATORS: The placeholder indicates the bug-reporting address
+	 * for this package.  Please add _another line_ saying
+	 * "Report translation bugs to <...>\n" with the address for translation
+	 * bugs (typically your translation team's web or email address).
+	 */
+	fprintf(
+	 stream,
+	 _( "Report bugs to <%s>.\n" ),
 	 PACKAGE_BUGREPORT );
 }
 
 /* Prints the version information to a stream
  */
-void ewfoutput_version_fprint(
+void ewftools_output_version_fprint(
       FILE *stream,
-      const libcstring_system_character_t *program )
+      const system_character_t *program )
 {
-	static char *function = "ewfoutput_version_fprint";
+	static char *function = "ewftools_output_version_fprint";
 
 	if( stream == NULL )
 	{
@@ -118,18 +167,18 @@ void ewfoutput_version_fprint(
 	}
 	fprintf(
 	 stream,
-	 "%" PRIs_LIBCSTRING_SYSTEM " %s\n\n",
+	 "%" PRIs_SYSTEM " %s\n\n",
 	 program,
 	 LIBEWF_VERSION_STRING );
 }
 
 /* Prints the detailed version information to a stream
  */
-void ewfoutput_version_detailed_fprint(
+void ewftools_output_version_detailed_fprint(
       FILE *stream,
-      const libcstring_system_character_t *program )
+      const system_character_t *program )
 {
-	static char *function = "ewfoutput_version_detailed_fprint";
+	static char *function = "ewftools_output_version_detailed_fprint";
 
 	if( stream == NULL )
 	{
@@ -149,7 +198,7 @@ void ewfoutput_version_detailed_fprint(
 	}
 	fprintf(
 	 stream,
-	 "%" PRIs_LIBCSTRING_SYSTEM " %s (libewf %s",
+	 "%" PRIs_SYSTEM " %s (libewf %s",
 	 program,
 	 LIBEWF_VERSION_STRING,
 	 LIBEWF_VERSION_STRING );
@@ -181,11 +230,6 @@ void ewfoutput_version_detailed_fprint(
 	 ", zlib %s",
 	 ZLIB_VERSION );
 #endif
-
-	fprintf(
-	 stream,
-	 ", libsystem %s",
-	 LIBCSYSTEM_VERSION_STRING );
 
 #if defined( HAVE_LIBHMAC ) || defined( HAVE_LOCAL_LIBHMAC )
 	fprintf(

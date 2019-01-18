@@ -198,7 +198,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\ewftools\ewfoutput.c"
+				RelativePath="..\..\ewftools\ewftools_getopt.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ewftools\ewftools_output.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ewftools\ewftools_signal.c"
 				>
 			</File>
 			<File
@@ -252,7 +260,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\ewftools\ewfoutput.h"
+				RelativePath="..\..\ewftools\ewftools_getopt.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ewftools\ewftools_i18n.h"
 				>
 			</File>
 			<File
@@ -309,6 +321,18 @@
 			</File>
 			<File
 				RelativePath="..\..\ewftools\ewftools_libuna.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ewftools\ewftools_output.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ewftools\ewftools_signal.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ewftools\ewftools_unused.h"
 				>
 			</File>
 			<File
