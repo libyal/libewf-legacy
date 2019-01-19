@@ -126,9 +126,6 @@ AX_ZLIB_CHECK_UNCOMPRESS
 dnl Check for enabling libhmac for message digest hash function support
 AX_LIBHMAC_CHECK_ENABLE
 
-dnl Check for enabling libcaes for AES cipher function support
-AX_LIBCAES_CHECK_ENABLE
-
 dnl Check for library function support
 AX_LIBEWF_CHECK_LOCAL
 
@@ -215,12 +212,16 @@ CFLAGS="$CFLAGS -Wall";
 
 dnl Check if requires and build requires should be set in spec file
 AS_IF(
- [test "x$ac_cv_libcstring" = xyes || test "x$ac_cv_libcerror" = xyes || test "x$ac_cv_libcthreads" = xyes || test "x$ac_cv_libcdata" = xyes || test "x$ac_cv_libclocale" = xyes || test "x$ac_cv_libcnotify" = xyes || test "x$ac_cv_libcsplit" = xyes || test "x$ac_cv_libuna" = xyes || test "x$ac_cv_libcfile" = xyes || test "x$ac_cv_libcpath" = xyes || test "x$ac_cv_libbfio" = xyes || test "x$ac_cv_libfcache" = xyes || test "x$ac_cv_libfdata" = xyes || test "x$ac_cv_libfvalue" = xyes || test "x$ac_cv_libmfdata" = xyes || test "x$ac_cv_zlib" != xno || test "x$ac_cv_libhmac" = xyes || test "x$ac_cv_libcaes" = xyes],
+ [test "x$ac_cv_libcstring" = xyes || test "x$ac_cv_libcerror" = xyes || test "x$ac_cv_libcthreads" = xyes || test "x$ac_cv_libcdata" = xyes || test "x$ac_cv_libclocale" = xyes || test "x$ac_cv_libcnotify" = xyes || test "x$ac_cv_libcsplit" = xyes || test "x$ac_cv_libuna" = xyes || test "x$ac_cv_libcfile" = xyes || test "x$ac_cv_libcpath" = xyes || test "x$ac_cv_libbfio" = xyes || test "x$ac_cv_libfcache" = xyes || test "x$ac_cv_libfdata" = xyes || test "x$ac_cv_libfvalue" = xyes || test "x$ac_cv_libmfdata" = xyes || test "x$ac_cv_zlib" != xno || test "x$ac_cv_libhmac" = xyes],
  [AC_SUBST(
   [libewf_spec_requires],
   [Requires:])
- AC_SUBST(
-  [libewf_spec_build_requires],
+ ])
+
+AS_IF(
+ [test "x$ac_cv_libodraw" = xyes || test "x$ac_cv_libsmdev" = xyes || test "x$ac_cv_libsmraw" = xyes || test "x$ac_cv_libfuse" != xno],
+ [AC_SUBST(
+  [libewf_spec_tools_build_requires],
   [BuildRequires:])
  ])
 
@@ -255,7 +256,6 @@ AC_CONFIG_FILES([libfdata/Makefile])
 AC_CONFIG_FILES([libfvalue/Makefile])
 AC_CONFIG_FILES([libmfdata/Makefile])
 AC_CONFIG_FILES([libhmac/Makefile])
-AC_CONFIG_FILES([libcaes/Makefile])
 AC_CONFIG_FILES([libewf/Makefile])
 AC_CONFIG_FILES([libodraw/Makefile])
 AC_CONFIG_FILES([libsmdev/Makefile])
@@ -316,8 +316,6 @@ Building:
    MD5 support:                              $ac_cv_libhmac_md5
    SHA1 support:                             $ac_cv_libhmac_sha1
    SHA256 support:                           $ac_cv_libhmac_sha256
-   libcaes support:                          $ac_cv_libcaes
-   AES support:                              $ac_cv_libcaes_aes
    libodraw support:                         $ac_cv_libodraw
    libsmdev support:                         $ac_cv_libsmdev
    libsmraw support:                         $ac_cv_libsmraw
@@ -330,8 +328,6 @@ Features:
    Wide character type support:              $ac_cv_enable_wide_character_type
    ewftools are build as static executables: $ac_cv_enable_static_executables
    Python (pyewf) support:                   $ac_cv_enable_python
-   Python version 2 (pyewf) support:         $ac_cv_enable_python2
-   Python version 3 (pyewf) support:         $ac_cv_enable_python3
    Verbose output:                           $ac_cv_enable_verbose_output
    Debug output:                             $ac_cv_enable_debug_output
    Version 1 API compatibility:              $ac_cv_enable_v1_api

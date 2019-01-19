@@ -18,9 +18,7 @@ TESTS = \
 	test_glob.sh \
 	test_seek.sh \
 	test_read.sh \
-	test_write.sh \
 	test_read_write.sh \
-	test_read_write_delta.sh \
 	test_ewfverify.sh \
 	test_ewfverify_logical.sh \
 	test_ewfacquire.sh \

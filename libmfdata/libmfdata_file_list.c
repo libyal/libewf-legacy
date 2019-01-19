@@ -953,12 +953,12 @@ int libmfdata_file_list_get_file_value(
      uint8_t read_flags,
      libcerror_error_t **error )
 {
-	libfcache_cache_value_t *cache_value              = NULL;
+	libfcache_cache_value_t *cache_value               = NULL;
 	libmfdata_internal_file_list_t *internal_file_list = NULL;
 	static char *function                              = "libmfdata_file_list_get_file_value";
-        off64_t cache_value_offset                         = (off64_t) -1;
-	time_t cache_value_timestamp                       = 0;
 	time_t file_timestamp                              = 0;
+        off64_t cache_value_offset                         = (off64_t) -1;
+	int64_t cache_value_timestamp                      = 0;
 	int cache_entry_index                              = -1;
 	int cache_value_file_io_pool_entry                 = -1;
 	int element_index                                  = -1;
@@ -1088,7 +1088,7 @@ int libmfdata_file_list_get_file_value(
 			}
 		}
 		if( ( file_io_pool_entry == cache_value_file_io_pool_entry )
-		 && ( file_timestamp == cache_value_timestamp ) )
+		 && ( (int64_t) file_timestamp == cache_value_timestamp ) )
 		{
 			result = 1;
 		}
@@ -1202,7 +1202,7 @@ int libmfdata_file_list_get_file_value(
 			}
 		}
 		if( ( file_io_pool_entry != cache_value_file_io_pool_entry )
-		 || ( file_timestamp != cache_value_timestamp ) )
+		 || ( (int64_t) file_timestamp != cache_value_timestamp ) )
 		{
 			libcerror_error_set(
 			 error,
@@ -1410,7 +1410,7 @@ int libmfdata_file_list_set_file_value(
 	     cache_entry_index,
 	     file_io_pool_entry,
 	     0,
-	     file_timestamp,
+	     (int64_t) file_timestamp,
 	     file_value,
 	     free_file_value,
 	     flags,

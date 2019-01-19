@@ -17,7 +17,6 @@ MSVSCPP_FILES = \
 	ewfrecover/ewfrecover.vcproj \
 	ewfverify/ewfverify.vcproj \
 	libbfio/libbfio.vcproj \
-	libcaes/libcaes.vcproj \
 	libcdata/libcdata.vcproj \
 	libcdatetime/libcdatetime.vcproj \
 	libcerror/libcerror.vcproj \
