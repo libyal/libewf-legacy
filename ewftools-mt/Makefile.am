@@ -22,7 +22,6 @@ AM_CPPFLAGS = \
 	@LIBODRAW_CPPFLAGS@ \
 	@LIBSMDEV_CPPFLAGS@ \
 	@LIBSMRAW_CPPFLAGS@ \
-	@LIBCSYSTEM_CPPFLAGS@ \
 	@LIBFUSE_CPPFLAGS@ \
 	@LIBEWF_DLL_IMPORT@ \
 	@PTHREAD_CPPFLAGS@ \
@@ -50,13 +49,13 @@ ewfacquirestream_SOURCES = \
 	../ewftools/ewftools_libcpath.h \
 	../ewftools/ewftools_libcsplit.h \
 	../ewftools/ewftools_libcstring.h \
-	../ewftools/ewftools_libcsystem.h \
 	../ewftools/ewftools_libewf.h \
 	../ewftools/ewftools_libhmac.h \
 	../ewftools/ewftools_libodraw.h \
 	../ewftools/ewftools_libsmdev.h \
 	../ewftools/ewftools_libsmraw.h \
 	../ewftools/ewftools_libuna.h \
+	../ewftools/ewftools_signal.c ../ewftools/ewftools_signal.h \
 	../ewftools/guid.c ../ewftools/guid.h \
 	../ewftools/imaging_handle.c ../ewftools/imaging_handle.h \
 	../ewftools/log_handle.c ../ewftools/log_handle.h \
@@ -69,7 +68,6 @@ ewfacquirestream_LDADD = \
 	@LIBHMAC_LIBADD@ \
 	@LIBCRYPTO_LIBADD@ \
 	@LIBDL_LIBADD@ \
-	@LIBCSYSTEM_LIBADD@ \
 	@LIBCSPLIT_LIBADD@ \
 	@LIBCDATETIME_LIBADD@ \
 	../libewf/libewf.la \

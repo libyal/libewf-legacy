@@ -28,7 +28,6 @@
 #include "ewftools_libcdatetime.h"
 #include "ewftools_libcerror.h"
 #include "ewftools_libcstring.h"
-#include "ewftools_libcsystem.h"
 
 #if defined( __cplusplus )
 extern "C" {

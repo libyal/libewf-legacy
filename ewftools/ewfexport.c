@@ -48,7 +48,6 @@
 #include "ewftools_libclocale.h"
 #include "ewftools_libcnotify.h"
 #include "ewftools_libcstring.h"
-#include "ewftools_libcsystem.h"
 #include "ewftools_libewf.h"
 #include "ewftools_output.h"
 #include "ewftools_signal.h"

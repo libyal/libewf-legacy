@@ -6,8 +6,7 @@ AM_CPPFLAGS = \
 	@LIBCLOCALE_CPPFLAGS@ \
 	@LIBCNOTIFY_CPPFLAGS@ \
 	@LIBUNA_CPPFLAGS@ \
-	@LIBCFILE_CPPFLAGS@ \
-	@LIBCSYSTEM_CPPFLAGS@
+	@LIBCFILE_CPPFLAGS@
 
 if HAVE_PYTHON
 TESTS_PYEWF = \
@@ -18,7 +17,9 @@ TESTS = \
 	test_glob.sh \
 	test_seek.sh \
 	test_read.sh \
+	test_write.sh \
 	test_read_write.sh \
+	test_read_write_delta.sh \
 	test_ewfverify.sh \
 	test_ewfverify_logical.sh \
 	test_ewfacquire.sh \
@@ -84,28 +85,26 @@ ewf_test_read_LDADD = \
 
 ewf_test_read_write_SOURCES = \
 	ewf_test_definitions.h \
+	ewf_test_getopt.c ewf_test_getopt.h \
 	ewf_test_libcerror.h \
 	ewf_test_libcstring.h \
-	ewf_test_libcsystem.h \
 	ewf_test_libewf.h \
 	ewf_test_read_write.c
 
 ewf_test_read_write_LDADD = \
-	@LIBCSYSTEM_LIBADD@ \
 	../libewf/libewf.la \
 	@LIBCERROR_LIBADD@ \
 	@LIBCSTRING_LIBADD@
 
 ewf_test_read_write_delta_SOURCES = \
 	ewf_test_definitions.h \
+	ewf_test_getopt.c ewf_test_getopt.h \
 	ewf_test_libcerror.h \
 	ewf_test_libcstring.h \
-	ewf_test_libcsystem.h \
 	ewf_test_libewf.h \
 	ewf_test_read_write_delta.c
 
 ewf_test_read_write_delta_LDADD = \
-	@LIBCSYSTEM_LIBADD@ \
 	../libewf/libewf.la \
 	@LIBCERROR_LIBADD@ \
 	@LIBCSTRING_LIBADD@
@@ -126,11 +125,9 @@ ewf_test_truncate_SOURCES = \
 	ewf_test_libcfile.h \
 	ewf_test_libcnotify.h \
 	ewf_test_libcstring.h \
-	ewf_test_libcsystem.h \
 	ewf_test_truncate.c
 
 ewf_test_truncate_LDADD = \
-	@LIBCSYSTEM_LIBADD@ \
 	@LIBCFILE_LIBADD@ \
 	@LIBUNA_LIBADD@ \
 	@LIBCNOTIFY_LIBADD@ \
@@ -140,27 +137,26 @@ ewf_test_truncate_LDADD = \
 
 ewf_test_write_SOURCES = \
 	ewf_test_definitions.h \
+	ewf_test_getopt.c ewf_test_getopt.h \
 	ewf_test_libcerror.h \
 	ewf_test_libcstring.h \
 	ewf_test_libewf.h \
 	ewf_test_write.c
 
 ewf_test_write_LDADD = \
-	@LIBCSYSTEM_LIBADD@ \
 	../libewf/libewf.la \
 	@LIBCERROR_LIBADD@ \
 	@LIBCSTRING_LIBADD@
 
 ewf_test_write_chunk_SOURCES = \
 	ewf_test_definitions.h \
+	ewf_test_getopt.c ewf_test_getopt.h \
 	ewf_test_libcerror.h \
 	ewf_test_libcstring.h \
 	ewf_test_libewf.h \
-	ewf_test_libcsystem.h \
 	ewf_test_write_chunk.c
 
 ewf_test_write_chunk_LDADD = \
-	@LIBCSYSTEM_LIBADD@ \
 	../libewf/libewf.la \
 	@LIBCERROR_LIBADD@ \
 	@LIBCSTRING_LIBADD@

@@ -29,9 +29,9 @@
 #include <stdio.h>
 
 #include "ewf_test_definitions.h"
+#include "ewf_test_getopt.h"
 #include "ewf_test_libcerror.h"
 #include "ewf_test_libcstring.h"
-#include "ewf_test_libcsystem.h"
 #include "ewf_test_libewf.h"
 
 /* Define to make ewf_test_read_write generate verbose output
@@ -626,7 +626,7 @@ int main( int argc, char * const argv[] )
 	size32_t chunk_size                            = 0;
 	size_t delta_segment_filename_length           = 0;
 
-	while( ( option = libcsystem_getopt(
+	while( ( option = ewf_test_getopt(
 	                   argc,
 	                   argv,
 	                   _LIBCSTRING_SYSTEM_STRING( "t:" ) ) ) != (libcstring_system_integer_t) -1 )

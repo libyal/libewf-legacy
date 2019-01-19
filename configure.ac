@@ -2,7 +2,7 @@ AC_PREREQ( 2.59 )
 
 AC_INIT(
  [libewf],
- [20140805],
+ [20140806],
  [joachim.metz@gmail.com])
 
 AC_CONFIG_SRCDIR(
@@ -129,29 +129,9 @@ AX_LIBHMAC_CHECK_ENABLE
 dnl Check for library function support
 AX_LIBEWF_CHECK_LOCAL
 
-dnl Check for enabling libcsystem for cross-platform C generic system functions
-AX_LIBCSYSTEM_CHECK_ENABLE
-
-dnl Check for enabling GUID/UUID support
-AX_LIBUUID_CHECK_ENABLE
-
-dnl Check for enabling libodraw for optical disc (split) RAW support
-AX_LIBODRAW_CHECK_ENABLE
-
-dnl Check for enabling libsmdev for storage media device support
-AX_LIBSMDEV_CHECK_ENABLE
-
-dnl Check for enabling libsmraw for storage media (split) RAW support
-AX_LIBSMRAW_CHECK_ENABLE
-
-dnl Check for libfuse Filesystem in Userspace (FUSE) support
-AX_LIBFUSE_CHECK_ENABLE
-
-dnl Check for headers and functions used in tools
+dnl Check if libewf should be build with version 1 API
+AX_LIBEWF_CHECK_ENABLE_V1_API
  
-dnl Check if ewftools should be build as static executables
-AX_COMMON_CHECK_ENABLE_STATIC_EXECUTABLES
-
 dnl Check if libewf python bindings (pyewf) should be build
 AX_PYTHON_CHECK_ENABLE
 
@@ -168,21 +148,23 @@ AS_IF(
     ])
   ])
 
-dnl Check if libewf should be build with version 1 API
-AX_LIBEWF_CHECK_ENABLE_V1_API
+dnl Check for enabling GUID/UUID support
+AX_LIBUUID_CHECK_ENABLE
 
-dnl Check for the host operation system will be used as a fall back in the ewftools
-AX_LIBEWF_CHECK_HOST_OPERATING_SYSTEM
+dnl Check for enabling libodraw for optical disc (split) RAW support
+AX_LIBODRAW_CHECK_ENABLE
 
-dnl Headers included in various places
-AC_CHECK_HEADERS([stdarg.h varargs.h])
+dnl Check for enabling libsmdev for storage media device support
+AX_LIBSMDEV_CHECK_ENABLE
 
-AS_IF(
- [test "x$ac_cv_header_stdarg_h" != xyes && test "x$ac_cv_header_varargs_h" != xyes],
- [AC_MSG_FAILURE(
-  [Missing headers: stdarg.h and varargs.h],
-  [1])
- ])
+dnl Check for enabling libsmraw for storage media (split) RAW support
+AX_LIBSMRAW_CHECK_ENABLE
+
+dnl Check for libfuse Filesystem in Userspace (FUSE) support
+AX_LIBFUSE_CHECK_ENABLE
+
+dnl Check if ewftools required headers and functions are available
+AX_EWFTOOLS_CHECK_LOCAL
 
 dnl Check if DLL support is needed
 AS_IF(
@@ -260,7 +242,6 @@ AC_CONFIG_FILES([libewf/Makefile])
 AC_CONFIG_FILES([libodraw/Makefile])
 AC_CONFIG_FILES([libsmdev/Makefile])
 AC_CONFIG_FILES([libsmraw/Makefile])
-AC_CONFIG_FILES([libcsystem/Makefile])
 AC_CONFIG_FILES([ewftools/Makefile])
 AC_CONFIG_FILES([ewf.net/Makefile])
 AC_CONFIG_FILES([pyewf/Makefile])
@@ -319,7 +300,6 @@ Building:
    libodraw support:                         $ac_cv_libodraw
    libsmdev support:                         $ac_cv_libsmdev
    libsmraw support:                         $ac_cv_libsmraw
-   libcsystem support:                       $ac_cv_libcsystem
    GUID/UUID support:                        $ac_cv_libuuid
    FUSE support:                             $ac_cv_libfuse
 

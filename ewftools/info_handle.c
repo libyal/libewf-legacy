@@ -34,7 +34,6 @@
 #include "ewftools_libcerror.h"
 #include "ewftools_libcsplit.h"
 #include "ewftools_libcstring.h"
-#include "ewftools_libcsystem.h"
 #include "ewftools_libewf.h"
 #include "guid.h"
 #include "info_handle.h"

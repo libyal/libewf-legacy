@@ -38,9 +38,9 @@
 #include "ewftools_libcnotify.h"
 #include "ewftools_libcsplit.h"
 #include "ewftools_libcstring.h"
-#include "ewftools_libcsystem.h"
 #include "ewftools_libewf.h"
 #include "ewftools_libhmac.h"
+#include "ewftools_system_string.h"
 #include "guid.h"
 #include "imaging_handle.h"
 #include "platform.h"
@@ -3687,7 +3687,7 @@ int imaging_handle_set_acquiry_offset(
 		string_length = libcstring_system_string_length(
 				 string );
 
-		if( libcsystem_string_decimal_copy_to_64_bit(
+		if( ewftools_system_string_decimal_copy_to_64_bit(
 		     string,
 		     string_length + 1,
 		     &( imaging_handle->acquiry_offset ),
@@ -3746,7 +3746,7 @@ int imaging_handle_set_acquiry_size(
 		string_length = libcstring_system_string_length(
 				 string );
 
-		if( libcsystem_string_decimal_copy_to_64_bit(
+		if( ewftools_system_string_decimal_copy_to_64_bit(
 		     string,
 		     string_length + 1,
 		     &( imaging_handle->acquiry_size ),
@@ -5095,7 +5095,7 @@ int imaging_handle_set_hash_value(
 
 		return( -1 );
 	}
-	if( libcsystem_string_size_to_utf8_string(
+	if( ewftools_string_size_to_utf8_string(
 	     hash_value,
 	     hash_value_length + 1,
 	     &utf8_hash_value_size,
@@ -5124,7 +5124,7 @@ int imaging_handle_set_hash_value(
 
 		goto on_error;
 	}
-	if( libcsystem_string_copy_to_utf8_string(
+	if( ewftools_string_copy_to_utf8_string(
 	     hash_value,
 	     hash_value_length + 1,
 	     utf8_hash_value,

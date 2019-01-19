@@ -28,11 +28,11 @@
 #include "ewfinput.h"
 #include "ewftools_libcerror.h"
 #include "ewftools_libcstring.h"
-#include "ewftools_libcsystem.h"
 #include "ewftools_libewf.h"
 #include "ewftools_libodraw.h"
 #include "ewftools_libsmdev.h"
 #include "ewftools_libsmraw.h"
+#include "ewftools_system_string.h"
 #include "storage_media_buffer.h"
 
 #define DEVICE_HANDLE_INPUT_BUFFER_SIZE		64
@@ -2212,7 +2212,7 @@ int device_handle_set_number_of_error_retries(
 	string_length = libcstring_system_string_length(
 	                 string );
 
-	if( libcsystem_string_decimal_copy_to_64_bit(
+	if( ewftools_system_string_decimal_copy_to_64_bit(
 	     string,
 	     string_length + 1,
 	     &size_variable,

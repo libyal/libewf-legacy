@@ -29,14 +29,124 @@
 #include <stdio.h>
 
 #include "ewf_test_definitions.h"
+#include "ewf_test_getopt.h"
 #include "ewf_test_libcerror.h"
 #include "ewf_test_libcstring.h"
-#include "ewf_test_libcsystem.h"
 #include "ewf_test_libewf.h"
 
 /* Define to make ewf_test_read_write_delta generate verbose output
 #define EWF_TEST_READ_WRITE_DELTA_VERBOSE
  */
+
+/* Copies a string of a decimal value to a 64-bit value
+ * Returns 1 if successful or -1 on error
+ */
+int ewf_test_system_string_decimal_copy_to_64_bit(
+     const system_character_t *string,
+     size_t string_size,
+     uint64_t *value_64bit,
+     libcerror_error_t **error )
+{
+	static char *function              = "ewf_test_system_string_decimal_copy_to_64_bit";
+	size_t string_index                = 0;
+	system_character_t character_value = 0;
+	uint8_t maximum_string_index       = 20;
+	int8_t sign                        = 1;
+
+	if( string == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid string.",
+		 function );
+
+		return( -1 );
+	}
+	if( string_size > (size_t) SSIZE_MAX )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
+		 "%s: invalid string size value exceeds maximum.",
+		 function );
+
+		return( -1 );
+	}
+	if( value_64bit == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid value 64-bit.",
+		 function );
+
+		return( -1 );
+	}
+	*value_64bit = 0;
+
+	if( string[ string_index ] == (system_character_t) '-' )
+	{
+		string_index++;
+		maximum_string_index++;
+
+		sign = -1;
+	}
+	else if( string[ string_index ] == (system_character_t) '+' )
+	{
+		string_index++;
+		maximum_string_index++;
+	}
+	while( string_index < string_size )
+	{
+		if( string[ string_index ] == 0 )
+		{
+			break;
+		}
+		if( string_index > (size_t) maximum_string_index )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+			 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_LARGE,
+			 "%s: string too large.",
+			 function );
+
+			return( -1 );
+		}
+		*value_64bit *= 10;
+
+		if( ( string[ string_index ] >= (system_character_t) '0' )
+		 && ( string[ string_index ] <= (system_character_t) '9' ) )
+		{
+			character_value = (system_character_t) ( string[ string_index ] - (system_character_t) '0' );
+		}
+		else
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_UNSUPPORTED_VALUE,
+			 "%s: unsupported character value: %" PRIc_SYSTEM " at index: %d.",
+			 function,
+			 string[ string_index ],
+			 string_index );
+
+			return( -1 );
+		}
+		*value_64bit += character_value;
+
+		string_index++;
+	}
+	if( sign == -1 )
+	{
+		*value_64bit *= (uint64_t) -1;
+	}
+	return( 1 );
+}
 
 /* Tests reading/writing data of a specific size at a specific offset
  * Return 1 if successful, 0 if not or -1 on error
@@ -309,7 +419,7 @@ int main( int argc, char * const argv[] )
 	size64_t write_size                            = 0;
 	size_t string_length                           = 0;
 
-	while( ( option = libcsystem_getopt(
+	while( ( option = ewf_test_getopt(
 	                   argc,
 	                   argv,
 	                   _LIBCSTRING_SYSTEM_STRING( "B:o:t:" ) ) ) != (libcstring_system_integer_t) -1 )
@@ -354,7 +464,7 @@ int main( int argc, char * const argv[] )
 		string_length = libcstring_system_string_length(
 				 option_offset );
 
-		if( libcsystem_string_decimal_copy_to_64_bit(
+		if( ewf_test_system_string_decimal_copy_to_64_bit(
 		     option_offset,
 		     string_length + 1,
 		     (uint64_t *) &write_offset,
@@ -372,7 +482,7 @@ int main( int argc, char * const argv[] )
 		string_length = libcstring_system_string_length(
 				 option_size );
 
-		if( libcsystem_string_decimal_copy_to_64_bit(
+		if( ewf_test_system_string_decimal_copy_to_64_bit(
 		     option_size,
 		     string_length + 1,
 		     &write_size,

@@ -1,5 +1,5 @@
 /*
- * Platform functions
+ * GetOpt functions
  *
  * Copyright (C) 2006-2019, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -19,26 +19,50 @@
  * along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined( _PLATFORM_H )
-#define _PLATFORM_H
+#if !defined( _EWF_TEST_GETOPT_H )
+#define _EWF_TEST_GETOPT_H
 
 #include <common.h>
 #include <types.h>
 
-#include "ewftools_libcerror.h"
+/* unistd.h is included here to export getopt, optarg, optind and optopt
+ */
+#if defined( HAVE_UNISTD_H )
+#include <unistd.h>
+#endif
 
 #if defined( __cplusplus )
 extern "C" {
 #endif
 
-int platform_get_operating_system(
-     system_character_t *operating_system_string,
-     size_t operating_system_string_size,
-     libcerror_error_t **error );
+#if defined( HAVE_GETOPT )
+#define ewf_test_getopt( argument_count, argument_values, options_string ) \
+	getopt( argument_count, argument_values, options_string )
+
+#else
+
+#if !defined( __CYGWIN__ )
+extern int optind;
+extern system_character_t *optarg;
+extern system_integer_t optopt;
+
+#else
+int optind;
+system_character_t *optarg;
+system_integer_t optopt;
+
+#endif /* !defined( __CYGWIN__ ) */
+
+system_integer_t ewf_test_getopt(
+                  int argument_count,
+                  system_character_t * const argument_values[],
+                  const system_character_t *options_string );
+
+#endif /* defined( HAVE_GETOPT ) */
 
 #if defined( __cplusplus )
 }
 #endif
 
-#endif /* !defined( _PLATFORM_H ) */
+#endif /* !defined( _EWF_TEST_GETOPT_H ) */
 

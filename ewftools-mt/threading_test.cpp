@@ -36,8 +36,7 @@
 #include "libcnotify_stream.h"
 #include "libcnotify_print.h"
 #include "libclocale_support.h"
-#include "libcsystem_support.h"
-#include "ewfoutput.h"
+#include "ewftools_output.h"
 
 #include <memory.h>
 #include <types.h>
@@ -62,7 +61,6 @@
 #include "ewftools_libclocale.h"
 #include "ewftools_libcnotify.h"
 #include "ewftools_libcstring.h"
-#include "ewftools_libcsystem.h"
 #include "ewftools_libewf.h"
 #include "imaging_handle.h"
 #include "log_handle.h"
@@ -370,8 +368,8 @@ int start_threads_testing()
 	
 	
 	if( libclocale_initialize(
-			"ewftools",
-			&error ) != 1 )
+	     "ewftools",
+	     &error ) != 1 )
 	{
 		fprintf(
 		 stderr,
@@ -379,19 +377,19 @@ int start_threads_testing()
 
 		return -1;
 	}
-	if( libcsystem_initialize(
-		 _IONBF,
-		 &error ) != 1 )
+	if( ewftools_output_initialize(
+	     _IONBF,
+	     &error ) != 1 )
 	{
-		ewfoutput_version_fprint(
+		ewftools_output_version_fprint(
 		 stdout,
 		 program );
 
 		fprintf(
 		 stderr,
-		 "Unable to initialize system values.\n" );
+		 "Unable to initialize output settings.\n" );
 
-		return -1;
+		goto on_error;
 	}
 	fifo_queue fifoReadToCompress(queueSizeReader);
 

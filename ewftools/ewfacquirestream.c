@@ -43,7 +43,6 @@
 #include "ewftools_libclocale.h"
 #include "ewftools_libcnotify.h"
 #include "ewftools_libcstring.h"
-#include "ewftools_libcsystem.h"
 #include "ewftools_libewf.h"
 #include "ewftools_output.h"
 #include "ewftools_signal.h"
@@ -335,11 +334,17 @@ ssize_t ewfacquirestream_read_chunk(
 
 		while( read_number_of_errors <= read_error_retries )
 		{
-			read_count = libcsystem_file_io_read(
+#if defined( WINAPI ) && !defined( __CYGWIN__ )
+			read_count = _read(
 			              input_file_descriptor,
 			              &( buffer[ buffer_offset + read_error_offset ] ),
 			              bytes_to_read );
-
+#else
+			read_count = read(
+			              input_file_descriptor,
+			              &( buffer[ buffer_offset + read_error_offset ] ),
+			              bytes_to_read );
+#endif
 #if defined( HAVE_VERBOSE_OUTPUT )
 			if( libcnotify_verbose != 0 )
 			{
