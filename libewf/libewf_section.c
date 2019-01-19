@@ -2652,6 +2652,7 @@ ssize_t libewf_section_error2_read(
 	uint32_t number_of_errors           = 0;
 	uint32_t number_of_sectors          = 0;
 	uint32_t stored_checksum            = 0;
+	int result                          = 0;
 
 	if( section == NULL )
 	{
@@ -2952,14 +2953,16 @@ ssize_t libewf_section_error2_read(
 				 number_of_sectors );
 			}
 #endif
-			if( libcdata_range_list_insert_range(
-			     acquiry_errors,
-			     (uint64_t) start_sector,
-			     (uint64_t) number_of_sectors,
-			     NULL,
-			     NULL,
-			     NULL,
-			     error ) != 1 )
+			result = libcdata_range_list_insert_range(
+			          acquiry_errors,
+			          (uint64_t) start_sector,
+			          (uint64_t) number_of_sectors,
+			          NULL,
+			          NULL,
+			          NULL,
+			          error );
+
+			if( result == -1 )
 			{
 				libcerror_error_set(
 				 error,

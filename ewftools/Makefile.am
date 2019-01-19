@@ -46,6 +46,7 @@ ewfacquire_SOURCES = \
 	ewfinput.c ewfinput.h \
 	ewftools_getopt.c ewftools_getopt.h \
 	ewftools_i18n.h \
+	ewftools_libbfio.h \
 	ewftools_libcdatetime.h \
 	ewftools_libcerror.h \
 	ewftools_libclocale.h \
@@ -103,6 +104,7 @@ ewfacquirestream_SOURCES = \
 	ewfinput.c ewfinput.h \
 	ewftools_getopt.c ewftools_getopt.h \
 	ewftools_i18n.h \
+	ewftools_libbfio.h \
 	ewftools_libcdatetime.h \
 	ewftools_libcerror.h \
 	ewftools_libclocale.h \
@@ -151,6 +153,7 @@ ewfdebug_SOURCES = \
 	ewftools_getopt.c ewftools_getopt.h \
 	ewftools_glob.c ewftools_glob.h \
 	ewftools_i18n.h \
+	ewftools_libbfio.h \
 	ewftools_libcerror.h \
 	ewftools_libclocale.h \
 	ewftools_libcnotify.h \
@@ -186,6 +189,7 @@ ewfexport_SOURCES = \
 	ewftools_getopt.c ewftools_getopt.h \
 	ewftools_glob.c ewftools_glob.h \
 	ewftools_i18n.h \
+	ewftools_libbfio.h \
 	ewftools_libcdatetime.h \
 	ewftools_libcerror.h \
 	ewftools_libcfile.h \
@@ -243,6 +247,7 @@ ewfinfo_SOURCES = \
 	ewftools_getopt.c ewftools_getopt.h \
 	ewftools_glob.c ewftools_glob.h \
 	ewftools_i18n.h \
+	ewftools_libbfio.h \
 	ewftools_libcerror.h \
 	ewftools_libclocale.h \
 	ewftools_libcnotify.h \
@@ -283,13 +288,13 @@ ewfmount_SOURCES = \
 	ewftools_getopt.c ewftools_getopt.h \
 	ewftools_glob.c ewftools_glob.h \
 	ewftools_i18n.h \
+	ewftools_libbfio.h \
 	ewftools_libcerror.h \
 	ewftools_libclocale.h \
 	ewftools_libcnotify.h \
 	ewftools_libcpath.h \
 	ewftools_libcstring.h \
 	ewftools_libcsystem.h \
-	ewftools_libcthreads.h \
 	ewftools_libewf.h \
 	ewftools_libfvalue.h \
 	ewftools_libhmac.h \
@@ -333,6 +338,7 @@ ewfrecover_SOURCES = \
 	ewftools_getopt.c ewftools_getopt.h \
 	ewftools_glob.c ewftools_glob.h \
 	ewftools_i18n.h \
+	ewftools_libbfio.h \
 	ewftools_libcdatetime.h \
 	ewftools_libcerror.h \
 	ewftools_libcfile.h \
@@ -389,6 +395,7 @@ ewfverify_SOURCES = \
 	ewftools_getopt.c ewftools_getopt.h \
 	ewftools_glob.c ewftools_glob.h \
 	ewftools_i18n.h \
+	ewftools_libbfio.h \
 	ewftools_libcdatetime.h \
 	ewftools_libcerror.h \
 	ewftools_libclocale.h \

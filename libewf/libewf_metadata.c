@@ -2083,6 +2083,7 @@ int libewf_handle_append_acquiry_error(
 {
 	libewf_internal_handle_t *internal_handle = NULL;
 	static char *function                     = "libewf_handle_append_acquiry_error";
+	int result                                = 0;
 
 	if( handle == NULL )
 	{
@@ -2097,14 +2098,16 @@ int libewf_handle_append_acquiry_error(
 	}
 	internal_handle = (libewf_internal_handle_t *) handle;
 
-	if( libcdata_range_list_insert_range(
-	     internal_handle->acquiry_errors,
-	     start_sector,
-	     number_of_sectors,
-	     NULL,
-	     NULL,
-	     NULL,
-	     error ) != 1 )
+	result = libcdata_range_list_insert_range(
+	          internal_handle->acquiry_errors,
+	          start_sector,
+	          number_of_sectors,
+	          NULL,
+	          NULL,
+	          NULL,
+	          error );
+
+	if( result == -1 )
 	{
 		libcerror_error_set(
 		 error,
@@ -2265,6 +2268,7 @@ int libewf_handle_append_checksum_error(
 {
 	libewf_internal_handle_t *internal_handle = NULL;
 	static char *function                     = "libewf_handle_append_checksum_error";
+	int result                                = 0;
 
 	if( handle == NULL )
 	{
@@ -2290,14 +2294,16 @@ int libewf_handle_append_checksum_error(
 
 		return( -1 );
 	}
-	if( libcdata_range_list_insert_range(
-	     internal_handle->read_io_handle->checksum_errors,
-	     start_sector,
-	     number_of_sectors,
-	     NULL,
-	     NULL,
-	     NULL,
-	     error ) != 1 )
+	result = libcdata_range_list_insert_range(
+	          internal_handle->read_io_handle->checksum_errors,
+	          start_sector,
+	          number_of_sectors,
+	          NULL,
+	          NULL,
+	          NULL,
+	          error );
+
+	if( result == -1 )
 	{
 		libcerror_error_set(
 		 error,

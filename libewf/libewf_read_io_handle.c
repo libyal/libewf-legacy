@@ -514,14 +514,16 @@ int libewf_read_io_handle_read_chunk_data(
 		{
 			number_of_sectors = (uint32_t) ( (uint64_t) media_values->number_of_sectors - start_sector );
 		}
-		if( libcdata_range_list_insert_range(
-		     read_io_handle->checksum_errors,
-		     start_sector,
-		     number_of_sectors,
-		     NULL,
-		     NULL,
-		     NULL,
-		     error ) != 1 )
+		result = libcdata_range_list_insert_range(
+		          read_io_handle->checksum_errors,
+		          start_sector,
+		          number_of_sectors,
+		          NULL,
+		          NULL,
+		          NULL,
+		          error );
+
+		if( result == -1 )
 		{
 			libcerror_error_set(
 			 error,

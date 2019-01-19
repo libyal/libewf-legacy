@@ -276,6 +276,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\ewftools\ewftools_libbfio.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\ewftools\ewftools_libcerror.h"
 				>
 			</File>
@@ -297,10 +301,6 @@
 			</File>
 			<File
 				RelativePath="..\..\ewftools\ewftools_libcsystem.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\ewftools\ewftools_libcthreads.h"
 				>
 			</File>
 			<File

@@ -234,6 +234,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\ewftools\ewftools_libbfio.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\ewftools\ewftools_libcerror.h"
 				>
 			</File>

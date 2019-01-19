@@ -157,7 +157,7 @@ int libewf_single_file_tree_get_sub_node_by_utf8_name(
 
 			return( -1 );
 		}
-		else if( result != 0 )
+		else if( result == LIBUNA_COMPARE_EQUAL )
 		{
 			break;
 		}
@@ -322,7 +322,7 @@ int libewf_single_file_tree_get_sub_node_by_utf16_name(
 
 			return( -1 );
 		}
-		else if( result != 0 )
+		else if( result == LIBUNA_COMPARE_EQUAL )
 		{
 			break;
 		}

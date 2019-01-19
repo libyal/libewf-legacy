@@ -239,22 +239,6 @@ int mount_file_system_free(
 			memory_free(
 			 ( *file_system )->path_prefix );
 		}
-		if( ( *file_system )->ewf_root_file_entry != NULL )
-		{
-			if( libewf_file_entry_free(
-			     &( ( *file_system )->ewf_root_file_entry ),
-			     error ) != 1 )
-			{
-				libcerror_error_set(
-				 error,
-				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-				 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
-				 "%s: unable to free root file entry.",
-				 function );
-
-				result = -1;
-			}
-		}
 		memory_free(
 		 *file_system );
 
@@ -1322,36 +1306,19 @@ int mount_file_system_get_file_entry_by_path(
 
 		goto on_error;
 	}
-	if( file_system->ewf_root_file_entry == NULL )
-	{
-		if( libewf_handle_get_root_file_entry(
-		     file_system->ewf_handle,
-		     &( file_system->ewf_root_file_entry ),
-		     error ) != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
-			 "%s: unable to retrieve root file entry.",
-			 function );
-
-			goto on_error;
-		}
-	}
 	ewf_file_entry_path_length = system_string_length(
 	                              ewf_file_entry_path );
 
 #if defined( HAVE_WIDE_SYSTEM_CHARACTER )
-	result = libewf_file_entry_get_sub_file_entry_by_utf16_path(
-		  file_system->ewf_root_file_entry,
+	result = libewf_file_get_file_entry_by_utf16_path(
+		  file_system->ewf_handle,
 		  (uint16_t *) ewf_file_entry_path,
 		  ewf_file_entry_path_length,
 		  ewf_file_entry,
 		  error );
 #else
-	result = libewf_file_entry_get_sub_file_entry_by_utf8_path(
-		  file_system->ewf_root_file_entry,
+	result = libewf_file_get_file_entry_by_utf8_path(
+		  file_system->ewf_handle,
 		  (uint8_t *) ewf_file_entry_path,
 		  ewf_file_entry_path_length,
 		  ewf_file_entry,

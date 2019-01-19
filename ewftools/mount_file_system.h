@@ -51,10 +51,6 @@ struct mount_file_system
 	/* The handle
 	 */
 	libewf_handle_t *ewf_handle;
-
-	/* The root file entry
-	 */
-	libewf_file_entry_t *ewf_root_file_entry;
 };
 
 int mount_file_system_initialize(
