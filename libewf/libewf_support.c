@@ -20,20 +20,20 @@
  */
 
 #include <common.h>
+#include <narrow_string.h>
 #include <types.h>
-
-#include "libewf_libcstring.h"
-#include "libewf_libcerror.h"
-#include "libewf_libclocale.h"
-#include "libewf_libcnotify.h"
+#include <wide_string.h>
 
 #include <stdio.h>
 
 #include "libewf_codepage.h"
 #include "libewf_definitions.h"
-#include "libewf_filename.h"
 #include "libewf_error.h"
+#include "libewf_filename.h"
 #include "libewf_libbfio.h"
+#include "libewf_libcerror.h"
+#include "libewf_libclocale.h"
+#include "libewf_libcnotify.h"
 #include "libewf_segment_file.h"
 #include "libewf_support.h"
 
@@ -187,7 +187,7 @@ int libewf_check_file_signature(
 
 		return( -1 );
 	}
-	filename_length = libcstring_narrow_string_length(
+	filename_length = narrow_string_length(
 	                   filename );
 
 	if( filename_length == 0 )
@@ -293,7 +293,7 @@ int libewf_check_file_signature_wide(
 
 		return( -1 );
 	}
-	filename_length = libcstring_wide_string_length(
+	filename_length = wide_string_length(
 	                   filename );
 
 	if( filename_length == 0 )
@@ -700,7 +700,7 @@ int libewf_glob(
 
 			goto on_error;
 		}
-		if( libcstring_narrow_string_copy(
+		if( narrow_string_copy(
 		     segment_filename,
 		     filename,
 		     filename_length ) == NULL )
@@ -1058,7 +1058,7 @@ int libewf_glob_wide(
 
 			goto on_error;
 		}
-		if( libcstring_wide_string_copy(
+		if( wide_string_copy(
 		     segment_filename,
 		     filename,
 		     filename_length ) == NULL )

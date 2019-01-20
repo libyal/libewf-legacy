@@ -1,7 +1,6 @@
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
-	@LIBCSTRING_CPPFLAGS@ \
 	@LIBCERROR_CPPFLAGS@ \
 	@LIBCDATA_CPPFLAGS@ \
 	@LIBCDATETIME_CPPFLAGS@ \
@@ -52,7 +51,6 @@ ewfacquire_SOURCES = \
 	ewftools_libcnotify.h \
 	ewftools_libcpath.h \
 	ewftools_libcsplit.h \
-	ewftools_libcstring.h \
 	ewftools_libewf.h \
 	ewftools_libhmac.h \
 	ewftools_libodraw.h \
@@ -91,7 +89,6 @@ ewfacquire_LDADD = \
 	@LIBCNOTIFY_LIBADD@ \
 	@LIBCLOCALE_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
-	@LIBCSTRING_LIBADD@ \
 	@LIBINTL@
 
 ewfacquirestream_SOURCES = \
@@ -109,7 +106,6 @@ ewfacquirestream_SOURCES = \
 	ewftools_libcnotify.h \
 	ewftools_libcpath.h \
 	ewftools_libcsplit.h \
-	ewftools_libcstring.h \
 	ewftools_libewf.h \
 	ewftools_libhmac.h \
 	ewftools_libodraw.h \
@@ -139,7 +135,6 @@ ewfacquirestream_LDADD = \
 	@LIBCNOTIFY_LIBADD@ \
 	@LIBCLOCALE_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
-	@LIBCSTRING_LIBADD@ \
 	@LIBINTL@
 
 ewfdebug_SOURCES = \
@@ -154,7 +149,6 @@ ewfdebug_SOURCES = \
 	ewftools_libcerror.h \
 	ewftools_libclocale.h \
 	ewftools_libcnotify.h \
-	ewftools_libcstring.h \
 	ewftools_libewf.h \
 	ewftools_libhmac.h \
 	ewftools_libodraw.h \
@@ -172,7 +166,6 @@ ewfdebug_LDADD = \
 	@LIBCNOTIFY_LIBADD@ \
 	@LIBCLOCALE_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
-	@LIBCSTRING_LIBADD@ \
 	@LIBINTL@
 
 ewfexport_SOURCES = \
@@ -193,7 +186,6 @@ ewfexport_SOURCES = \
 	ewftools_libcnotify.h \
 	ewftools_libcpath.h \
 	ewftools_libcsplit.h \
-	ewftools_libcstring.h \
 	ewftools_libewf.h \
 	ewftools_libhmac.h \
 	ewftools_libodraw.h \
@@ -230,7 +222,6 @@ ewfexport_LDADD = \
 	@LIBCNOTIFY_LIBADD@ \
 	@LIBCLOCALE_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
-	@LIBCSTRING_LIBADD@ \
 	@LIBINTL@
 
 ewfinfo_SOURCES = \
@@ -247,7 +238,6 @@ ewfinfo_SOURCES = \
 	ewftools_libclocale.h \
 	ewftools_libcnotify.h \
 	ewftools_libcsplit.h \
-	ewftools_libcstring.h \
 	ewftools_libewf.h \
 	ewftools_libhmac.h \
 	ewftools_libodraw.h \
@@ -270,7 +260,6 @@ ewfinfo_LDADD = \
 	@LIBCNOTIFY_LIBADD@ \
 	@LIBCLOCALE_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
-	@LIBCSTRING_LIBADD@ \
 	@LIBINTL@
 
 ewfmount_SOURCES = \
@@ -287,7 +276,6 @@ ewfmount_SOURCES = \
 	ewftools_libclocale.h \
 	ewftools_libcnotify.h \
 	ewftools_libcpath.h \
-	ewftools_libcstring.h \
 	ewftools_libewf.h \
 	ewftools_libfvalue.h \
 	ewftools_libhmac.h \
@@ -337,7 +325,6 @@ ewfrecover_SOURCES = \
 	ewftools_libclocale.h \
 	ewftools_libcnotify.h \
 	ewftools_libcpath.h \
-	ewftools_libcstring.h \
 	ewftools_libewf.h \
 	ewftools_libhmac.h \
 	ewftools_libodraw.h \
@@ -374,7 +361,6 @@ ewfrecover_LDADD = \
 	@LIBCNOTIFY_LIBADD@ \
 	@LIBCLOCALE_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
-	@LIBCSTRING_LIBADD@ \
 	@LIBINTL@
 
 ewfverify_SOURCES = \
@@ -391,7 +377,6 @@ ewfverify_SOURCES = \
 	ewftools_libcerror.h \
 	ewftools_libclocale.h \
 	ewftools_libcnotify.h \
-	ewftools_libcstring.h \
 	ewftools_libewf.h \
 	ewftools_libhmac.h \
 	ewftools_libodraw.h \
@@ -420,7 +405,6 @@ ewfverify_LDADD = \
 	@LIBCNOTIFY_LIBADD@ \
 	@LIBCLOCALE_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
-	@LIBCSTRING_LIBADD@ \
 	@LIBINTL@
 
 MAINTAINERCLEANFILES = \

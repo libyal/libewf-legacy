@@ -1,7 +1,6 @@
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
-	@LIBCSTRING_CPPFLAGS@ \
 	@LIBCERROR_CPPFLAGS@ \
 	@LIBCERROR_CPPFLAGS@ \
 	@LIBCTHREADS_CPPFLAGS@ \
@@ -65,7 +64,6 @@ libewf_la_SOURCES = \
 	libewf_libcerror.h \
 	libewf_libclocale.h \
 	libewf_libcnotify.h \
-	libewf_libcstring.h \
 	libewf_libbfio.h \
 	libewf_libfcache.h \
 	libewf_libfdata.h \
@@ -90,7 +88,6 @@ libewf_la_SOURCES = \
 	libewf_write_io_handle.c libewf_write_io_handle.h
 
 libewf_la_LIBADD = \
-	@LIBCSTRING_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
 	@LIBCTHREADS_LIBADD@ \
 	@LIBCDATA_LIBADD@ \

@@ -25,11 +25,9 @@
 #include <common.h>
 #include <types.h>
 
-#include "libewf_libcstring.h"
-#include "libewf_libcerror.h"
-
 #include "libewf_libbfio.h"
 #include "libewf_libcdata.h"
+#include "libewf_libcerror.h"
 #include "libewf_libmfdata.h"
 #include "libewf_media_values.h"
 
@@ -43,7 +41,7 @@ struct libewf_segment_table
 {
 	/* The basename
 	 */
-	libcstring_system_character_t *basename;
+	system_character_t *basename;
 
 	/* The basename size
 	 */

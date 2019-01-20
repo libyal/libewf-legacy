@@ -21,13 +21,13 @@
 
 #include <common.h>
 #include <memory.h>
+#include <narrow_string.h>
 #include <types.h>
 
 #include "libewf_definitions.h"
 #include "libewf_hash_values.h"
 #include "libewf_libcerror.h"
 #include "libewf_libcnotify.h"
-#include "libewf_libcstring.h"
 #include "libewf_libfvalue.h"
 #include "libewf_libuna.h"
 
@@ -502,17 +502,17 @@ int libewf_hash_values_generate_xhash(
 	}
 	xml_head = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
-	xml_head_length = libcstring_narrow_string_length(
+	xml_head_length = narrow_string_length(
 	                   xml_head );
 
 	xml_xhash_open_tag = "<xhash>\n";
 
-	xml_xhash_open_tag_length = libcstring_narrow_string_length(
+	xml_xhash_open_tag_length = narrow_string_length(
 	                             xml_xhash_open_tag );
 
 	xml_xhash_close_tag = "</xhash>\n\n";
 
-	xml_xhash_close_tag_length = libcstring_narrow_string_length(
+	xml_xhash_close_tag_length = narrow_string_length(
 	                              xml_xhash_close_tag );
 
 	/* Reserve space for the UTF-8 byte order mark and the XML skeleton data
@@ -617,7 +617,7 @@ int libewf_hash_values_generate_xhash(
 	( *xhash )[ xhash_index++ ] = 0xbb;
 	( *xhash )[ xhash_index++ ] = 0xbf;
 
-	if( libcstring_narrow_string_copy(
+	if( narrow_string_copy(
 	     (char *) &( ( *xhash )[ xhash_index ] ),
 	     xml_head,
 	     xml_head_length ) == NULL )
@@ -633,7 +633,7 @@ int libewf_hash_values_generate_xhash(
 	}
 	xhash_index += xml_head_length;
 
-	if( libcstring_narrow_string_copy(
+	if( narrow_string_copy(
 	     (char *) &( ( *xhash )[ xhash_index ] ),
 	     xml_xhash_open_tag,
 	     xml_xhash_open_tag_length ) == NULL )
@@ -723,7 +723,7 @@ int libewf_hash_values_generate_xhash(
 			( *xhash )[ xhash_index++ ] = (uint8_t) '\t';
 			( *xhash )[ xhash_index++ ] = (uint8_t) '<';
 
-			if( libcstring_narrow_string_copy(
+			if( narrow_string_copy(
 			     (char *) &( ( *xhash )[ xhash_index ] ),
 			     (char *) identifier,
 			     identifier_size - 1 ) == NULL )
@@ -763,7 +763,7 @@ int libewf_hash_values_generate_xhash(
 			( *xhash )[ xhash_index - 1 ] = (uint8_t) '<';
 			( *xhash )[ xhash_index++   ] = (uint8_t) '/';
 
-			if( libcstring_narrow_string_copy(
+			if( narrow_string_copy(
 			     (char *) &( ( *xhash )[ xhash_index ] ),
 			     (char *) identifier,
 			     identifier_size - 1 ) == NULL )
@@ -784,7 +784,7 @@ int libewf_hash_values_generate_xhash(
 			( *xhash )[ xhash_index++ ] = (uint8_t) '\n';
 		}
 	}
-	if( libcstring_narrow_string_copy(
+	if( narrow_string_copy(
 	     (char *) &( ( *xhash )[ xhash_index ] ),
 	     xml_xhash_close_tag,
 	     xml_xhash_close_tag_length ) == NULL )

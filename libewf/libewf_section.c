@@ -22,6 +22,7 @@
 #include <common.h>
 #include <byte_stream.h>
 #include <memory.h>
+#include <narrow_string.h>
 #include <types.h>
 
 #include "libewf_checksum.h"
@@ -36,7 +37,6 @@
 #include "libewf_libcdata.h"
 #include "libewf_libcerror.h"
 #include "libewf_libcnotify.h"
-#include "libewf_libcstring.h"
 #include "libewf_libmfdata.h"
 #include "libewf_media_values.h"
 #include "libewf_section.h"
@@ -556,7 +556,7 @@ ssize_t libewf_section_start_read(
 
 		return( -1 );
 	}
-	section->type_length = libcstring_narrow_string_length(
+	section->type_length = narrow_string_length(
 	                        (char *) section->type );
 
 	if( ( section->end_offset < file_offset )

@@ -21,6 +21,7 @@
  */
 
 #include <common.h>
+#include <narrow_string.h>
 #include <types.h>
 
 #if defined( HAVE_STDLIB_H )
@@ -34,7 +35,6 @@
 #include "pyewf_file_object_io_handle.h"
 #include "pyewf_handle.h"
 #include "pyewf_libcerror.h"
-#include "pyewf_libcstring.h"
 #include "pyewf_libewf.h"
 #include "pyewf_python.h"
 #include "pyewf_unused.h"
@@ -115,7 +115,7 @@ PyObject *pyewf_get_version(
 
 	Py_END_ALLOW_THREADS
 
-	version_string_length = libcstring_narrow_string_length(
+	version_string_length = narrow_string_length(
 	                         version_string );
 
 	/* Pass the string length to PyUnicode_DecodeUTF8
@@ -318,7 +318,7 @@ PyObject *pyewf_glob(
 	{
 		return( NULL );
 	}
-	filename_length = libcstring_narrow_string_length(
+	filename_length = narrow_string_length(
 	                   filename );
 
 	if( libewf_glob(
@@ -347,7 +347,7 @@ PyObject *pyewf_glob(
 	     filename_index < number_of_filenames;
 	     filename_index++ )
 	{
-		filename_length = libcstring_narrow_string_length(
+		filename_length = narrow_string_length(
 		                   filenames[ filename_index ] );
 
 		/* Pass the string length to PyUnicode_DecodeUTF8

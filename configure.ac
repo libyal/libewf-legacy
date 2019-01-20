@@ -68,9 +68,6 @@ AX_TYPES_CHECK_LOCAL
 dnl Checks for libraries and library functions
 AX_COMMON_CHECK_LOCAL
 
-dnl Check for enabling libcstring for cross-platform C string functions
-AX_LIBCSTRING_CHECK_ENABLE
-
 dnl Check for enabling libcerror for cross-platform C error functions
 AX_LIBCERROR_CHECK_ENABLE
 
@@ -194,7 +191,7 @@ CFLAGS="$CFLAGS -Wall";
 
 dnl Check if requires and build requires should be set in spec file
 AS_IF(
- [test "x$ac_cv_libcstring" = xyes || test "x$ac_cv_libcerror" = xyes || test "x$ac_cv_libcthreads" = xyes || test "x$ac_cv_libcdata" = xyes || test "x$ac_cv_libclocale" = xyes || test "x$ac_cv_libcnotify" = xyes || test "x$ac_cv_libcsplit" = xyes || test "x$ac_cv_libuna" = xyes || test "x$ac_cv_libcfile" = xyes || test "x$ac_cv_libcpath" = xyes || test "x$ac_cv_libbfio" = xyes || test "x$ac_cv_libfcache" = xyes || test "x$ac_cv_libfdata" = xyes || test "x$ac_cv_libfvalue" = xyes || test "x$ac_cv_libmfdata" = xyes || test "x$ac_cv_zlib" != xno || test "x$ac_cv_libhmac" = xyes],
+ [test "x$ac_cv_libcerror" = xyes || test "x$ac_cv_libcthreads" = xyes || test "x$ac_cv_libcdata" = xyes || test "x$ac_cv_libclocale" = xyes || test "x$ac_cv_libcnotify" = xyes || test "x$ac_cv_libcsplit" = xyes || test "x$ac_cv_libuna" = xyes || test "x$ac_cv_libcfile" = xyes || test "x$ac_cv_libcpath" = xyes || test "x$ac_cv_libbfio" = xyes || test "x$ac_cv_libfcache" = xyes || test "x$ac_cv_libfdata" = xyes || test "x$ac_cv_libfvalue" = xyes || test "x$ac_cv_libmfdata" = xyes || test "x$ac_cv_zlib" != xno || test "x$ac_cv_libhmac" = xyes],
  [AC_SUBST(
   [libewf_spec_requires],
   [Requires:])
@@ -221,7 +218,6 @@ dnl Generate Makefiles
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([include/Makefile])
 AC_CONFIG_FILES([common/Makefile])
-AC_CONFIG_FILES([libcstring/Makefile])
 AC_CONFIG_FILES([libcerror/Makefile])
 AC_CONFIG_FILES([libcthreads/Makefile])
 AC_CONFIG_FILES([libcdata/Makefile])
@@ -275,7 +271,6 @@ AC_OUTPUT
 dnl Print a summary
 AC_MSG_NOTICE([
 Building:
-   libcstring support:                       $ac_cv_libcstring
    libcerror support:                        $ac_cv_libcerror
    libcthreads support:                      $ac_cv_libcthreads
    libcdata support:                         $ac_cv_libcdata

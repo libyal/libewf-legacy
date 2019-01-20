@@ -21,6 +21,10 @@
 
 #include <common.h>
 #include <memory.h>
+#include <narrow_string.h>
+#include <system_string.h>
+#include <types.h>
+#include <wide_string.h>
 
 #if defined( HAVE_STDLIB_H ) || defined( WINAPI )
 #include <stdlib.h>
@@ -31,7 +35,6 @@
 #include "ewf_test_definitions.h"
 #include "ewf_test_getopt.h"
 #include "ewf_test_libcerror.h"
-#include "ewf_test_libcstring.h"
 #include "ewf_test_libewf.h"
 
 /* Define to make ewf_test_read_write_delta generate verbose output
@@ -154,7 +157,7 @@ int ewf_test_system_string_decimal_copy_to_64_bit(
 int ewf_test_read_write_delta(
      char * const filenames[],
      int number_of_filenames,
-     const libcstring_system_character_t *delta_segment_filename,
+     const system_character_t *delta_segment_filename,
      off64_t write_offset,
      size64_t write_size,
      libcerror_error_t **error )
@@ -188,7 +191,7 @@ int ewf_test_read_write_delta(
 	 NULL );
 #endif
 
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libewf_handle_open_wide(
 	     handle,
 	     filenames,
@@ -215,10 +218,10 @@ int ewf_test_read_write_delta(
 	}
 	if( delta_segment_filename != NULL )
 	{
-		delta_segment_filename_length = libcstring_system_string_length(
+		delta_segment_filename_length = system_string_length(
 		                                 delta_segment_filename );
 
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 		if( libewf_handle_set_delta_segment_filename_wide(
 		     handle,
 		     delta_segment_filename,
@@ -404,48 +407,48 @@ on_error:
 
 /* The main program
  */
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 int wmain( int argc, wchar_t * const argv[] )
 #else
 int main( int argc, char * const argv[] )
 #endif
 {
-	libcstring_system_character_t *option_offset   = NULL;
-	libcstring_system_character_t *option_size     = NULL;
-	libcstring_system_character_t *target_filename = NULL;
-	libcerror_error_t *error                       = NULL;
-	libcstring_system_integer_t option             = 0;
-	off64_t write_offset                           = 0;
-	size64_t write_size                            = 0;
-	size_t string_length                           = 0;
+	libcerror_error_t *error            = NULL;
+	system_character_t *option_offset   = NULL;
+	system_character_t *option_size     = NULL;
+	system_character_t *target_filename = NULL;
+	system_integer_t option             = 0;
+	size64_t write_size                 = 0;
+	size_t string_length                = 0;
+	off64_t write_offset                = 0;
 
 	while( ( option = ewf_test_getopt(
 	                   argc,
 	                   argv,
-	                   _LIBCSTRING_SYSTEM_STRING( "B:o:t:" ) ) ) != (libcstring_system_integer_t) -1 )
+	                   _SYSTEM_STRING( "B:o:t:" ) ) ) != (system_integer_t) -1 )
 	{
 		switch( option )
 		{
-			case (libcstring_system_integer_t) '?':
+			case (system_integer_t) '?':
 			default:
 				fprintf(
 				 stderr,
-				 "Invalid argument: %" PRIs_LIBCSTRING_SYSTEM ".\n",
+				 "Invalid argument: %" PRIs_SYSTEM ".\n",
 				 argv[ optind - 1 ] );
 
 				return( EXIT_FAILURE );
 
-			case (libcstring_system_integer_t) 'B':
+			case (system_integer_t) 'B':
 				option_size = optarg;
 
 				break;
 
-			case (libcstring_system_integer_t) 'o':
+			case (system_integer_t) 'o':
 				option_offset = optarg;
 
 				break;
 
-			case (libcstring_system_integer_t) 't':
+			case (system_integer_t) 't':
 				target_filename = optarg;
 
 				break;
@@ -461,7 +464,7 @@ int main( int argc, char * const argv[] )
 	}
 	if( option_offset != NULL )
 	{
-		string_length = libcstring_system_string_length(
+		string_length = system_string_length(
 				 option_offset );
 
 		if( ewf_test_system_string_decimal_copy_to_64_bit(
@@ -479,7 +482,7 @@ int main( int argc, char * const argv[] )
 	}
 	if( option_size != NULL )
 	{
-		string_length = libcstring_system_string_length(
+		string_length = system_string_length(
 				 option_size );
 
 		if( ewf_test_system_string_decimal_copy_to_64_bit(

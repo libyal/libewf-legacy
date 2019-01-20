@@ -22,13 +22,15 @@
 #include <common.h>
 #include <byte_stream.h>
 #include <memory.h>
+#include <narrow_string.h>
+#include <system_string.h>
 #include <types.h>
+#include <wide_string.h>
 
 #include "libewf_checksum.h"
 #include "libewf_debug.h"
 #include "libewf_libcerror.h"
 #include "libewf_libcnotify.h"
-#include "libewf_libcstring.h"
 #include "libewf_libuna.h"
 
 /* Prints a dump of data
@@ -124,10 +126,10 @@ int libewf_debug_byte_stream_print(
      size_t byte_stream_size,
      libcerror_error_t **error )
 {
-	libcstring_system_character_t *string = NULL;
-	static char *function                 = "libewf_debug_byte_stream_print";
-	size_t string_size                    = 0;
-	int result                            = 0;
+	system_character_t *string = NULL;
+	static char *function      = "libewf_debug_byte_stream_print";
+	size_t string_size         = 0;
+	int result                 = 0;
 
 	if( header_string == NULL )
 	{
@@ -151,7 +153,7 @@ int libewf_debug_byte_stream_print(
 
 		return( -1 );
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	result = libuna_utf16_string_size_from_byte_stream(
 	          byte_stream,
 	          byte_stream_size,
@@ -177,7 +179,7 @@ int libewf_debug_byte_stream_print(
 
 		return( -1 );
 	}
-	string = libcstring_system_string_allocate(
+	string = system_string_allocate(
 	          string_size );
 
 	if( string == NULL )
@@ -191,7 +193,7 @@ int libewf_debug_byte_stream_print(
 
 		return( -1 );
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	result = libuna_utf16_string_copy_from_byte_stream(
 	          (uint16_t *) string,
 	          string_size,
@@ -224,7 +226,7 @@ int libewf_debug_byte_stream_print(
 	}
 	libcnotify_printf(
 	 "%s:\n"
-	 "%" PRIs_LIBCSTRING_SYSTEM "",
+	 "%" PRIs_SYSTEM "",
 	 header_string,
 	 string );
 
@@ -243,10 +245,10 @@ int libewf_debug_utf8_stream_print(
      size_t utf8_stream_size,
      libcerror_error_t **error )
 {
-	libcstring_system_character_t *string = NULL;
-	static char *function                 = "libewf_debug_utf8_stream_print";
-	size_t string_size                    = 0;
-	int result                            = 0;
+	system_character_t *string = NULL;
+	static char *function      = "libewf_debug_utf8_stream_print";
+	size_t string_size         = 0;
+	int result                 = 0;
 
 	if( header_string == NULL )
 	{
@@ -270,7 +272,7 @@ int libewf_debug_utf8_stream_print(
 
 		return( -1 );
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	result = libuna_utf16_string_size_from_utf8_stream(
 	          utf8_stream,
 	          utf8_stream_size,
@@ -294,7 +296,7 @@ int libewf_debug_utf8_stream_print(
 
 		return( -1 );
 	}
-	string = libcstring_system_string_allocate(
+	string = system_string_allocate(
 	          string_size );
 
 	if( string == NULL )
@@ -308,7 +310,7 @@ int libewf_debug_utf8_stream_print(
 
 		return( -1 );
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	result = libuna_utf16_string_copy_from_utf8_stream(
 	          (uint16_t *) string,
 	          string_size,
@@ -339,7 +341,7 @@ int libewf_debug_utf8_stream_print(
 	}
 	libcnotify_printf(
 	 "%s:\n"
-	 "%" PRIs_LIBCSTRING_SYSTEM "",
+	 "%" PRIs_SYSTEM "",
 	 header_string,
 	 string );
 
@@ -358,10 +360,10 @@ int libewf_debug_utf16_stream_print(
      size_t utf16_stream_size,
      libcerror_error_t **error )
 {
-	libcstring_system_character_t *string = NULL;
-	static char *function                 = "libewf_debug_utf16_stream_print";
-	size_t string_size                    = 0;
-	int result                            = 0;
+	system_character_t *string = NULL;
+	static char *function      = "libewf_debug_utf16_stream_print";
+	size_t string_size         = 0;
+	int result                 = 0;
 
 	if( header_string == NULL )
 	{
@@ -385,7 +387,7 @@ int libewf_debug_utf16_stream_print(
 
 		return( -1 );
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	result = libuna_utf16_string_size_from_utf16_stream(
 	          utf16_stream,
 	          utf16_stream_size,
@@ -411,7 +413,7 @@ int libewf_debug_utf16_stream_print(
 
 		return( -1 );
 	}
-	string = libcstring_system_string_allocate(
+	string = system_string_allocate(
 	          string_size );
 
 	if( string == NULL )
@@ -425,7 +427,7 @@ int libewf_debug_utf16_stream_print(
 
 		return( -1 );
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	result = libuna_utf16_string_copy_from_utf16_stream(
 	          (uint16_t *) string,
 	          string_size,
@@ -458,7 +460,7 @@ int libewf_debug_utf16_stream_print(
 	}
 	libcnotify_printf(
 	 "%s:\n"
-	 "%" PRIs_LIBCSTRING_SYSTEM "",
+	 "%" PRIs_SYSTEM "",
 	 header_string,
 	 string );
 

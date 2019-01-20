@@ -21,7 +21,10 @@
 
 #include <common.h>
 #include <memory.h>
+#include <system_string.h>
 #include <types.h>
+
+#include <stdio.h>
 
 #if defined( HAVE_SYS_RESOURCE_H )
 #include <sys/resource.h>
@@ -46,7 +49,6 @@
 #include "ewftools_libcerror.h"
 #include "ewftools_libclocale.h"
 #include "ewftools_libcnotify.h"
-#include "ewftools_libcstring.h"
 #include "ewftools_libewf.h"
 #include "ewftools_output.h"
 #include "ewftools_signal.h"
@@ -135,7 +137,7 @@ void ewfinfo_signal_handler(
 
 /* The main program
  */
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 int wmain( int argc, wchar_t * const argv[] )
 #else
 int main( int argc, char * const argv[] )
@@ -144,19 +146,19 @@ int main( int argc, char * const argv[] )
 #if defined( HAVE_GETRLIMIT )
 	struct rlimit limit_data;
 #endif
-	libcstring_system_character_t * const *argv_filenames = NULL;
+	system_character_t * const *argv_filenames = NULL;
 
 #if !defined( HAVE_GLOB_H )
 	ewftools_glob_t *glob                                 = NULL;
 #endif
 	libcerror_error_t *error                              = NULL;
 
-	libcstring_system_character_t *option_date_format     = NULL;
-	libcstring_system_character_t *option_header_codepage = NULL;
-	libcstring_system_character_t *option_output_format   = NULL;
-	libcstring_system_character_t *program                = _LIBCSTRING_SYSTEM_STRING( "ewfinfo" );
+	system_character_t *option_date_format     = NULL;
+	system_character_t *option_header_codepage = NULL;
+	system_character_t *option_output_format   = NULL;
+	system_character_t *program                = _SYSTEM_STRING( "ewfinfo" );
 
-	libcstring_system_integer_t option                    = 0;
+	system_integer_t option                    = 0;
 	uint8_t verbose                                       = 0;
 	char info_option                                      = 'a';
 	int number_of_filenames                               = 0;
@@ -196,11 +198,11 @@ int main( int argc, char * const argv[] )
 	while( ( option = ewftools_getopt(
 	                   argc,
 	                   argv,
-	                   _LIBCSTRING_SYSTEM_STRING( "A:d:ef:himvV" ) ) ) != (libcstring_system_integer_t) -1 )
+	                   _SYSTEM_STRING( "A:d:ef:himvV" ) ) ) != (system_integer_t) -1 )
 	{
 		switch( option )
 		{
-			case (libcstring_system_integer_t) '?':
+			case (system_integer_t) '?':
 			default:
 				ewftools_output_version_fprint(
 				 stderr,
@@ -208,7 +210,7 @@ int main( int argc, char * const argv[] )
 
 				fprintf(
 				 stderr,
-				 "Invalid argument: %" PRIs_LIBCSTRING_SYSTEM "\n",
+				 "Invalid argument: %" PRIs_SYSTEM "\n",
 				 argv[ optind - 1 ] );
 
 				usage_fprint(
@@ -216,17 +218,17 @@ int main( int argc, char * const argv[] )
 
 				goto on_error;
 
-			case (libcstring_system_integer_t) 'A':
+			case (system_integer_t) 'A':
 				option_header_codepage = optarg;
 
 				break;
 
-			case (libcstring_system_integer_t) 'd':
+			case (system_integer_t) 'd':
 				option_date_format = optarg;
 
 				break;
 
-			case (libcstring_system_integer_t) 'e':
+			case (system_integer_t) 'e':
 				if( info_option != 'a' )
 				{
 					ewftools_output_version_fprint(
@@ -235,7 +237,7 @@ int main( int argc, char * const argv[] )
 
 					fprintf(
 					 stderr,
-					 "Conflicting options: %" PRIc_LIBCSTRING_SYSTEM " and %c\n",
+					 "Conflicting options: %" PRIc_SYSTEM " and %c\n",
 					 option,
 					 info_option );
 
@@ -248,12 +250,12 @@ int main( int argc, char * const argv[] )
 
 				break;
 
-			case (libcstring_system_integer_t) 'f':
+			case (system_integer_t) 'f':
 				option_output_format = optarg;
 
 				break;
 
-			case (libcstring_system_integer_t) 'h':
+			case (system_integer_t) 'h':
 				ewftools_output_version_fprint(
 				 stdout,
 				 program );
@@ -263,7 +265,7 @@ int main( int argc, char * const argv[] )
 
 				return( EXIT_SUCCESS );
 
-			case (libcstring_system_integer_t) 'i':
+			case (system_integer_t) 'i':
 				if( info_option != 'a' )
 				{
 					ewftools_output_version_fprint(
@@ -272,7 +274,7 @@ int main( int argc, char * const argv[] )
 
 					fprintf(
 					 stderr,
-					 "Conflicting options: %" PRIc_LIBCSTRING_SYSTEM " and %c\n",
+					 "Conflicting options: %" PRIc_SYSTEM " and %c\n",
 					 option,
 					 info_option );
 
@@ -285,7 +287,7 @@ int main( int argc, char * const argv[] )
 
 				break;
 
-			case (libcstring_system_integer_t) 'm':
+			case (system_integer_t) 'm':
 				if( info_option != 'a' )
 				{
 					ewftools_output_version_fprint(
@@ -294,7 +296,7 @@ int main( int argc, char * const argv[] )
 
 					fprintf(
 					 stderr,
-					 "Conflicting options: %" PRIc_LIBCSTRING_SYSTEM " and %c\n",
+					 "Conflicting options: %" PRIc_SYSTEM " and %c\n",
 					 option,
 					 info_option );
 
@@ -307,12 +309,12 @@ int main( int argc, char * const argv[] )
 
 				break;
 
-			case (libcstring_system_integer_t) 'v':
+			case (system_integer_t) 'v':
 				verbose = 1;
 
 				break;
 
-			case (libcstring_system_integer_t) 'V':
+			case (system_integer_t) 'V':
 				ewftools_output_version_fprint(
 				 stdout,
 				 program );
@@ -898,7 +900,7 @@ on_abort:
 		}
 		fprintf(
 		 stdout,
-		 "%" PRIs_LIBCSTRING_SYSTEM ": ABORTED\n",
+		 "%" PRIs_SYSTEM ": ABORTED\n",
 		 program );
 
 		return( EXIT_FAILURE );

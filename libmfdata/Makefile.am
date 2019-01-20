@@ -2,7 +2,6 @@ if HAVE_LOCAL_LIBMFDATA
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
-	@LIBCSTRING_CPPFLAGS@ \
 	@LIBCERROR_CPPFLAGS@ \
 	@LIBCDATA_CPPFLAGS@ \
 	@LIBCLOCALE_CPPFLAGS@ \
@@ -28,7 +27,6 @@ libmfdata_la_SOURCES = \
 	libmfdata_libcdata.h \
 	libmfdata_libcerror.h \
 	libmfdata_libcnotify.h \
-	libmfdata_libcstring.h \
 	libmfdata_libfcache.h \
 	libmfdata_list.c libmfdata_list.h \
 	libmfdata_list_element.c libmfdata_list_element.h \

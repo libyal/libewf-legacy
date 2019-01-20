@@ -30,7 +30,6 @@
 
 #include "ewf_test_definitions.h"
 #include "ewf_test_libcerror.h"
-#include "ewf_test_libcstring.h"
 #include "ewf_test_libewf.h"
 
 /* Define to make ewf_test_read generate verbose output
@@ -528,7 +527,7 @@ int ewf_test_read_chunk_at_offset(
 
 /* The main program
  */
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 int wmain( int argc, wchar_t * const argv[] )
 #else
 int main( int argc, char * const argv[] )
@@ -568,7 +567,7 @@ int main( int argc, char * const argv[] )
 
 		goto on_error;
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libewf_handle_open_wide(
 	     handle,
 	     &( argv[ 1 ] ),

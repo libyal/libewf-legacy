@@ -21,6 +21,10 @@
 
 #include <common.h>
 #include <memory.h>
+#include <narrow_string.h>
+#include <system_string.h>
+#include <types.h>
+#include <wide_string.h>
 
 #if defined( HAVE_STDLIB_H ) || defined( WINAPI )
 #include <stdlib.h>
@@ -31,7 +35,6 @@
 #include "ewf_test_definitions.h"
 #include "ewf_test_getopt.h"
 #include "ewf_test_libcerror.h"
-#include "ewf_test_libcstring.h"
 #include "ewf_test_libewf.h"
 
 /* Define to make ewf_test_write generate verbose output
@@ -152,7 +155,7 @@ int ewf_test_system_string_decimal_copy_to_64_bit(
  * Return 1 if successful, 0 if not or -1 on error
  */
 int ewf_test_write(
-     const char *filename,
+     const system_character_t *filename,
      size64_t media_size,
      size64_t maximum_segment_size,
      int8_t compression_level,
@@ -179,7 +182,7 @@ int ewf_test_write(
 
 		goto on_error;
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libewf_handle_open_wide(
 	     handle,
 	     (wchar_t * const *) &filename,
@@ -436,57 +439,57 @@ on_error:
 
 /* The main program
  */
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 int wmain( int argc, wchar_t * const argv[] )
 #else
 int main( int argc, char * const argv[] )
 #endif
 {
-	libcstring_system_character_t *option_chunk_size           = NULL;
-	libcstring_system_character_t *option_compression_level    = NULL;
-	libcstring_system_character_t *option_maximum_segment_size = NULL;
-	libcstring_system_character_t *option_media_size           = NULL;
-	libcerror_error_t *error                                    = NULL;
-	libcstring_system_integer_t option                         = 0;
-	size64_t chunk_size                                        = 0;
-	size64_t maximum_segment_size                              = 0;
-	size64_t media_size                                        = 0;
-	size_t string_length                                       = 0;
-	uint8_t compression_flags                                  = 0;
-	int8_t compression_level                                   = LIBEWF_COMPRESSION_NONE;
+	libcerror_error_t *error                        = NULL;
+	system_character_t *option_chunk_size           = NULL;
+	system_character_t *option_compression_level    = NULL;
+	system_character_t *option_maximum_segment_size = NULL;
+	system_character_t *option_media_size           = NULL;
+	system_integer_t option                         = 0;
+	size64_t chunk_size                             = 0;
+	size64_t maximum_segment_size                   = 0;
+	size64_t media_size                             = 0;
+	size_t string_length                            = 0;
+	uint8_t compression_flags                       = 0;
+	int8_t compression_level                        = LIBEWF_COMPRESSION_NONE;
 
 	while( ( option = ewf_test_getopt(
 	                   argc,
 	                   argv,
-	                   _LIBCSTRING_SYSTEM_STRING( "b:B:c:S:" ) ) ) != (libcstring_system_integer_t) -1 )
+	                   _SYSTEM_STRING( "b:B:c:S:" ) ) ) != (system_integer_t) -1 )
 	{
 		switch( option )
 		{
-			case (libcstring_system_integer_t) '?':
+			case (system_integer_t) '?':
 			default:
 				fprintf(
 				 stderr,
-				 "Invalid argument: %" PRIs_LIBCSTRING_SYSTEM ".\n",
+				 "Invalid argument: %" PRIs_SYSTEM ".\n",
 				 argv[ optind - 1 ] );
 
 				return( EXIT_FAILURE );
 
-			case (libcstring_system_integer_t) 'b':
+			case (system_integer_t) 'b':
 				option_chunk_size = optarg;
 
 				break;
 
-			case (libcstring_system_integer_t) 'B':
+			case (system_integer_t) 'B':
 				option_media_size = optarg;
 
 				break;
 
-			case (libcstring_system_integer_t) 'c':
+			case (system_integer_t) 'c':
 				option_compression_level = optarg;
 
 				break;
 
-			case (libcstring_system_integer_t) 'S':
+			case (system_integer_t) 'S':
 				option_maximum_segment_size = optarg;
 
 				break;
@@ -509,7 +512,7 @@ int main( int argc, char * const argv[] )
 #endif
 	if( option_chunk_size != NULL )
 	{
-		string_length = libcstring_system_string_length(
+		string_length = system_string_length(
 				 option_chunk_size );
 
 		if( ewf_test_system_string_decimal_copy_to_64_bit(
@@ -527,7 +530,7 @@ int main( int argc, char * const argv[] )
 	}
 	if( option_compression_level != NULL )
 	{
-		string_length = libcstring_system_string_length(
+		string_length = system_string_length(
 				 option_compression_level );
 
 		if( string_length != 1 )
@@ -538,22 +541,22 @@ int main( int argc, char * const argv[] )
 
 			goto on_error;
 		}
-		if( option_compression_level[ 0 ] == (libcstring_system_character_t) 'n' )
+		if( option_compression_level[ 0 ] == (system_character_t) 'n' )
 		{
 			compression_level = LIBEWF_COMPRESSION_NONE;
 			compression_flags = 0;
 		}
-		else if( option_compression_level[ 0 ] == (libcstring_system_character_t) 'e' )
+		else if( option_compression_level[ 0 ] == (system_character_t) 'e' )
 		{
 			compression_level = LIBEWF_COMPRESSION_NONE;
 			compression_flags = LIBEWF_COMPRESS_FLAG_USE_EMPTY_BLOCK_COMPRESSION;
 		}
-		else if( option_compression_level[ 0 ] == (libcstring_system_character_t) 'f' )
+		else if( option_compression_level[ 0 ] == (system_character_t) 'f' )
 		{
 			compression_level = LIBEWF_COMPRESSION_FAST;
 			compression_flags = 0;
 		}
-		else if( option_compression_level[ 0 ] == (libcstring_system_character_t) 'b' )
+		else if( option_compression_level[ 0 ] == (system_character_t) 'b' )
 		{
 			compression_level = LIBEWF_COMPRESSION_BEST;
 			compression_flags = 0;
@@ -569,7 +572,7 @@ int main( int argc, char * const argv[] )
 	}
 	if( option_maximum_segment_size != NULL )
 	{
-		string_length = libcstring_system_string_length(
+		string_length = system_string_length(
 				 option_maximum_segment_size );
 
 		if( ewf_test_system_string_decimal_copy_to_64_bit(
@@ -587,7 +590,7 @@ int main( int argc, char * const argv[] )
 	}
 	if( option_media_size != NULL )
 	{
-		string_length = libcstring_system_string_length(
+		string_length = system_string_length(
 				 option_media_size );
 
 		if( ewf_test_system_string_decimal_copy_to_64_bit(

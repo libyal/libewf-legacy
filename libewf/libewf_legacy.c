@@ -21,15 +21,14 @@
 
 #include <common.h>
 #include <memory.h>
+#include <narrow_string.h>
 #include <types.h>
-
-#include "libewf_libcstring.h"
-#include "libewf_libcerror.h"
-#include "libewf_libcnotify.h"
 
 #include "libewf_definitions.h"
 #include "libewf_file_entry.h"
 #include "libewf_handle.h"
+#include "libewf_libcerror.h"
+#include "libewf_libcnotify.h"
 #include "libewf_metadata.h"
 #include "libewf_notify.h"
 #include "libewf_types.h"
@@ -3499,7 +3498,7 @@ int libewf_get_header_value_size(
 
 		return( -1 );
 	}
-	identifier_length = libcstring_narrow_string_length(
+	identifier_length = narrow_string_length(
 	                     identifier );
 
 	result = libewf_handle_get_header_value_size(
@@ -3559,7 +3558,7 @@ int libewf_get_header_value(
 
 		return( -1 );
 	}
-	identifier_length = libcstring_narrow_string_length(
+	identifier_length = narrow_string_length(
 	                     identifier );
 
 	result = libewf_handle_get_header_value(
@@ -3620,7 +3619,7 @@ int libewf_set_header_value(
 
 		return( -1 );
 	}
-	identifier_length = libcstring_narrow_string_length(
+	identifier_length = narrow_string_length(
 	                     identifier );
 
 	if( libewf_handle_set_header_value(
@@ -3898,7 +3897,7 @@ int libewf_get_hash_value(
 
 		return( -1 );
 	}
-	identifier_length = libcstring_narrow_string_length(
+	identifier_length = narrow_string_length(
 	                     identifier );
 
 	result = libewf_handle_get_hash_value(
@@ -3957,7 +3956,7 @@ int libewf_get_hash_value_size(
 
 		return( -1 );
 	}
-	identifier_length = libcstring_narrow_string_length(
+	identifier_length = narrow_string_length(
 	                     identifier );
 
 	result = libewf_handle_get_hash_value_size(
@@ -4015,7 +4014,7 @@ int libewf_set_hash_value(
 
 		return( -1 );
 	}
-	identifier_length = libcstring_narrow_string_length(
+	identifier_length = narrow_string_length(
 	                     identifier );
 
 	if( libewf_handle_set_hash_value(

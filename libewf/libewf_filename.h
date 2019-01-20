@@ -26,7 +26,6 @@
 #include <memory.h>
 #include <types.h>
 
-#include "libewf_libcstring.h"
 #include "libewf_libcerror.h"
 
 #if defined( __cplusplus )
@@ -43,6 +42,7 @@ int libewf_filename_set_extension(
      libcerror_error_t **error );
 
 #if defined( HAVE_WIDE_CHARACTER_TYPE )
+
 int libewf_filename_set_extension_wide(
      wchar_t *extension,
      uint16_t segment_number,
@@ -51,12 +51,13 @@ int libewf_filename_set_extension_wide(
      uint8_t format,
      uint8_t ewf_format,
      libcerror_error_t **error );
-#endif
+
+#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */
 
 int libewf_filename_create(
-     libcstring_system_character_t **filename,
+     system_character_t **filename,
      size_t *filename_size,
-     libcstring_system_character_t *basename,
+     system_character_t *basename,
      size_t basename_length,
      uint16_t segment_number,
      uint16_t maximum_number_of_segments,
@@ -69,5 +70,5 @@ int libewf_filename_create(
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBEWF_FILENAME_H ) */
 

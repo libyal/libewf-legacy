@@ -21,14 +21,15 @@
 
 #include <common.h>
 #include <memory.h>
+#include <narrow_string.h>
+#include <system_string.h>
 #include <types.h>
-
-#include "libewf_libcstring.h"
-#include "libewf_libcerror.h"
-#include "libewf_libclocale.h"
+#include <wide_string.h>
 
 #include "libewf_libbfio.h"
 #include "libewf_libcdata.h"
+#include "libewf_libcerror.h"
+#include "libewf_libclocale.h"
 #include "libewf_libmfdata.h"
 #include "libewf_libuna.h"
 #include "libewf_segment_file.h"
@@ -242,7 +243,7 @@ int libewf_segment_table_clone(
 	}
 	if( source_segment_table->basename != NULL )
 	{
-		( *destination_segment_table )->basename = libcstring_system_string_allocate(
+		( *destination_segment_table )->basename = system_string_allocate(
 					                    source_segment_table->basename_size );
 
 		if( *destination_segment_table == NULL )
@@ -259,7 +260,7 @@ int libewf_segment_table_clone(
 		if( memory_copy(
 		     ( *destination_segment_table )->basename,
 		     source_segment_table->basename,
-		     sizeof( libcstring_system_character_t ) * source_segment_table->basename_size ) == NULL )
+		     sizeof( system_character_t ) * source_segment_table->basename_size ) == NULL )
 		{
 			libcerror_error_set(
 			 error,
@@ -318,7 +319,7 @@ int libewf_segment_table_get_basename_size(
 {
 	static char *function = "libewf_segment_table_get_basename_size";
 
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	int result            = 0;
 #endif
 
@@ -348,7 +349,7 @@ int libewf_segment_table_get_basename_size(
 	{
 		return( 0 );
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libclocale_codepage == 0 )
 	{
 #if SIZEOF_WCHAR_T == 4
@@ -400,7 +401,7 @@ int libewf_segment_table_get_basename_size(
 	}
 #else
 	*basename_size = segment_table->basename_size;
-#endif /* defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER ) */
+#endif /* defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
 
 	return( 1 );
 }
@@ -417,7 +418,7 @@ int libewf_segment_table_get_basename(
 	static char *function       = "libewf_segment_table_get_basename";
 	size_t narrow_basename_size = 0;
 
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	int result                  = 0;
 #endif
 
@@ -447,7 +448,7 @@ int libewf_segment_table_get_basename(
 	{
 		return( 0 );
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libclocale_codepage == 0 )
 	{
 #if SIZEOF_WCHAR_T == 4
@@ -499,7 +500,7 @@ int libewf_segment_table_get_basename(
 	}
 #else
 	narrow_basename_size = segment_table->basename_size;
-#endif /* defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER ) */
+#endif /* defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
 
 	if( basename_size < narrow_basename_size )
 	{
@@ -512,7 +513,7 @@ int libewf_segment_table_get_basename(
 
 		return( -1 );
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libclocale_codepage == 0 )
 	{
 #if SIZEOF_WCHAR_T == 4
@@ -567,7 +568,7 @@ int libewf_segment_table_get_basename(
 		return( -1 );
 	}
 #else
-	if( libcstring_system_string_copy(
+	if( system_string_copy(
 	     basename,
 	     segment_table->basename,
 	     segment_table->basename_size ) == NULL )
@@ -582,7 +583,7 @@ int libewf_segment_table_get_basename(
 		return( -1 );
 	}
 	basename[ segment_table->basename_size - 1 ] = 0;
-#endif /* defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER ) */
+#endif /* defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
 
 	return( 1 );
 }
@@ -598,7 +599,7 @@ int libewf_segment_table_set_basename(
 {
 	static char *function = "libewf_segment_table_set_basename";
 
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	int result            = 0;
 #endif
 
@@ -632,7 +633,7 @@ int libewf_segment_table_set_basename(
 		segment_table->basename      = NULL;
 		segment_table->basename_size = 0;
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libclocale_codepage == 0 )
 	{
 #if SIZEOF_WCHAR_T == 4
@@ -685,7 +686,7 @@ int libewf_segment_table_set_basename(
 #else
 	segment_table->basename_size = basename_length + 1;
 #endif
-	segment_table->basename = libcstring_system_string_allocate(
+	segment_table->basename = system_string_allocate(
 	                           segment_table->basename_size );
 
 	if( segment_table->basename == NULL )
@@ -701,7 +702,7 @@ int libewf_segment_table_set_basename(
 
 		return( -1 );
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libclocale_codepage == 0 )
 	{
 #if SIZEOF_WCHAR_T == 4
@@ -762,7 +763,7 @@ int libewf_segment_table_set_basename(
 		return( -1 );
 	}
 #else
-	if( libcstring_system_string_copy(
+	if( system_string_copy(
 	     segment_table->basename,
 	     basename,
 	     basename_length ) == NULL )
@@ -783,7 +784,7 @@ int libewf_segment_table_set_basename(
 		return( -1 );
 	}
 	segment_table->basename[ basename_length ] = 0;
-#endif /* defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER ) */
+#endif /* defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
 
 	return( 1 );
 }
@@ -799,7 +800,7 @@ int libewf_segment_table_get_basename_size_wide(
 {
 	static char *function = "libewf_segment_table_get_basename_size_wide";
 
-#if !defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if !defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	int result            = 0;
 #endif
 
@@ -829,7 +830,7 @@ int libewf_segment_table_get_basename_size_wide(
 	{
 		return( 0 );
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	*basename_size = segment_table->basename_size;
 #else
 	if( libclocale_codepage == 0 )
@@ -881,7 +882,7 @@ int libewf_segment_table_get_basename_size_wide(
 
 		return( -1 );
 	}
-#endif /* defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER ) */
+#endif /* defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
 	return( 1 );
 }
 
@@ -897,7 +898,7 @@ int libewf_segment_table_get_basename_wide(
 	static char *function     = "libewf_segment_table_get_basename_wide";
 	size_t wide_basename_size = 0;
 
-#if !defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if !defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	int result                = 0;
 #endif
 
@@ -927,7 +928,7 @@ int libewf_segment_table_get_basename_wide(
 	{
 		return( 0 );
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	wide_basename_size = segment_table->basename_size;
 #else
 	if( libclocale_codepage == 0 )
@@ -979,7 +980,7 @@ int libewf_segment_table_get_basename_wide(
 
 		return( -1 );
 	}
-#endif /* defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER ) */
+#endif /* defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
 	if( basename_size < wide_basename_size )
 	{
 		libcerror_error_set(
@@ -991,8 +992,8 @@ int libewf_segment_table_get_basename_wide(
 
 		return( -1 );
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
-	if( libcstring_system_string_copy(
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
+	if( system_string_copy(
 	     basename,
 	     segment_table->basename,
 	     segment_table->basename_size ) == NULL )
@@ -1061,7 +1062,7 @@ int libewf_segment_table_get_basename_wide(
 
 		return( -1 );
 	}
-#endif /* defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER ) */
+#endif /* defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
 	return( 1 );
 }
 
@@ -1076,7 +1077,7 @@ int libewf_segment_table_set_basename_wide(
 {
 	static char *function = "libewf_segment_table_set_basename_wide";
 
-#if !defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if !defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	int result            = 0;
 #endif
 
@@ -1110,7 +1111,7 @@ int libewf_segment_table_set_basename_wide(
 		segment_table->basename      = NULL;
 		segment_table->basename_size = 0;
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	segment_table->basename_size = basename_length + 1;
 #else
 	if( libclocale_codepage == 0 )
@@ -1162,8 +1163,8 @@ int libewf_segment_table_set_basename_wide(
 
 		return( -1 );
 	}
-#endif /* defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER ) */
-	segment_table->basename = libcstring_system_string_allocate(
+#endif /* defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
+	segment_table->basename = system_string_allocate(
 	                           segment_table->basename_size );
 
 	if( segment_table->basename == NULL )
@@ -1177,8 +1178,8 @@ int libewf_segment_table_set_basename_wide(
 
 		return( -1 );
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
-	if( libcstring_system_string_copy(
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
+	if( system_string_copy(
 	     segment_table->basename,
 	     basename,
 	     basename_length ) == NULL )
@@ -1259,7 +1260,7 @@ int libewf_segment_table_set_basename_wide(
 
 		return( -1 );
 	}
-#endif /* defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER ) */
+#endif /* defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
 	return( 1 );
 }
 #endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */

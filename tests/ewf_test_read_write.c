@@ -21,6 +21,10 @@
 
 #include <common.h>
 #include <memory.h>
+#include <narrow_string.h>
+#include <system_string.h>
+#include <types.h>
+#include <wide_string.h>
 
 #if defined( HAVE_STDLIB_H ) || defined( WINAPI )
 #include <stdlib.h>
@@ -31,7 +35,6 @@
 #include "ewf_test_definitions.h"
 #include "ewf_test_getopt.h"
 #include "ewf_test_libcerror.h"
-#include "ewf_test_libcstring.h"
 #include "ewf_test_libewf.h"
 
 /* Define to make ewf_test_read_write generate verbose output
@@ -610,39 +613,39 @@ int ewf_test_read_write_chunk_at_offset(
 
 /* The main program
  */
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 int wmain( int argc, wchar_t * const argv[] )
 #else
 int main( int argc, char * const argv[] )
 #endif
 {
-	libcstring_system_character_t *target_filename = NULL;
-	libcerror_error_t *error                        = NULL;
-	libewf_handle_t *handle                        = NULL;
-	libcstring_system_integer_t option             = 0;
-	off64_t read_offset                            = 0;
-	size64_t media_size                            = 0;
-	size64_t read_size                             = 0;
-	size32_t chunk_size                            = 0;
-	size_t delta_segment_filename_length           = 0;
+	libcerror_error_t *error             = NULL;
+	libewf_handle_t *handle              = NULL;
+	system_character_t *target_filename  = NULL;
+	system_integer_t option              = 0;
+	size64_t media_size                  = 0;
+	size64_t read_size                   = 0;
+	size32_t chunk_size                  = 0;
+	size_t delta_segment_filename_length = 0;
+	off64_t read_offset                  = 0;
 
 	while( ( option = ewf_test_getopt(
 	                   argc,
 	                   argv,
-	                   _LIBCSTRING_SYSTEM_STRING( "t:" ) ) ) != (libcstring_system_integer_t) -1 )
+	                   _SYSTEM_STRING( "t:" ) ) ) != (system_integer_t) -1 )
 	{
 		switch( option )
 		{
-			case (libcstring_system_integer_t) '?':
+			case (system_integer_t) '?':
 			default:
 				fprintf(
 				 stderr,
-				 "Invalid argument: %" PRIs_LIBCSTRING_SYSTEM ".\n",
+				 "Invalid argument: %" PRIs_SYSTEM ".\n",
 				 argv[ optind - 1 ] );
 
 				return( EXIT_FAILURE );
 
-			case (libcstring_system_integer_t) 't':
+			case (system_integer_t) 't':
 				target_filename = optarg;
 
 				break;
@@ -676,7 +679,7 @@ int main( int argc, char * const argv[] )
 	 NULL );
 #endif
 
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libewf_handle_open_wide(
 	     handle,
 	     &( argv[ optind ] ),
@@ -700,10 +703,10 @@ int main( int argc, char * const argv[] )
 	}
 	if( target_filename != NULL )
 	{
-		delta_segment_filename_length = libcstring_system_string_length(
+		delta_segment_filename_length = system_string_length(
 		                                 target_filename );
 
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 		if( libewf_handle_set_delta_segment_filename_wide(
 		     handle,
 		     target_filename,

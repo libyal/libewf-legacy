@@ -27,7 +27,6 @@
 
 #include "digest_hash.h"
 #include "ewftools_libcerror.h"
-#include "ewftools_libcstring.h"
 #include "ewftools_libewf.h"
 #include "ewftools_libhmac.h"
 #include "log_handle.h"
@@ -73,7 +72,7 @@ struct verification_handle
 
 	/* The calculated MD5 digest hash string
 	 */
-	libcstring_system_character_t *calculated_md5_hash_string;
+	system_character_t *calculated_md5_hash_string;
 
 	/* Value to indicate a stored MD5 digest hash is available
 	 */
@@ -81,7 +80,7 @@ struct verification_handle
 
 	/* The stored MD5 digest hash string
 	 */
-	libcstring_system_character_t *stored_md5_hash_string;
+	system_character_t *stored_md5_hash_string;
 
 	/* Value to indicate if the SHA1 digest hash should be calculated
 	 */
@@ -97,7 +96,7 @@ struct verification_handle
 
 	/* The calculated SHA1 digest hash string
 	 */
-	libcstring_system_character_t *calculated_sha1_hash_string;
+	system_character_t *calculated_sha1_hash_string;
 
 	/* Value to indicate a stored SHA1 digest hash is available
 	 */
@@ -105,7 +104,7 @@ struct verification_handle
 
 	/* The stored SHA1 digest hash string
 	 */
-	libcstring_system_character_t *stored_sha1_hash_string;
+	system_character_t *stored_sha1_hash_string;
 
 	/* Value to indicate if the SHA256 digest hash should be calculated
 	 */
@@ -121,7 +120,7 @@ struct verification_handle
 
 	/* The calculated SHA256 digest hash string
 	 */
-	libcstring_system_character_t *calculated_sha256_hash_string;
+	system_character_t *calculated_sha256_hash_string;
 
 	/* Value to indicate a stored SHA256 digest hash is available
 	 */
@@ -129,7 +128,7 @@ struct verification_handle
 
 	/* The stored SHA256 digest hash string
 	 */
-	libcstring_system_character_t *stored_sha256_hash_string;
+	system_character_t *stored_sha256_hash_string;
 
 	/* Value to indicate if the chunk data instead of the buffered read and write functions should be used
 	 */
@@ -185,7 +184,7 @@ int verification_handle_set_maximum_number_of_open_handles(
 
 int verification_handle_open_input(
      verification_handle_t *verification_handle,
-     libcstring_system_character_t * const * filenames,
+     system_character_t * const * filenames,
      int number_of_filenames,
      libcerror_error_t **error );
 
@@ -233,7 +232,7 @@ int verification_handle_verify_single_files(
 int verification_handle_verify_file_entry(
      verification_handle_t *verification_handle,
      libewf_file_entry_t *file_entry,
-     const libcstring_system_character_t *file_entry_path,
+     const system_character_t *file_entry_path,
      size_t file_entry_path_length,
      log_handle_t *log_handle,
      libcerror_error_t **error );
@@ -241,7 +240,7 @@ int verification_handle_verify_file_entry(
 int verification_handle_verify_sub_file_entries(
      verification_handle_t *verification_handle,
      libewf_file_entry_t *file_entry,
-     const libcstring_system_character_t *file_entry_path,
+     const system_character_t *file_entry_path,
      size_t file_entry_path_length,
      log_handle_t *log_handle,
      libcerror_error_t **error );
@@ -257,22 +256,22 @@ int verification_handle_get_integrity_hash_from_file_entry(
 
 int verification_handle_set_header_codepage(
      verification_handle_t *verification_handle,
-     const libcstring_system_character_t *string,
+     const system_character_t *string,
      libcerror_error_t **error );
 
 int verification_handle_set_format(
      verification_handle_t *verification_handle,
-     const libcstring_system_character_t *string,
+     const system_character_t *string,
      libcerror_error_t **error );
 
 int verification_handle_set_process_buffer_size(
      verification_handle_t *verification_handle,
-     const libcstring_system_character_t *string,
+     const system_character_t *string,
      libcerror_error_t **error );
 
 int verification_handle_set_additional_digest_types(
      verification_handle_t *verification_handle,
-     const libcstring_system_character_t *string,
+     const system_character_t *string,
      libcerror_error_t **error );
 
 int verification_handle_set_zero_chunk_on_error(

@@ -8,7 +8,6 @@ if HAVE_PYTHON3
 AM_CFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
-	@LIBCSTRING_CPPFLAGS@ \
 	@LIBCERROR_CPPFLAGS@ \
 	@LIBCDATA_CPPFLAGS@ \
 	@LIBCLOCALE_CPPFLAGS@ \
@@ -34,7 +33,6 @@ BUILT_SOURCES = \
 	pyewf_libbfio.h \
 	pyewf_libcerror.h \
 	pyewf_libclocale.h \
-	pyewf_libcstring.h \
 	pyewf_libewf.h \
 	pyewf_metadata.c pyewf_metadata.h \
 	pyewf_python.h \
@@ -45,7 +43,6 @@ pyexec_LTLIBRARIES = pyewf.la
 nodist_pyewf_la_SOURCES = $(BUILT_SOURCES)
 
 pyewf_la_LIBADD = \
-	@LIBCSTRING_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
 	../libewf/libewf.la
 	@LIBCDATA_LIBADD@ \

@@ -21,13 +21,15 @@
 
 #include <common.h>
 #include <memory.h>
+#include <narrow_string.h>
+#include <system_string.h>
 #include <types.h>
+#include <wide_string.h>
 
 #include "byte_size_string.h"
 #include "device_handle.h"
 #include "ewfinput.h"
 #include "ewftools_libcerror.h"
-#include "ewftools_libcstring.h"
 #include "ewftools_libewf.h"
 #include "ewftools_libodraw.h"
 #include "ewftools_libsmdev.h"
@@ -149,7 +151,7 @@ int device_handle_initialize(
 
 		return( -1 );
 	}
-	( *device_handle )->input_buffer = libcstring_system_string_allocate(
+	( *device_handle )->input_buffer = system_string_allocate(
 	                                    DEVICE_HANDLE_INPUT_BUFFER_SIZE );
 
 	if( ( *device_handle )->input_buffer == NULL )
@@ -166,7 +168,7 @@ int device_handle_initialize(
 	if( memory_set(
 	     ( *device_handle )->input_buffer,
 	     0,
-	     sizeof( libcstring_system_character_t ) * DEVICE_HANDLE_INPUT_BUFFER_SIZE ) == NULL )
+	     sizeof( system_character_t ) * DEVICE_HANDLE_INPUT_BUFFER_SIZE ) == NULL )
 	{
 		libcerror_error_set(
 		 error,
@@ -379,7 +381,7 @@ int device_handle_signal_abort(
  */
 int device_handle_open_input(
      device_handle_t *device_handle,
-     libcstring_system_character_t * const * filenames,
+     system_character_t * const * filenames,
      int number_of_filenames,
      libcerror_error_t **error )
 {
@@ -410,7 +412,7 @@ int device_handle_open_input(
 	}
 	if( number_of_filenames == 1 )
 	{
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 		result = libsmdev_check_device_wide(
 		          filenames[ 0 ],
 	                  error );
@@ -505,7 +507,7 @@ int device_handle_open_input(
  */
 int device_handle_open_smdev_input(
      device_handle_t *device_handle,
-     libcstring_system_character_t * const * filenames,
+     system_character_t * const * filenames,
      int number_of_filenames,
      libcerror_error_t **error )
 {
@@ -568,7 +570,7 @@ int device_handle_open_smdev_input(
 
 		goto on_error;
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libsmdev_handle_open_wide(
 	     device_handle->smdev_input_handle,
 	     filenames[ 0 ],
@@ -608,7 +610,7 @@ on_error:
  */
 int device_handle_open_odraw_input(
      device_handle_t *device_handle,
-     libcstring_system_character_t * const * filenames,
+     system_character_t * const * filenames,
      int number_of_filenames,
      libcerror_error_t **error )
 {
@@ -664,7 +666,7 @@ int device_handle_open_odraw_input(
 
 		goto on_error;
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libodraw_handle_open_wide(
 	     device_handle->odraw_input_handle,
 	     device_handle->toc_filename,
@@ -728,7 +730,7 @@ int device_handle_open_odraw_input(
 
 			return( -1 );
 		}
-		filename_length = libcstring_system_string_length(
+		filename_length = system_string_length(
 		                   filenames[ data_file_index ] );
 
 		if( libodraw_handle_get_data_file(
@@ -747,7 +749,7 @@ int device_handle_open_odraw_input(
 
 			goto on_error;
 		}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 		if( libodraw_data_file_set_filename_wide(
 		     data_file,
 		     filenames[ data_file_index ],
@@ -822,7 +824,7 @@ on_error:
  */
 int device_handle_open_smraw_input(
      device_handle_t *device_handle,
-     libcstring_system_character_t * const * filenames,
+     system_character_t * const * filenames,
      int number_of_filenames,
      libcerror_error_t **error )
 {
@@ -874,7 +876,7 @@ int device_handle_open_smraw_input(
 
 		goto on_error;
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libsmraw_handle_open_wide(
 	     device_handle->smraw_input_handle,
 	     (wchar_t * const *) filenames,
@@ -1169,8 +1171,8 @@ off64_t device_handle_seek_offset(
  */
 int device_handle_prompt_for_string(
      device_handle_t *device_handle,
-     const libcstring_system_character_t *request_string,
-     libcstring_system_character_t **internal_string,
+     const system_character_t *request_string,
+     system_character_t **internal_string,
      size_t *internal_string_size,
      libcerror_error_t **error )
 {
@@ -1220,7 +1222,7 @@ int device_handle_prompt_for_string(
 	}
 	*internal_string_size = DEVICE_HANDLE_STRING_SIZE;
 
-	*internal_string = libcstring_system_string_allocate(
+	*internal_string = system_string_allocate(
 	                    *internal_string_size );
 
 	if( *internal_string == NULL )
@@ -1286,7 +1288,7 @@ on_error:
  */
 int device_handle_prompt_for_number_of_error_retries(
      device_handle_t *device_handle,
-     const libcstring_system_character_t *request_string,
+     const system_character_t *request_string,
      libcerror_error_t **error )
 {
 	static char *function  = "device_handle_prompt_for_number_of_error_retries";
@@ -1338,10 +1340,10 @@ int device_handle_prompt_for_number_of_error_retries(
  */
 int device_handle_prompt_for_zero_buffer_on_error(
      device_handle_t *device_handle,
-     const libcstring_system_character_t *request_string,
+     const system_character_t *request_string,
      libcerror_error_t **error )
 {
-	libcstring_system_character_t *fixed_string_variable = NULL;
+	system_character_t *fixed_string_variable = NULL;
 	static char *function                                = "device_handle_prompt_for_zero_buffer_on_error";
 	int result                                           = 0;
 
@@ -1672,7 +1674,7 @@ int device_handle_get_information_value(
      device_handle_t *device_handle,
      const uint8_t *information_value_identifier,
      size_t information_value_identifier_length,
-     libcstring_system_character_t *information_value,
+     system_character_t *information_value,
      size_t information_value_size,
      libcerror_error_t **error )
 {
@@ -1692,7 +1694,7 @@ int device_handle_get_information_value(
 	}
 	if( device_handle->type == DEVICE_HANDLE_TYPE_DEVICE )
 	{
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 		result = libsmdev_handle_get_utf16_information_value(
 		          device_handle->smdev_input_handle,
 		          information_value_identifier,
@@ -1728,7 +1730,7 @@ int device_handle_get_information_value(
 	}
 	else if( device_handle->type == DEVICE_HANDLE_TYPE_FILE )
 	{
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 		result = libsmraw_handle_get_utf16_information_value(
 		          device_handle->smraw_input_handle,
 		          information_value_identifier,
@@ -2073,8 +2075,8 @@ int device_handle_get_track(
  */
 int device_handle_set_string(
      device_handle_t *device_handle,
-     const libcstring_system_character_t *string,
-     libcstring_system_character_t **internal_string,
+     const system_character_t *string,
+     system_character_t **internal_string,
      size_t *internal_string_size,
      libcerror_error_t **error )
 {
@@ -2133,12 +2135,12 @@ int device_handle_set_string(
 		*internal_string      = NULL;
 		*internal_string_size = 0;
 	}
-	string_length = libcstring_system_string_length(
+	string_length = system_string_length(
 	                 string );
 
 	if( string_length > 0 )
 	{
-		*internal_string = libcstring_system_string_allocate(
+		*internal_string = system_string_allocate(
 		                    string_length + 1 );
 
 		if( *internal_string == NULL )
@@ -2152,7 +2154,7 @@ int device_handle_set_string(
 
 			goto on_error;
 		}
-		if( libcstring_system_string_copy(
+		if( system_string_copy(
 		     *internal_string,
 		     string,
 		     string_length ) == NULL )
@@ -2190,7 +2192,7 @@ on_error:
  */
 int device_handle_set_number_of_error_retries(
      device_handle_t *device_handle,
-     const libcstring_system_character_t *string,
+     const system_character_t *string,
      libcerror_error_t **error )
 {
 	static char *function  = "device_handle_set_number_of_error_retries";
@@ -2209,7 +2211,7 @@ int device_handle_set_number_of_error_retries(
 
 		return( -1 );
 	}
-	string_length = libcstring_system_string_length(
+	string_length = system_string_length(
 	                 string );
 
 	if( ewftools_system_string_decimal_copy_to_64_bit(
@@ -2437,7 +2439,7 @@ int device_handle_media_information_fprint(
 {
 	uint8_t media_information_value[ 64 ];
 
-        libcstring_system_character_t byte_size_string[ 16 ];
+        system_character_t byte_size_string[ 16 ];
 
 	static char *function     = "device_handle_media_information_fprint";
 	size64_t media_size       = 0;
@@ -2734,7 +2736,7 @@ int device_handle_media_information_fprint(
 	{
 		fprintf(
 		 stream,
-		 "Media size:\t\t\t\t%" PRIs_LIBCSTRING_SYSTEM " (%" PRIu64 " bytes)\n",
+		 "Media size:\t\t\t\t%" PRIs_SYSTEM " (%" PRIu64 " bytes)\n",
 		 byte_size_string,
 		 media_size );
 	}

@@ -21,6 +21,7 @@
  */
 
 #include <common.h>
+#include <narrow_string.h>
 #include <types.h>
 
 #include "pyewf_codepage.h"
@@ -29,7 +30,6 @@
 #include "pyewf_integer.h"
 #include "pyewf_libcerror.h"
 #include "pyewf_libclocale.h"
-#include "pyewf_libcstring.h"
 #include "pyewf_libewf.h"
 #include "pyewf_metadata.h"
 #include "pyewf_python.h"
@@ -187,7 +187,7 @@ int pyewf_handle_set_header_codepage_from_string(
 
 		return( -1 );
 	}
-	codepage_string_length = libcstring_narrow_string_length(
+	codepage_string_length = narrow_string_length(
 	                          codepage_string );
 
 	feature_flags = LIBCLOCALE_CODEPAGE_FEATURE_FLAG_HAVE_KOI8
@@ -426,7 +426,7 @@ PyObject *pyewf_handle_get_header_value(
 	{
 		return( NULL );
 	}
-	header_value_identifier_length = libcstring_narrow_string_length(
+	header_value_identifier_length = narrow_string_length(
 	                                  header_value_identifier );
 
 	Py_BEGIN_ALLOW_THREADS
@@ -667,7 +667,7 @@ PyObject *pyewf_handle_get_header_values(
 
 			goto on_error;
 		}
-		header_value_identifier_length = libcstring_narrow_string_length(
+		header_value_identifier_length = narrow_string_length(
 						  header_value_identifier );
 
 		Py_BEGIN_ALLOW_THREADS
@@ -845,7 +845,7 @@ PyObject *pyewf_handle_get_hash_value(
 	{
 		return( NULL );
 	}
-	hash_value_identifier_length = libcstring_narrow_string_length(
+	hash_value_identifier_length = narrow_string_length(
 	                                hash_value_identifier );
 
 	Py_BEGIN_ALLOW_THREADS
@@ -1086,7 +1086,7 @@ PyObject *pyewf_handle_get_hash_values(
 
 			goto on_error;
 		}
-		hash_value_identifier_length = libcstring_narrow_string_length(
+		hash_value_identifier_length = narrow_string_length(
 		                                hash_value_identifier );
 
 		Py_BEGIN_ALLOW_THREADS

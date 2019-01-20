@@ -21,13 +21,14 @@
 
 #include <common.h>
 #include <memory.h>
+#include <narrow_string.h>
+#include <system_string.h>
 #include <types.h>
-
-#include "libewf_libcstring.h"
-#include "libewf_libcerror.h"
+#include <wide_string.h>
 
 #include "libewf_definitions.h"
 #include "libewf_filename.h"
+#include "libewf_libcerror.h"
 
 #include "ewf_definitions.h"
 
@@ -297,9 +298,9 @@ int libewf_filename_set_extension_wide(
  * Returns 1 if successful or -1 on error
  */
 int libewf_filename_create(
-     libcstring_system_character_t **filename,
+     system_character_t **filename,
      size_t *filename_size,
-     libcstring_system_character_t *basename,
+     system_character_t *basename,
      size_t basename_length,
      uint16_t segment_number,
      uint16_t maximum_number_of_segments,
@@ -308,8 +309,8 @@ int libewf_filename_create(
      uint8_t ewf_format,
      libcerror_error_t **error )
 {
-	libcstring_system_character_t *new_filename = NULL;
-	static char *function                       = "libewf_filename_create";
+	system_character_t *new_filename = NULL;
+	static char *function            = "libewf_filename_create";
 
 	if( filename == NULL )
 	{
@@ -357,7 +358,7 @@ int libewf_filename_create(
 	}
 	/* The actual filename also contains a '.', 3 character extension and a end of string byte
 	 */
-	new_filename = libcstring_system_string_allocate(
+	new_filename = system_string_allocate(
 	                basename_length + 5 );
 
 	if( new_filename == NULL )
@@ -373,7 +374,7 @@ int libewf_filename_create(
 	}
 	/* Add one additional character for the end of line
 	 */
-	if( libcstring_system_string_copy(
+	if( system_string_copy(
 	     new_filename,
 	     basename,
 	     ( basename_length + 1 ) ) == NULL )
@@ -390,9 +391,9 @@ int libewf_filename_create(
 
 		return( -1 );
 	}
-	new_filename[ basename_length ] = (libcstring_system_character_t) '.';
+	new_filename[ basename_length ] = (system_character_t) '.';
 
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libewf_filename_set_extension_wide(
 	     &( new_filename[ basename_length + 1 ] ),
 	     segment_number,

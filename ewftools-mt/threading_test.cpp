@@ -60,7 +60,6 @@
 #include "ewftools_libcerror.h"
 #include "ewftools_libclocale.h"
 #include "ewftools_libcnotify.h"
-#include "ewftools_libcstring.h"
 #include "ewftools_libewf.h"
 #include "imaging_handle.h"
 #include "log_handle.h"
@@ -329,13 +328,13 @@ void writer(
 
 int start_threads_testing()
 {
-	libcerror_error_t *error               = NULL;
-	libcstring_system_character_t *program = _LIBCSTRING_SYSTEM_STRING( "threading_test" );
-	storage_media_buffer_t *src            = NULL;
-	storage_media_buffer_t *mid            = NULL;
-	storage_media_buffer_t *target         = NULL;
-	const char *function                   = "start_threads_testing";
-	uint8_t running                        = 0;
+	libcerror_error_t *error       = NULL;
+	storage_media_buffer_t *mid    = NULL;
+	storage_media_buffer_t *src    = NULL;
+	storage_media_buffer_t *target = NULL;
+	system_character_t *program    = _SYSTEM_STRING( "threading_test" );
+	const char *function           = "start_threads_testing";
+	uint8_t running                = 0;
 
 	/* initialize random seed: */
 	srand (time(NULL));
@@ -475,7 +474,7 @@ int start_threads_testing()
 }
 
 int verbose_mt = 1;
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 int wmain( int argc, wchar_t * const argv[] )
 #else
 int main( int argc, char * const argv[] )

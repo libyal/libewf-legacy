@@ -2,7 +2,6 @@ if HAVE_CXX11
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
-	@LIBCSTRING_CPPFLAGS@ \
 	@LIBCERROR_CPPFLAGS@ \
 	@LIBCDATA_CPPFLAGS@ \
 	@LIBCDATETIME_CPPFLAGS@ \
@@ -48,7 +47,6 @@ ewfacquirestream_SOURCES = \
 	../ewftools/ewftools_libcnotify.h \
 	../ewftools/ewftools_libcpath.h \
 	../ewftools/ewftools_libcsplit.h \
-	../ewftools/ewftools_libcstring.h \
 	../ewftools/ewftools_libewf.h \
 	../ewftools/ewftools_libhmac.h \
 	../ewftools/ewftools_libodraw.h \
@@ -74,7 +72,6 @@ ewfacquirestream_LDADD = \
 	@LIBCNOTIFY_LIBADD@ \
 	@LIBCLOCALE_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
-	@LIBCSTRING_LIBADD@ \
 	@LIBINTL@ \
 	@PTHREAD_LIBADD@ \
 	-lstdc++

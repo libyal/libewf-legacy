@@ -21,6 +21,7 @@
 
 #include <common.h>
 #include <memory.h>
+#include <narrow_string.h>
 #include <types.h>
 
 #include "libewf_codepage.h"
@@ -32,7 +33,6 @@
 #include "libewf_libcdata.h"
 #include "libewf_libcerror.h"
 #include "libewf_libcnotify.h"
-#include "libewf_libcstring.h"
 #include "libewf_libfvalue.h"
 #include "libewf_metadata.h"
 #include "libewf_sector_range.h"
@@ -3305,7 +3305,7 @@ int libewf_handle_get_utf8_header_value_size(
 		return( 0 );
 	}
 	if( ( identifier_length == 16 )
-	 && ( libcstring_narrow_string_compare(
+	 && ( narrow_string_compare(
 	       (char *) identifier,
 	       "compression_type",
 	       16 ) == 0 ) )
@@ -3364,12 +3364,12 @@ int libewf_handle_get_utf8_header_value_size(
 		return( 0 );
 	}
 	if( ( ( identifier_length == 11 )
-	   && ( libcstring_narrow_string_compare(
+	   && ( narrow_string_compare(
 		 (char *) identifier,
 		 "system_date",
 		 11 ) == 0 ) )
 	 || ( ( identifier_length == 12 )
-	   && ( libcstring_narrow_string_compare(
+	   && ( narrow_string_compare(
 		 (char *) identifier,
 		 "acquiry_date",
 		 12 ) == 0 ) ) )
@@ -3516,7 +3516,7 @@ int libewf_handle_get_utf8_header_value(
 		return( 0 );
 	}
 	if( ( identifier_length == 16 )
-	 && ( libcstring_narrow_string_compare(
+	 && ( narrow_string_compare(
 	       (char *) identifier,
 	       "compression_type",
 	       16 ) == 0 ) )
@@ -3575,12 +3575,12 @@ int libewf_handle_get_utf8_header_value(
 		return( 0 );
 	}
 	if( ( ( identifier_length == 11 )
-	   && ( libcstring_narrow_string_compare(
+	   && ( narrow_string_compare(
 		 (char *) identifier,
 		 "system_date",
 		 11 ) == 0 ) )
 	 || ( ( identifier_length == 12 )
-	   && ( libcstring_narrow_string_compare(
+	   && ( narrow_string_compare(
 		 (char *) identifier,
 		 "acquiry_date",
 		 12 ) == 0 ) ) )
@@ -3875,7 +3875,7 @@ int libewf_handle_get_utf16_header_value_size(
 		return( 0 );
 	}
 	if( ( identifier_length == 16 )
-	 && ( libcstring_narrow_string_compare(
+	 && ( narrow_string_compare(
 	       (char *) identifier,
 	       "compression_type",
 	       16 ) == 0 ) )
@@ -3934,12 +3934,12 @@ int libewf_handle_get_utf16_header_value_size(
 		return( 0 );
 	}
 	if( ( ( identifier_length == 11 )
-	   && ( libcstring_narrow_string_compare(
+	   && ( narrow_string_compare(
 		 (char *) identifier,
 		 "system_date",
 		 11 ) == 0 ) )
 	 || ( ( identifier_length == 12 )
-	   && ( libcstring_narrow_string_compare(
+	   && ( narrow_string_compare(
 		 (char *) identifier,
 		 "acquiry_date",
 		 12 ) == 0 ) ) )
@@ -4086,7 +4086,7 @@ int libewf_handle_get_utf16_header_value(
 		return( 0 );
 	}
 	if( ( identifier_length == 16 )
-	 && ( libcstring_narrow_string_compare(
+	 && ( narrow_string_compare(
 	       (char *) identifier,
 	       "compression_type",
 	       16 ) == 0 ) )
@@ -4145,12 +4145,12 @@ int libewf_handle_get_utf16_header_value(
 		return( 0 );
 	}
 	if( ( ( identifier_length == 11 )
-	   && ( libcstring_narrow_string_compare(
+	   && ( narrow_string_compare(
 		 (char *) identifier,
 		 "system_date",
 		 11 ) == 0 ) )
 	 || ( ( identifier_length == 12 )
-	   && ( libcstring_narrow_string_compare(
+	   && ( narrow_string_compare(
 		 (char *) identifier,
 		 "acquiry_date",
 		 12 ) == 0 ) ) )
@@ -5377,7 +5377,7 @@ int libewf_handle_set_utf8_hash_value(
 	if( internal_handle->hash_sections != NULL )
 	{
 		if( ( identifier_length == 3 )
-		 && ( libcstring_narrow_string_compare(
+		 && ( narrow_string_compare(
 		       (char *) identifier,
 		       "MD5",
 		       identifier_length ) == 0 ) )
@@ -5416,7 +5416,7 @@ int libewf_handle_set_utf8_hash_value(
 			}
 		}
 		else if( ( identifier_length == 4 )
-		      && ( libcstring_narrow_string_compare(
+		      && ( narrow_string_compare(
 		            (char *) identifier,
 		            "SHA1",
 		            identifier_length ) == 0 ) )
@@ -5864,7 +5864,7 @@ int libewf_handle_set_utf16_hash_value(
 	if( internal_handle->hash_sections != NULL )
 	{
 		if( ( identifier_length == 3 )
-		 && ( libcstring_narrow_string_compare(
+		 && ( narrow_string_compare(
 		       (char *) identifier,
 		       "MD5",
 		       identifier_length ) == 0 ) )
@@ -5903,7 +5903,7 @@ int libewf_handle_set_utf16_hash_value(
 			}
 		}
 		else if( ( identifier_length == 4 )
-		      && ( libcstring_narrow_string_compare(
+		      && ( narrow_string_compare(
 		            (char *) identifier,
 		            "SHA1",
 		            identifier_length ) == 0 ) )
