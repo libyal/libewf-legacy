@@ -44,15 +44,27 @@ test_read_write_delta()
 
 	mkdir ${TMP};
 
-	./${EWF_TEST_WRITE} -b ${CHUNK_SIZE} -B ${MEDIA_SIZE} -c `echo ${COMPRESSION_LEVEL} | ${CUT} -c 1` ${TMP}/write;
+	if test "${OSTYPE}" = "msys";
+	then
+		OUTPUT_FILE="${TMP}\\write";
+	else
+		OUTPUT_FILE="${TMP}/write";
+	fi
+	./${EWF_TEST_WRITE} -b ${CHUNK_SIZE} -B ${MEDIA_SIZE} -c `echo ${COMPRESSION_LEVEL} | ${CUT} -c 1` "${OUTPUT_FILE}";
 
 	RESULT=$?;
 
 	if [ ${RESULT} -eq ${EXIT_SUCCESS} ];
 	then
-		FILENAMES=`${LS} ${TMP}/write.* | ${TR} '\n' ' '`;
+		FILENAMES=`${LS} ${OUTPUT_FILE}.* | ${TR} '\n' ' '`;
 
-		./${EWF_TEST_READ_WRITE_DELTA} -B ${WRITE_SIZE} -o ${WRITE_OFFSET} -t ${TMP}/read_write ${FILENAMES};
+		if test "${OSTYPE}" = "msys";
+		then
+			OUTPUT_FILE="${TMP}\\read_write";
+		else
+			OUTPUT_FILE="${TMP}/read_write";
+		fi
+		./${EWF_TEST_READ_WRITE_DELTA} -B ${WRITE_SIZE} -o ${WRITE_OFFSET} -t "${OUTPUT_FILE}" ${FILENAMES};
 
 		RESULT=$?;
 	fi
@@ -61,9 +73,9 @@ test_read_write_delta()
 	then
 		if [ ${WRITE_OFFSET} -lt ${MEDIA_SIZE} ];
 		then
-			if [ -e ${TMP}/read_write.d01 ];
+			if [ -e ${OUTPUT_FILE}.d01 ];
 			then
-				FILESIZE=`${LS} -l ${TMP}/read_write.d01 | ${AWK} '{ print $5 }'`;
+				FILESIZE=`${LS} -l ${OUTPUT_FILE}.d01 | ${AWK} '{ print $5 }'`;
 
 				CHUNK_SIZE=`expr ${CHUNK_SIZE} \* 512`;
 
@@ -124,7 +136,7 @@ test_read_write_delta()
 				RESULT=${EXIT_FAILURE};
 			fi
 		else
-			if [ -e ${TMP}/read_write.d01 ];
+			if [ -e ${OUTPUT_FILE}.d01 ];
 			then
 				RESULT=${EXIT_FAILURE};
 			else
