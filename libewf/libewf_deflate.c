@@ -36,7 +36,8 @@ int libewf_deflate_bit_stream_get_value(
      uint32_t *value_32bit,
      libcerror_error_t **error )
 {
-	static char *function = "libewf_deflate_bit_stream_get_value";
+	static char *function     = "libewf_deflate_bit_stream_get_value";
+	uint32_t safe_value_32bit = 0;
 
 	if( bit_stream == NULL )
 	{
@@ -90,16 +91,24 @@ int libewf_deflate_bit_stream_get_value(
 
 			return( -1 );
 		}
-		*value_32bit   = bit_stream->byte_stream[ bit_stream->byte_stream_offset++ ];
-		*value_32bit <<= bit_stream->bit_buffer_size;
+		safe_value_32bit   = bit_stream->byte_stream[ bit_stream->byte_stream_offset++ ];
+		safe_value_32bit <<= bit_stream->bit_buffer_size;
 
-		bit_stream->bit_buffer      |= *value_32bit;
+		bit_stream->bit_buffer      |= safe_value_32bit;
 		bit_stream->bit_buffer_size += 8;
 	}
-	*value_32bit = bit_stream->bit_buffer & ~( 0xffffffffUL << number_of_bits );
+	safe_value_32bit = bit_stream->bit_buffer;
 
+	/* On VS 2008 32-bit "~( 0xfffffffUL << 32 )" does not behave as expected
+	 */
+	if( number_of_bits < 32 )
+	{
+		safe_value_32bit &= ~( 0xffffffffUL << number_of_bits );
+	}
 	bit_stream->bit_buffer     >>= number_of_bits;
 	bit_stream->bit_buffer_size -= number_of_bits;
+
+	*value_32bit = safe_value_32bit;
 
 	return( 1 );
 }
