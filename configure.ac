@@ -287,7 +287,7 @@ Building:
    libfvalue support:                        $ac_cv_libfvalue
    libmfdata support:                        $ac_cv_libmfdata
    ADLER32 checksum support:                 $ac_cv_adler32
-   DEFLATE compression support:              $ac_cv_zlib
+   DEFLATE compression support:              $ac_cv_uncompress
    libhmac support:                          $ac_cv_libhmac
    MD5 support:                              $ac_cv_libhmac_md5
    SHA1 support:                             $ac_cv_libhmac_sha1
