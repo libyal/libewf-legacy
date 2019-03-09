@@ -19,6 +19,7 @@ TESTS = \
 	test_write.sh \
 	test_read_write.sh \
 	test_read_write_delta.sh \
+	test_manpage.sh \
 	test_ewfverify.sh \
 	test_ewfverify_logical.sh \
 	test_ewfacquire.sh \
@@ -41,6 +42,7 @@ check_SCRIPTS = \
 	test_ewfverify.sh \
 	test_ewfverify_logical.sh \
 	test_glob.sh \
+	test_manpage.sh \
 	test_pyewf.sh \
 	test_read.sh \
 	test_read_write.sh \
