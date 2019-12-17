@@ -37,16 +37,20 @@ environment:
     configuration: Release
   - TARGET: python27
     BUILD_ENVIRONMENT: python
-    PYTHON: "C:\\Python27"
+    PYTHON: "C:\\Python27\\python.exe"
   - TARGET: python27-x64
     BUILD_ENVIRONMENT: python
-    PYTHON: "C:\\Python27-x64"
-  - TARGET: python36
+    PYTHON: "C:\\Python27-x64\\python.exe"
+  - TARGET: python37
     BUILD_ENVIRONMENT: python
-    PYTHON: "C:\\Python36"
-  - TARGET: python36-x64
+    PYTHON: "C:\\Python37\\python.exe"
+  - TARGET: python37-x64
     BUILD_ENVIRONMENT: python
-    PYTHON: "C:\\Python36-x64"
+    PYTHON: "C:\\Python37-x64\\python.exe"
+  - TARGET: python37-x64
+    BUILD_ENVIRONMENT: python
+    APPVEYOR_BUILD_WORKER_IMAGE: macOS-Mojave
+    PYTHON: "/usr/local/bin/python3.7"
   - TARGET: cygwin-gcc
     BUILD_ENVIRONMENT: cygwin
     CONFIGURE_OPTIONS: ""
@@ -68,11 +72,13 @@ environment:
     CONFIGURE_OPTIONS: "--enable-python2"
     CFLAGS: "--coverage"
     LDFLAGS: "--coverage"
+    PYTHON_VERSION: 2
   - TARGET: cygwin-gcc-python3
     BUILD_ENVIRONMENT: cygwin
     CONFIGURE_OPTIONS: "--enable-python3"
     CFLAGS: "--coverage"
     LDFLAGS: "--coverage"
+    PYTHON_VERSION: 3
   - TARGET: cygwin-gcc-static-executables
     BUILD_ENVIRONMENT: cygwin
     CONFIGURE_OPTIONS: "--enable-static-executables"
@@ -99,11 +105,13 @@ environment:
     CONFIGURE_OPTIONS: "--enable-python2"
     CFLAGS: "--coverage"
     LDFLAGS: "--coverage"
+    PYTHON_VERSION: 2
   - TARGET: cygwin64-gcc-python3
     BUILD_ENVIRONMENT: cygwin64
     CONFIGURE_OPTIONS: "--enable-python3"
     CFLAGS: "--coverage"
     LDFLAGS: "--coverage"
+    PYTHON_VERSION: 3
   - TARGET: cygwin64-gcc-static-executables
     BUILD_ENVIRONMENT: cygwin64
     CONFIGURE_OPTIONS: "--enable-static-executables"
@@ -141,10 +149,6 @@ environment:
     CONFIGURE_OPTIONS: "--enable-static-executables"
     CFLAGS: "--coverage"
     LDFLAGS: "--coverage"
-
-matrix:
-  allow_failures:
-  - TARGET: python27-x64
 
 install:
 - cmd: git clone https://github.com/codecov/codecov-bash.git ..\codecov-bash
@@ -197,6 +201,9 @@ install:
     Else {
       .\builddokan.ps1 -UseLegacyVersion }
     }
+- sh: if test ${BUILD_ENVIRONMENT} = "python"; then brew update && brew install gettext gnu-sed python3 && brew link --force gettext; fi
+- ps: If ($env:BUILD_ENVIRONMENT -eq "python") {
+    Invoke-Expression "${env:PYTHON} -m pip install -U pip setuptools twine wheel" }
 - cmd: if [%BUILD_ENVIRONMENT%]==[cygwin] (
     C:\cygwin\setup-x86.exe -qgnNdO -l C:\cygwin\var\cache\setup -R c:\cygwin -s http://cygwin.mirror.constant.com -P bison -P flex -P zlib-devel -P openssl-devel -P python2-devel -P python3-devel -P libuuid-devel )
 - cmd: if [%BUILD_ENVIRONMENT%]==[cygwin64] (
@@ -207,7 +214,7 @@ install:
     C:\msys64\usr\bin\pacman -S --noconfirm --needed msys/bison msys/flex msys/zlib-devel )
 
 build_script:
-- ps: If ($env:BUILD_ENVIRONMENT -eq "msbuild" -or $env:BUILD_ENVIRONMENT -eq "python") {
+- ps: If ($env:BUILD_ENVIRONMENT -eq "msbuild" -or ($env:BUILD_ENVIRONMENT -eq "python" -and $isWindows)) {
     .\synclibs.ps1;
     .\autogen.ps1 }
 - cmd: if [%TARGET%]==[vs2008] (
@@ -234,35 +241,40 @@ build_script:
     msbuild /verbosity:quiet vs2017\libewf.sln /property:Platform=Win32 /property:PlatformToolset=v141 /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" &&
     msbuild /verbosity:quiet vs2017\libewf.sln /property:Platform=x64 /property:PlatformToolset=v141 /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" )
 - cmd: if [%BUILD_ENVIRONMENT%]==[python] (
-    "%PYTHON%\\python.exe" setup.py bdist_msi )
+    "%PYTHON%" setup.py bdist_msi bdist_wheel )
+- sh: if test ${BUILD_ENVIRONMENT} = "python"; then ./synclibs.sh && ./autogen.sh; fi
+- sh: if test ${BUILD_ENVIRONMENT} = "python"; then ${PYTHON} setup.py bdist_wheel; fi
 - cmd: if [%BUILD_ENVIRONMENT%]==[cygwin] (
-    xcopy /i /q /s C:\projects\libewf-legacy C:\cygwin\home\appveyor\libewf-legacy &&
-    C:\cygwin\bin\bash -e -l -c "cd libewf-legacy && ./synclibs.sh --use-head && ./autogen.sh" )
+    xcopy /i /q /s C:\projects\libewf C:\cygwin\home\appveyor\libewf &&
+    C:\cygwin\bin\bash -e -l -c "cd libewf && ./synclibs.sh --use-head && ./autogen.sh" )
 - cmd: if [%BUILD_ENVIRONMENT%]==[cygwin64] (
-    xcopy /i /q /s C:\projects\libewf-legacy C:\cygwin64\home\appveyor\libewf-legacy &&
-    C:\cygwin64\bin\bash -e -l -c "cd libewf-legacy && ./synclibs.sh --use-head && ./autogen.sh" )
+    xcopy /i /q /s C:\projects\libewf C:\cygwin64\home\appveyor\libewf &&
+    C:\cygwin64\bin\bash -e -l -c "cd libewf && ./synclibs.sh --use-head && ./autogen.sh" )
 - cmd: if [%BUILD_ENVIRONMENT%]==[mingw] (
-    xcopy /i /q /s C:\projects\libewf-legacy C:\MinGW\msys\1.0\home\appveyor\libewf-legacy &&
-    C:\MinGW\msys\1.0\bin\bash -e -l -c "cd libewf-legacy && sed 's/@VERSION@/0.29/g' m4/pkg.m4.in > m4/pkg.m4 && ./synclibs.sh --use-head && ./autogen.sh" )
+    xcopy /i /q /s C:\projects\libewf C:\MinGW\msys\1.0\home\appveyor\libewf &&
+    C:\MinGW\msys\1.0\bin\bash -e -l -c "cd libewf && sed 's/@VERSION@/0.29/g' m4/pkg.m4.in > m4/pkg.m4 && ./synclibs.sh --use-head && ./autogen.sh" )
 - cmd: if [%BUILD_ENVIRONMENT%]==[mingw-w64] (
-    xcopy /i /q /s C:\projects\libewf-legacy C:\msys64\home\appveyor\libewf-legacy &&
-    C:\msys64\usr\bin\bash -e -l -c "cd libewf-legacy && ./synclibs.sh --use-head && ./autogen.sh" )
+    xcopy /i /q /s C:\projects\libewf C:\msys64\home\appveyor\libewf &&
+    C:\msys64\usr\bin\bash -e -l -c "cd libewf && ./synclibs.sh --use-head && ./autogen.sh" )
 
 test_script:
 - cmd: rem Run tests
 - ps: If ($env:BUILD_ENVIRONMENT -eq "msbuild") {
     .\runtests.ps1 }
 - cmd: if [%BUILD_ENVIRONMENT%]==[cygwin] (
-    C:\cygwin\bin\bash -e -l -c "cd libewf-legacy && ./configure ${CONFIGURE_OPTIONS} && make > /dev/null && make check CHECK_WITH_STDERR=1; RESULT=$?; if test ${RESULT} -ne 0 && test -f tests/test-suite.log; then cat tests/test-suite.log; fi; exit ${RESULT};" )
+    C:\cygwin\bin\bash -l -c "cd libewf && ./configure ${CONFIGURE_OPTIONS} && make > /dev/null && make check CHECK_WITH_STDERR=1; RESULT=$?; if test ${RESULT} -ne 0 && test -f tests/test-suite.log; then cat tests/test-suite.log; fi; exit ${RESULT};" )
 - cmd: if [%BUILD_ENVIRONMENT%]==[cygwin64] (
-    C:\cygwin64\bin\bash -e -l -c "cd libewf-legacy && ./configure ${CONFIGURE_OPTIONS} && make > /dev/null && make check CHECK_WITH_STDERR=1; RESULT=$?; if test ${RESULT} -ne 0 && test -f tests/test-suite.log; then cat tests/test-suite.log; fi; exit ${RESULT};" )
+    C:\cygwin64\bin\bash -l -c "cd libewf && ./configure ${CONFIGURE_OPTIONS} && make > /dev/null && make check CHECK_WITH_STDERR=1; RESULT=$?; if test ${RESULT} -ne 0 && test -f tests/test-suite.log; then cat tests/test-suite.log; fi; exit ${RESULT};" )
 - cmd: if [%BUILD_ENVIRONMENT%]==[mingw] (
-    C:\MinGW\msys\1.0\bin\bash -e -l -c "cd libewf-legacy && ./configure ${CONFIGURE_OPTIONS} && make > /dev/null && make check CHECK_WITH_STDERR=1; RESULT=$?; if test ${RESULT} -ne 0 && test -f tests/test-suite.log; then cat tests/test-suite.log; fi; exit ${RESULT};" )
+    C:\MinGW\msys\1.0\bin\bash -l -c "cd libewf && ./configure ${CONFIGURE_OPTIONS} && make > /dev/null && make check CHECK_WITH_STDERR=1; RESULT=$?; if test ${RESULT} -ne 0 && test -f tests/test-suite.log; then cat tests/test-suite.log; fi; exit ${RESULT};" )
 - cmd: if [%BUILD_ENVIRONMENT%]==[mingw-w64] (
-    C:\msys64\usr\bin\bash -e -l -c "cd libewf-legacy && ./configure ${CONFIGURE_OPTIONS} && make > /dev/null && make check CHECK_WITH_STDERR=1; RESULT=$?; if test ${RESULT} -ne 0 && test -f tests/test-suite.log; then cat tests/test-suite.log; fi; exit ${RESULT};" )
+    C:\msys64\usr\bin\bash -l -c "cd libewf && ./configure ${CONFIGURE_OPTIONS} && make > /dev/null && make check CHECK_WITH_STDERR=1; RESULT=$?; if test ${RESULT} -ne 0 && test -f tests/test-suite.log; then cat tests/test-suite.log; fi; exit ${RESULT};" )
 
 after_test:
 - cmd: if [%TARGET%]==[mingw-gcc-no-optimization] (
-    copy C:\projects\codecov-bash\codecov C:\MinGW\msys\1.0\home\appveyor\libewf-legacy\codecov.sh &&
-    C:\MinGW\msys\1.0\bin\bash -e -l -c "cd libewf-legacy && chmod a+x ./codecov.sh && sed -i 's/-execdir /-exec /' ./codecov.sh && ./codecov.sh -n ${TARGET} -y .codecov.yml" )
+    copy C:\projects\codecov-bash\codecov C:\MinGW\msys\1.0\home\appveyor\libewf\codecov.sh &&
+    C:\MinGW\msys\1.0\bin\bash -e -l -c "cd libewf && chmod a+x ./codecov.sh && sed -i 's/-execdir /-exec /' ./codecov.sh && ./codecov.sh -n ${TARGET} -y .codecov.yml" )
+
+artifacts:
+- path: dist\*.whl
 
