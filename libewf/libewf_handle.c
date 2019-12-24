@@ -396,7 +396,7 @@ int libewf_handle_clone(
 
 		return( 1 );
 	}
-	internal_source_handle = (libewf_internal_handle_t *) *source_handle;
+	internal_source_handle = (libewf_internal_handle_t *) source_handle;
 
 	if( internal_source_handle->io_handle == NULL )
 	{
@@ -767,6 +767,8 @@ int libewf_handle_clone(
 	}
 	internal_destination_handle->maximum_number_of_open_handles = internal_source_handle->maximum_number_of_open_handles;
 	internal_destination_handle->date_format                    = internal_source_handle->date_format;
+
+	*destination_handle = (libewf_handle_t *) internal_destination_handle;
 
 	return( 1 );
 
