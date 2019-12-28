@@ -56,10 +56,12 @@ test_read_write_delta()
 
 	if [ ${RESULT} -eq ${EXIT_SUCCESS} ];
 	then
-		FILENAMES=`${LS} ${OUTPUT_FILE}.* | ${TR} '\n' ' '`;
+		FILENAMES=`${LS} ${TMP}/write.* | ${TR} '\n' ' '`;
 
 		if test "${OSTYPE}" = "msys";
 		then
+			FILENAMES=`echo ${FILENAMES} | sed 's?/?\\\\?g'`;
+
 			OUTPUT_FILE="${TMP}\\read_write";
 		else
 			OUTPUT_FILE="${TMP}/read_write";
