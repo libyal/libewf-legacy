@@ -107,7 +107,7 @@ int libewf_chunk_data_initialize(
 		goto on_error;
 	}
 	( *chunk_data )->data = (uint8_t *) memory_allocate(
-	                                     sizeof( uint8_t ) * data_size );
+	                                     sizeof( uint8_t ) * ( data_size + sizeof( uint32_t ) ) );
 
 	if( ( *chunk_data )->data == NULL )
 	{
@@ -120,7 +120,7 @@ int libewf_chunk_data_initialize(
 
 		goto on_error;
 	}
-	( *chunk_data )->allocated_data_size = data_size;
+	( *chunk_data )->allocated_data_size = data_size + sizeof( uint32_t );
 
 	return( 1 );
 

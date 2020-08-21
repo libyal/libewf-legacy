@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>libewf</id>
+    <version>20140809</version>
+    <authors>Joachim Metz</authors>
+    <owners>joachimmetz</owners>
+    <licenseUrl>https://raw.githubusercontent.com/libyal/libewf/master/COPYING.LESSER</licenseUrl>
+    <projectUrl>https://github.com/libyal/libewf</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <title>libewf</title>
+    <description>Library to access the Expert Witness Compression Format (EWF) format</description>
+    <releaseNotes>Release of libewf 20140809</releaseNotes>
+    <copyright>Copyright (C) 2009-2014</copyright>
+    <tags>native</tags>
+  </metadata>
+  <files>
+    <file src="include\*.h" target="lib\native\include\" />
+    <file src="include\libewf\*.h" target="lib\native\include\libewf\" />
+    <file src="msvscpp\Release\Win32\libewf.dll" target="lib\native\lib\Win32\" />
+    <file src="msvscpp\Release\Win32\libewf.lib" target="lib\native\lib\Win32\" />
+    <file src="msvscpp\Release\Win32\libewf.pdb" target="lib\native\lib\Win32\" />
+    <file src="msvscpp\Release\x64\libewf.dll" target="lib\native\lib\x64\" />
+    <file src="msvscpp\Release\x64\libewf.lib" target="lib\native\lib\x64\" />
+    <file src="msvscpp\Release\x64\libewf.pdb" target="lib\native\lib\x64\" />
+  </files>
+</package>
