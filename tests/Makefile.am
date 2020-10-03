@@ -2,10 +2,24 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
 	@LIBCERROR_CPPFLAGS@ \
+	@LIBCDATA_CPPFLAGS@ \
 	@LIBCLOCALE_CPPFLAGS@ \
 	@LIBCNOTIFY_CPPFLAGS@ \
+	@LIBCSPLIT_CPPFLAGS@ \
 	@LIBUNA_CPPFLAGS@ \
-	@LIBCFILE_CPPFLAGS@
+	@LIBCFILE_CPPFLAGS@ \
+	@LIBCPATH_CPPFLAGS@ \
+	@LIBBFIO_CPPFLAGS@ \
+	@LIBFCACHE_CPPFLAGS@ \
+	@LIBFDATA_CPPFLAGS@ \
+	@LIBFVALUE_CPPFLAGS@ \
+	@LIBMFDATA_CPPFLAGS@ \
+	@ZLIB_CPPFLAGS@ \
+	@LIBCRYPTO_CPPFLAGS@ \
+	@LIBHMAC_CPPFLAGS@ \
+	@LIBODRAW_CPPFLAGS@ \
+	@LIBSMDEV_CPPFLAGS@ \
+	@LIBSMRAW_CPPFLAGS@
 
 if HAVE_PYTHON
 TESTS_PYEWF = \
@@ -13,6 +27,7 @@ TESTS_PYEWF = \
 endif
 
 TESTS = \
+	test_library.sh \
 	test_glob.sh \
 	test_seek.sh \
 	test_read.sh \
@@ -41,6 +56,7 @@ check_SCRIPTS = \
 	test_ewfverify.sh \
 	test_ewfverify_logical.sh \
 	test_glob.sh \
+	test_library.sh \
 	test_manpage.sh \
 	test_pyewf.sh \
 	test_read.sh \
@@ -55,6 +71,7 @@ EXTRA_DIST = \
 
 check_PROGRAMS = \
 	ewf_test_glob \
+	ewf_test_handle \
 	ewf_test_read \
 	ewf_test_read_write \
 	ewf_test_read_write_delta \
@@ -69,6 +86,32 @@ ewf_test_glob_SOURCES = \
 
 ewf_test_glob_LDADD = \
 	../libewf/libewf.la
+
+ewf_test_handle_SOURCES = \
+	ewf_test_functions.c ewf_test_functions.h \
+	ewf_test_getopt.c ewf_test_getopt.h \
+	ewf_test_handle.c \
+	ewf_test_libbfio.h \
+	ewf_test_libcerror.h \
+	ewf_test_libclocale.h \
+	ewf_test_libcnotify.h \
+	ewf_test_libewf.h \
+	ewf_test_libuna.h \
+	ewf_test_macros.h \
+	ewf_test_memory.c ewf_test_memory.h
+
+ewf_test_handle_LDADD = \
+	@LIBBFIO_LIBADD@ \
+	@LIBCPATH_LIBADD@ \
+	@LIBCFILE_LIBADD@ \
+	@LIBUNA_LIBADD@ \
+	@LIBCSPLIT_LIBADD@ \
+	@LIBCNOTIFY_LIBADD@ \
+	@LIBCLOCALE_LIBADD@ \
+	@LIBCDATA_LIBADD@ \
+	../libewf/libewf.la \
+	@LIBCTHREADS_LIBADD@ \
+	@LIBCERROR_LIBADD@
 
 ewf_test_read_SOURCES = \
 	ewf_test_definitions.h \

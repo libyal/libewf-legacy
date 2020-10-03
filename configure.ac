@@ -2,7 +2,7 @@ AC_PREREQ( 2.59 )
 
 AC_INIT(
  [libewf],
- [20140809],
+ [20140810],
  [joachim.metz@gmail.com])
 
 AC_CONFIG_SRCDIR(
@@ -49,6 +49,9 @@ AC_SYS_LARGEFILE
 
 dnl Check if shared library support should be disabled
 AX_COMMON_CHECK_DISABLE_SHARED_LIBS
+
+dnl Check if tools should be build as static executables
+AX_COMMON_CHECK_ENABLE_STATIC_EXECUTABLES
 
 dnl Check if WINAPI support should be enabled
 AX_COMMON_CHECK_ENABLE_WINAPI
@@ -164,27 +167,10 @@ dnl Check if ewftools required headers and functions are available
 AX_EWFTOOLS_CHECK_LOCAL
 
 dnl Check if DLL support is needed
-AS_IF(
- [test "x$enable_shared" = xyes],
- [AS_CASE(
-  [$host],
-  [*cygwin* | *mingw* | *msys*],
-  [AC_DEFINE(
-   [HAVE_DLLMAIN],
-   [1],
-   [Define to 1 to enable the DllMain function.])
-  AC_SUBST(
-   [HAVE_DLLMAIN],
-   [1])
+AX_LIBEWF_CHECK_DLL_SUPPORT
 
-  AS_IF(
-   [test "x$ac_cv_enable_static_executables" = xno],
-   [AC_SUBST(
-    [LIBEWF_DLL_IMPORT],
-    ["-DLIBEWF_DLL_IMPORT"])
-   ])
-  ])
- ])
+dnl Check if tests required headers and functions are available
+AX_TESTS_CHECK_LOCAL
 
 dnl Set additional compiler flags
 CFLAGS="$CFLAGS -Wall";

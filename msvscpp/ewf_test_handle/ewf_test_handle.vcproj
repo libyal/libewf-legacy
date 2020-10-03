@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="ewf_test_read_write_delta"
-	ProjectGUID="{82454223-CBF2-44DE-8BE0-307B020107A6}"
-	RootNamespace="ewf_test_read_write_delta"
+	Name="ewf_test_handle"
+	ProjectGUID="{141FB81E-6521-459D-82E0-3F242FAF7D7D}"
+	RootNamespace="ewf_test_handle"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -176,11 +176,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\..\tests\ewf_test_functions.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\tests\ewf_test_getopt.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\tests\ewf_test_read_write_delta.c"
+				RelativePath="..\..\tests\ewf_test_handle.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\tests\ewf_test_memory.c"
 				>
 			</File>
 		</Filter>
@@ -190,7 +198,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\tests\ewf_test_definitions.h"
+				RelativePath="..\..\tests\ewf_test_functions.h"
 				>
 			</File>
 			<File
@@ -198,7 +206,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\tests\ewf_test_libbfio.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\tests\ewf_test_libcerror.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\tests\ewf_test_libclocale.h"
 				>
 			</File>
 			<File
@@ -207,6 +223,18 @@
 			</File>
 			<File
 				RelativePath="..\..\tests\ewf_test_libewf.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\tests\ewf_test_libuna.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\tests\ewf_test_macros.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\tests\ewf_test_memory.h"
 				>
 			</File>
 		</Filter>

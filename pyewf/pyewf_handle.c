@@ -421,7 +421,7 @@ PyObject *pyewf_handle_new_open_file_objects(
 	return( pyewf_handle );
 }
 
-/* Intializes a handle object
+/* Initializes a handle object
  * Returns 0 if successful or -1 on error
  */
 int pyewf_handle_init(

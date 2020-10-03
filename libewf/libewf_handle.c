@@ -4907,6 +4907,8 @@ ssize_t libewf_handle_read_buffer(
 
 		return( -1 );
 	}
+	internal_handle->io_handle->abort = 0;
+
 	while( buffer_size > 0 )
 	{
 		if( libewf_read_io_handle_read_chunk_data(
@@ -5943,6 +5945,8 @@ ssize_t libewf_handle_write_buffer(
 
 		return( -1 );
 	}
+	internal_handle->io_handle->abort = 0;
+
 	while( buffer_size > 0 )
 	{
 		chunk_exists = libmfdata_list_is_set(

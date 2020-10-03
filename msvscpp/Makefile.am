@@ -1,6 +1,7 @@
 MSVSCPP_FILES = \
 	ewf.net/ewf.net.vcproj \
 	ewf_test_glob/ewf_test_glob.vcproj \
+	ewf_test_handle/ewf_test_handle.vcproj \
 	ewf_test_read/ewf_test_read.vcproj \
 	ewf_test_read_write/ewf_test_read_write.vcproj \
 	ewf_test_read_write_delta/ewf_test_read_write_delta.vcproj \

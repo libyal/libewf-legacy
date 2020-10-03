@@ -277,11 +277,12 @@ int libewf_read_io_handle_read_chunk_data(
      libewf_chunk_data_t **chunk_data,
      libcerror_error_t **error )
 {
-	static char *function      = "libewf_read_io_handle_read_chunk_data";
-	size_t chunk_size          = 0;
-	uint64_t start_sector      = 0;
-	uint32_t number_of_sectors = 0;
-	int result                 = 0;
+	libewf_chunk_data_t *safe_chunk_data = NULL;
+	static char *function                = "libewf_read_io_handle_read_chunk_data";
+	size_t chunk_size                    = 0;
+	uint64_t start_sector                = 0;
+	uint32_t number_of_sectors           = 0;
+	int result                           = 0;
 
 	if( read_io_handle == NULL )
 	{
@@ -316,6 +317,8 @@ int libewf_read_io_handle_read_chunk_data(
 
 		return( -1 );
 	}
+	*chunk_data = NULL;
+
 	/* This function will expand element groups
 	 */
 	result = libmfdata_list_get_element_value_by_index(
@@ -323,7 +326,7 @@ int libewf_read_io_handle_read_chunk_data(
 	          file_io_pool,
 	          chunk_table_cache,
 	          chunk_index,
-	          (intptr_t **) chunk_data,
+	          (intptr_t **) &safe_chunk_data,
 	          0,
 	          error );
 
@@ -357,10 +360,10 @@ int libewf_read_io_handle_read_chunk_data(
 		{
 			chunk_size = (size_t) ( media_values->media_size - chunk_offset );
 		}
-		*chunk_data = NULL;
+		safe_chunk_data = NULL;
 
 		if( libewf_chunk_data_initialize(
-		     chunk_data,
+		     &safe_chunk_data,
 		     chunk_size,
 		     error ) != 1 )
 		{
@@ -373,7 +376,7 @@ int libewf_read_io_handle_read_chunk_data(
 
 			return( -1 );
 		}
-		if( *chunk_data == NULL )
+		if( safe_chunk_data == NULL )
 		{
 			libcerror_error_set(
 			 error,
@@ -385,13 +388,13 @@ int libewf_read_io_handle_read_chunk_data(
 
 			return( -1 );
 		}
-		( *chunk_data )->data_size  = chunk_size;
-		( *chunk_data )->is_corrupt = 1;
+		safe_chunk_data->data_size  = chunk_size;
+		safe_chunk_data->is_corrupt = 1;
 
 		if( memory_set(
-		     ( *chunk_data )->data,
+		     safe_chunk_data->data,
 		     0,
-		     ( *chunk_data )->data_size ) == NULL )
+		     safe_chunk_data->data_size ) == NULL )
 		{
 			libcerror_error_set(
 			 error,
@@ -401,7 +404,7 @@ int libewf_read_io_handle_read_chunk_data(
 			 function );
 
 			libewf_chunk_data_free(
-			 chunk_data,
+			 &safe_chunk_data,
 			 NULL );
 
 			return( -1 );
@@ -424,7 +427,7 @@ int libewf_read_io_handle_read_chunk_data(
 			 chunk_index );
 
 			libewf_chunk_data_free(
-			 chunk_data,
+			 &safe_chunk_data,
 			 NULL );
 
 			return( -1 );
@@ -455,7 +458,7 @@ int libewf_read_io_handle_read_chunk_data(
 	}
 	else
 	{
-		if( *chunk_data == NULL )
+		if( safe_chunk_data == NULL )
 		{
 			libcerror_error_set(
 			 error,
@@ -468,7 +471,7 @@ int libewf_read_io_handle_read_chunk_data(
 			return( -1 );
 		}
 		if( libewf_chunk_data_unpack(
-		     *chunk_data,
+		     safe_chunk_data,
 		     media_values->chunk_size,
 		     error ) != 1 )
 		{
@@ -482,14 +485,14 @@ int libewf_read_io_handle_read_chunk_data(
 
 			return( -1 );
 		}
-		if( ( *chunk_data )->is_corrupt != 0 )
+		if( safe_chunk_data->is_corrupt != 0 )
 		{
 			if( read_io_handle->zero_on_error != 0 )
 			{
 				if( memory_set(
-				     ( *chunk_data )->data,
+				     safe_chunk_data->data,
 				     0,
-				     ( *chunk_data )->data_size ) == NULL )
+				     safe_chunk_data->data_size ) == NULL )
 				{
 					libcerror_error_set(
 					 error,
@@ -503,7 +506,7 @@ int libewf_read_io_handle_read_chunk_data(
 			}
 		}
 	}
-	if( ( *chunk_data )->is_corrupt != 0 )
+	if( safe_chunk_data->is_corrupt != 0 )
 	{
 		/* Add checksum error
 		 */
@@ -535,6 +538,8 @@ int libewf_read_io_handle_read_chunk_data(
 			return( -1 );
 		}
 	}
+	*chunk_data = safe_chunk_data;
+
 	return( 1 );
 }
 

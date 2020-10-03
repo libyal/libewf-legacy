@@ -229,7 +229,7 @@ int libewf_compress_data(
 }
 
 /* Decompresses data using the compression method
- * Returns 1 on success, 0 on failure or -1 on error
+ * Returns 1 on success, 0 if uncompressed data size is too small or -1 on error
  */
 int libewf_decompress_data(
      const uint8_t *compressed_data,

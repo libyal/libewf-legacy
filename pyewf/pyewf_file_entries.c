@@ -224,7 +224,7 @@ on_error:
 	return( NULL );
 }
 
-/* Intializes a file entries object
+/* Initializes a file entries object
  * Returns 0 if successful or -1 on error
  */
 int pyewf_file_entries_init(

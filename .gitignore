@@ -1,6 +1,6 @@
 # Files to ignore by git
 #
-# Version: 20191220
+# Version: 20200912
 
 # Generic auto-generated build files
 *~
@@ -61,6 +61,7 @@ stamp-h[1-9]
 /m4/gettext.m4
 /m4/glibc21.m4
 /m4/glibc2.m4
+/m4/host-cpu-c-abi.m4
 /m4/iconv.m4
 /m4/intdiv0.m4
 /m4/intldir.m4
@@ -134,7 +135,9 @@ stamp-h[1-9]
 /ewftools/ewfrecover
 /ewftools/ewfverify
 /tests/*.exe
+/tests/ewf_test_handle
 /tests/ewf_test_glob
+/tests/ewf_test_handle
 /tests/ewf_test_open_close
 /tests/ewf_test_read
 /tests/ewf_test_read_chunk
@@ -146,6 +149,7 @@ stamp-h[1-9]
 /tests/ewf_test_write
 /tests/ewf_test_write_chunk
 /tests/input
+/tests/input2
 /tests/input_delta
 /tests/input_error
 /tests/input_logical

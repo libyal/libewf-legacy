@@ -561,6 +561,7 @@ int libewf_chunk_data_unpack(
 			  &( chunk_data->data_size ),
 			  error );
 
+/* TODO handle chunk with zlib data corruption */
 		if( result == -1 )
 		{
 			libcerror_error_set(
@@ -583,6 +584,7 @@ int libewf_chunk_data_unpack(
 			}
 #endif
 			chunk_data->is_corrupt = 1;
+			chunk_data->data_size  = chunk_size;
 		}
 	}
 	chunk_data->is_packed = 0;
