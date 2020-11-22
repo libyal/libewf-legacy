@@ -68,71 +68,71 @@ AX_COMMON_CHECK_ENABLE_DEBUG_OUTPUT
 dnl Check for type definitions
 AX_TYPES_CHECK_LOCAL
 
-dnl Checks for libraries and library functions
+dnl Check if common required headers and functions are available
 AX_COMMON_CHECK_LOCAL
 
-dnl Check for enabling libcerror for cross-platform C error functions
+dnl Check if libcerror or required headers and functions are available
 AX_LIBCERROR_CHECK_ENABLE
 
-dnl Check for enabling libcthreads for cross-platform C threads functions
+dnl Check if libcthreads or required headers and functions are available
 AX_LIBCTHREADS_CHECK_ENABLE
 
-dnl Check for enabling libcdata for cross-platform C generic data functions
+dnl Check if libcdata or required headers and functions are available
 AX_LIBCDATA_CHECK_ENABLE
 
-dnl Check for enabling libcdatetime for cross-platform C datetime functions
+dnl Check if libcdatetime or required headers and functions are available
 AX_LIBCDATETIME_CHECK_ENABLE
 
-dnl Check for enabling libclocale for cross-platform C locale functions
+dnl Check if libclocale or required headers and functions are available
 AX_LIBCLOCALE_CHECK_ENABLE
 
-dnl Check for enabling libcnotify for cross-platform C notification functions
+dnl Check if libcnotify or required headers and functions are available
 AX_LIBCNOTIFY_CHECK_ENABLE
 
-dnl Check for enabling libcsplit for cross-platform C split string functions
+dnl Check if libcsplit or required headers and functions are available
 AX_LIBCSPLIT_CHECK_ENABLE
 
-dnl Check for enabling libuna for Unicode string support
+dnl Check if libuna or required headers and functions are available
 AX_LIBUNA_CHECK_ENABLE
 
-dnl Check for enabling libcfile for cross-platform C file functions
+dnl Check if libcfile or required headers and functions are available
 AX_LIBCFILE_CHECK_ENABLE
 
-dnl Check for enabling libcpath for cross-platform C path functions
+dnl Check if libcpath or required headers and functions are available
 AX_LIBCPATH_CHECK_ENABLE
 
-dnl Check for enabling libbfio for basic file IO support
+dnl Check if libbfio or required headers and functions are available
 AX_LIBBFIO_CHECK_ENABLE
 
-dnl Check for enabling libfcache for file value cache support
+dnl Check if libfcache or required headers and functions are available
 AX_LIBFCACHE_CHECK_ENABLE
 
-dnl Check for enabling libfdata for file data types support
+dnl Check if libfdata or required headers and functions are available
 AX_LIBFDATA_CHECK_ENABLE
 
-dnl Check for enabling libfvalue for file value support
+dnl Check if libfvalue or required headers and functions are available
 AX_LIBFVALUE_CHECK_ENABLE
 
 dnl Check for enabling libmfdata for multi-file data types support
 AX_LIBMFDATA_CHECK_ENABLE
 
-dnl Check for zlib compression support
+dnl Check if zlib or required headers and functions are available
 AX_ZLIB_CHECK_ENABLE
 AX_ZLIB_CHECK_ADLER32
 AX_ZLIB_CHECK_COMPRESS2
 AX_ZLIB_CHECK_COMPRESSBOUND
 AX_ZLIB_CHECK_UNCOMPRESS
 
-dnl Check for enabling libhmac for message digest hash function support
+dnl Check if libhmac or required headers and functions are available
 AX_LIBHMAC_CHECK_ENABLE
 
-dnl Check for library function support
+dnl Check if libewf required headers and functions are available
 AX_LIBEWF_CHECK_LOCAL
 
 dnl Check if libewf should be build with version 1 API
 AX_LIBEWF_CHECK_ENABLE_V1_API
- 
-dnl Check if libewf python bindings (pyewf) should be build
+
+dnl Check if libewf Python bindings (pyewf) required headers and functions are available
 AX_PYTHON_CHECK_ENABLE
 
 AS_IF(
@@ -148,19 +148,19 @@ AS_IF(
     ])
   ])
 
-dnl Check for enabling GUID/UUID support
-AX_LIBUUID_CHECK_ENABLE
-
-dnl Check for enabling libodraw for optical disc (split) RAW support
+dnl Check if libodraw or required headers and functions are available
 AX_LIBODRAW_CHECK_ENABLE
 
-dnl Check for enabling libsmdev for storage media device support
+dnl Check if libsmdev or required headers and functions are available
 AX_LIBSMDEV_CHECK_ENABLE
 
-dnl Check for enabling libsmraw for storage media (split) RAW support
+dnl Check if libsmraw or required headers and functions are available
 AX_LIBSMRAW_CHECK_ENABLE
 
-dnl Check for libfuse Filesystem in Userspace (FUSE) support
+dnl Check if libuuid or required headers and functions are available
+AX_LIBUUID_CHECK_ENABLE
+
+dnl Check if libfuse or required headers and functions are available
 AX_LIBFUSE_CHECK_ENABLE
 
 dnl Check if ewftools required headers and functions are available
@@ -177,7 +177,7 @@ CFLAGS="$CFLAGS -Wall";
 
 dnl Check if requires and build requires should be set in spec file
 AS_IF(
- [test "x$ac_cv_libcerror" = xyes || test "x$ac_cv_libcthreads" = xyes || test "x$ac_cv_libcdata" = xyes || test "x$ac_cv_libclocale" = xyes || test "x$ac_cv_libcnotify" = xyes || test "x$ac_cv_libcsplit" = xyes || test "x$ac_cv_libuna" = xyes || test "x$ac_cv_libcfile" = xyes || test "x$ac_cv_libcpath" = xyes || test "x$ac_cv_libbfio" = xyes || test "x$ac_cv_libfcache" = xyes || test "x$ac_cv_libfdata" = xyes || test "x$ac_cv_libfvalue" = xyes || test "x$ac_cv_libmfdata" = xyes || test "x$ac_cv_zlib" != xno || test "x$ac_cv_libhmac" = xyes],
+ [test "x$ac_cv_libcerror" = xyes || test "x$ac_cv_libcthreads" = xyes || test "x$ac_cv_libcdata" = xyes || test "x$ac_cv_libcdatetime" = xyes || test "x$ac_cv_libclocale" = xyes || test "x$ac_cv_libcnotify" = xyes || test "x$ac_cv_libcsplit" = xyes || test "x$ac_cv_libuna" = xyes || test "x$ac_cv_libcfile" = xyes || test "x$ac_cv_libcpath" = xyes || test "x$ac_cv_libbfio" = xyes || test "x$ac_cv_libfcache" = xyes || test "x$ac_cv_libfdata" = xyes || test "x$ac_cv_libfvalue" = xyes || test "x$ac_cv_zlib" != xno],
  [AC_SUBST(
   [libewf_spec_requires],
   [Requires:])
@@ -221,35 +221,35 @@ AC_CONFIG_FILES([libfvalue/Makefile])
 AC_CONFIG_FILES([libmfdata/Makefile])
 AC_CONFIG_FILES([libhmac/Makefile])
 AC_CONFIG_FILES([libewf/Makefile])
+AC_CONFIG_FILES([pyewf/Makefile])
+AC_CONFIG_FILES([pyewf-python2/Makefile])
+AC_CONFIG_FILES([pyewf-python3/Makefile])
+AC_CONFIG_FILES([ewf.net/Makefile])
 AC_CONFIG_FILES([libodraw/Makefile])
 AC_CONFIG_FILES([libsmdev/Makefile])
 AC_CONFIG_FILES([libsmraw/Makefile])
 AC_CONFIG_FILES([ewftools/Makefile])
-AC_CONFIG_FILES([ewf.net/Makefile])
-AC_CONFIG_FILES([pyewf/Makefile])
-AC_CONFIG_FILES([pyewf-python2/Makefile])
-AC_CONFIG_FILES([pyewf-python3/Makefile])
 AC_CONFIG_FILES([po/Makefile.in])
 AC_CONFIG_FILES([po/Makevars])
 AC_CONFIG_FILES([documents/Makefile])
 AC_CONFIG_FILES([manuals/Makefile])
-AC_CONFIG_FILES([tests/Makefile])
 AC_CONFIG_FILES([examples/Makefile])
+AC_CONFIG_FILES([tests/Makefile])
 AC_CONFIG_FILES([msvscpp/Makefile])
-dnl Have configure make the include files
+dnl Generate header files
 AC_CONFIG_FILES([include/libewf.h])
 AC_CONFIG_FILES([include/libewf/definitions.h])
 AC_CONFIG_FILES([include/libewf/features.h])
 AC_CONFIG_FILES([include/libewf/types.h])
 AC_CONFIG_FILES([libewf/libewf_definitions.h])
-dnl Have configure make distribution specific files
+dnl Generate distribution specific files
 AC_CONFIG_FILES([common/types.h])
 AC_CONFIG_FILES([dpkg/changelog])
-AC_CONFIG_FILES([ewf.net/ewf.net.rc])
 AC_CONFIG_FILES([libewf/libewf.rc])
+AC_CONFIG_FILES([ewf.net/ewf.net.rc])
 AC_CONFIG_FILES([libewf.pc])
 AC_CONFIG_FILES([libewf.spec])
-dnl Have configure write its configuration
+dnl Generate a source configuration file
 AC_CONFIG_HEADERS([common/config.h])
 
 AC_OUTPUT

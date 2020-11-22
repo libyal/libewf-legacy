@@ -135,7 +135,12 @@ stamp-h[1-9]
 /ewftools/ewfrecover
 /ewftools/ewfverify
 /tests/*.exe
-/tests/ewf_test_handle
+/tests/ewf_test_chunk_data
+/tests/ewf_test_chunk_table
+/tests/ewf_test_compression
+/tests/ewf_test_deflate
+/tests/ewf_test_error
+/tests/ewf_test_file_entry
 /tests/ewf_test_glob
 /tests/ewf_test_handle
 /tests/ewf_test_open_close
@@ -175,7 +180,6 @@ stamp-h[1-9]
 /libcthreads
 /libfcache
 /libfdata
-/libfguid
 /libfvalue
 /libhmac
 /libodraw

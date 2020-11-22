@@ -1613,7 +1613,7 @@ PyObject *pyewf_file_entry_get_number_of_sub_file_entries(
  * Returns a Python object if successful or NULL on error
  */
 PyObject *pyewf_file_entry_get_sub_file_entry_by_index(
-           pyewf_file_entry_t *pyewf_file_entry,
+           PyObject *pyewf_file_entry,
            int sub_file_entry_index )
 {
 	libcerror_error_t *error            = NULL;
@@ -1634,7 +1634,7 @@ PyObject *pyewf_file_entry_get_sub_file_entry_by_index(
 	Py_BEGIN_ALLOW_THREADS
 
 	result = libewf_file_entry_get_sub_file_entry(
-	          pyewf_file_entry->file_entry,
+	          ( (pyewf_file_entry_t *) pyewf_file_entry )->file_entry,
 	          sub_file_entry_index,
 	          &sub_file_entry,
 	          &error );
@@ -1657,7 +1657,7 @@ PyObject *pyewf_file_entry_get_sub_file_entry_by_index(
 	}
 	file_entry_object = pyewf_file_entry_new(
 	                     sub_file_entry,
-	                     pyewf_file_entry->handle_object );
+	                     ( (pyewf_file_entry_t *) pyewf_file_entry )->handle_object );
 
 	if( file_entry_object == NULL )
 	{
@@ -1702,7 +1702,7 @@ PyObject *pyewf_file_entry_get_sub_file_entry(
 		return( NULL );
         }
 	file_entry_object = pyewf_file_entry_get_sub_file_entry_by_index(
-	                     pyewf_file_entry,
+	                     (PyObject *) pyewf_file_entry,
 	                     sub_file_entry_index );
 
 	return( file_entry_object );
@@ -1755,7 +1755,7 @@ PyObject *pyewf_file_entry_get_sub_file_entries(
 		return( NULL );
 	}
 	file_entries_object = pyewf_file_entries_new(
-	                       pyewf_file_entry,
+	                       (PyObject *) pyewf_file_entry,
 	                       &pyewf_file_entry_get_sub_file_entry_by_index,
 	                       number_of_sub_file_entries );
 

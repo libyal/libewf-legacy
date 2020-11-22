@@ -264,6 +264,14 @@ enum LIBEWF_SEGMENT_FILE_FLAGS
 #define LIBEWF_ENDIAN_BIG					_BYTE_STREAM_ENDIAN_BIG
 #define LIBEWF_ENDIAN_LITTLE					_BYTE_STREAM_ENDIAN_LITTLE
 
+/* The chunk data range is sparse
+ */
+#define LIBEWF_RANGE_FLAG_IS_SPARSE				LIBMFDATA_RANGE_FLAG_IS_SPARSE
+
+/* The chunk data range is compressed
+ */
+#define LIBEWF_RANGE_FLAG_IS_COMPRESSED				LIBMFDATA_RANGE_FLAG_IS_COMPRESSED
+
 /* The chunk data range refers to a delta chunk
  */
 #define LIBEWF_RANGE_FLAG_IS_DELTA				LIBMFDATA_RANGE_FLAG_USER_DEFINED_4
@@ -282,5 +290,5 @@ enum LIBEWF_SEGMENT_FILE_FLAGS
 #define LIBEWF_2_TIB						0x20000000000ULL
 #endif
 
-#endif
+#endif /* !defined( _LIBEWF_INTERNAL_DEFINITIONS_H ) */
 

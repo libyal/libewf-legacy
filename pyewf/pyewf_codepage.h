@@ -1,7 +1,7 @@
 /*
  * Codepage functions
  *
- * Copyright (c) 2008-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2008-2020, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -38,5 +38,5 @@ const char *pyewf_codepage_to_string(
 }
 #endif
 
-#endif
+#endif /* !defined( _PYEWF_CODEPAGE_H */
 

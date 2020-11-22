@@ -1,7 +1,7 @@
 /*
  * Features of libewf
  *
- * Copyright (c) 2006-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2020, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -22,13 +22,15 @@
 #if !defined( _LIBEWF_FEATURES_H )
 #define _LIBEWF_FEATURES_H
 
+/* The libewf type support features
+ */
 #if defined( WINAPI ) || @HAVE_WIDE_CHARACTER_TYPE@
-#define LIBEWF_HAVE_WIDE_CHARACTER_TYPE		1
+#define LIBEWF_HAVE_WIDE_CHARACTER_TYPE	1
+#endif
 
 /* Old definition kept for compatibility (for now)
  */
-#define LIBEWF_WIDE_CHARACTER_TYPE		1
-#endif
+#define LIBEWF_WIDE_CHARACTER_TYPE             1
 
 #if defined( HAVE_LIBBFIO ) || ( !defined( WINAPI ) && @HAVE_LIBBFIO@ )
 #define LIBEWF_HAVE_BFIO			1

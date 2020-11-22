@@ -132,7 +132,7 @@ PyObject *pyewf_file_entry_get_number_of_sub_file_entries(
            PyObject *arguments );
 
 PyObject *pyewf_file_entry_get_sub_file_entry_by_index(
-           pyewf_file_entry_t *pyewf_file_entry,
+           PyObject *pyewf_file_entry,
            int sub_file_entry_index );
 
 PyObject *pyewf_file_entry_get_sub_file_entry(

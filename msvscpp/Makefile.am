@@ -1,5 +1,11 @@
 MSVSCPP_FILES = \
 	ewf.net/ewf.net.vcproj \
+	ewf_test_chunk_data/ewf_test_chunk_data.vcproj \
+	ewf_test_chunk_table/ewf_test_chunk_table.vcproj \
+	ewf_test_compression/ewf_test_compression.vcproj \
+	ewf_test_deflate/ewf_test_deflate.vcproj \
+	ewf_test_error/ewf_test_error.vcproj \
+	ewf_test_file_entry/ewf_test_file_entry.vcproj \
 	ewf_test_glob/ewf_test_glob.vcproj \
 	ewf_test_handle/ewf_test_handle.vcproj \
 	ewf_test_read/ewf_test_read.vcproj \
@@ -30,7 +36,6 @@ MSVSCPP_FILES = \
 	libewf/libewf.vcproj \
 	libfcache/libfcache.vcproj \
 	libfdata/libfdata.vcproj \
-	libfguid/libfguid.vcproj \
 	libfvalue/libfvalue.vcproj \
 	libhmac/libhmac.vcproj \
 	libmfdata/libmfdata.vcproj \

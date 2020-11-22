@@ -1,7 +1,7 @@
 /*
  * Deflate (zlib) (un)compression functions
  *
- * Copyright (C) 2006-2019, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2020, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -36,7 +36,7 @@ extern "C" {
 enum LIBEWF_DEFLATE_BLOCK_TYPES
 {
 	LIBEWF_DEFLATE_BLOCK_TYPE_UNCOMPRESSED		= 0x00,
-	LIBEWF_DEFLATE_BLOCK_TYPE_HUFFMAN_FIXED		= 0x01,
+	LIBEWF_DEFLATE_BLOCK_TYPE_HUFFMAN_FIXED	= 0x01,
 	LIBEWF_DEFLATE_BLOCK_TYPE_HUFFMAN_DYNAMIC	= 0x02,
 	LIBEWF_DEFLATE_BLOCK_TYPE_RESERVED		= 0x03
 };
@@ -74,7 +74,7 @@ struct libewf_deflate_huffman_table
 	 */
 	uint8_t maximum_number_of_bits;
 
-/* TODO create initialize and set size? */
+/* TODO create initialize function that sets the size of codes array? */
 	/* The codes array
 	 */
 	int codes_array[ 288 ];
@@ -133,7 +133,28 @@ int libewf_deflate_calculate_adler32(
      uint32_t initial_value,
      libcerror_error_t **error );
 
+int libewf_deflate_read_data_header(
+     const uint8_t *compressed_data,
+     size_t compressed_data_size,
+     size_t *compressed_data_offset,
+     libcerror_error_t **error );
+
+int libewf_deflate_read_block(
+     libewf_deflate_bit_stream_t *bit_stream,
+     uint8_t *uncompressed_data,
+     size_t uncompressed_data_size,
+     size_t *uncompressed_data_offset,
+     uint8_t *last_block_flag,
+     libcerror_error_t **error );
+
 int libewf_deflate_decompress(
+     const uint8_t *compressed_data,
+     size_t compressed_data_size,
+     uint8_t *uncompressed_data,
+     size_t *uncompressed_data_size,
+     libcerror_error_t **error );
+
+int libewf_deflate_decompress_zlib(
      const uint8_t *compressed_data,
      size_t compressed_data_size,
      uint8_t *uncompressed_data,

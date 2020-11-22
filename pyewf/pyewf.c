@@ -545,7 +545,7 @@ PyMODINIT_FUNC initpyewf(
 
 	PyModule_AddObject(
 	 module,
-	"_file_entries",
+	"file_entries",
 	(PyObject *) file_entries_type_object );
 
 #if PY_MAJOR_VERSION >= 3

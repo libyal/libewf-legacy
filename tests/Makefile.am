@@ -70,6 +70,12 @@ EXTRA_DIST = \
 	$(check_SCRIPTS)
 
 check_PROGRAMS = \
+	ewf_test_chunk_data \
+	ewf_test_chunk_table \
+	ewf_test_compression \
+	ewf_test_deflate \
+	ewf_test_error \
+	ewf_test_file_entry \
 	ewf_test_glob \
 	ewf_test_handle \
 	ewf_test_read \
@@ -79,6 +85,78 @@ check_PROGRAMS = \
 	ewf_test_truncate \
 	ewf_test_write \
 	ewf_test_write_chunk
+
+ewf_test_chunk_data_SOURCES = \
+	ewf_test_chunk_data.c \
+	ewf_test_libcerror.h \
+	ewf_test_libewf.h \
+	ewf_test_macros.h \
+	ewf_test_memory.c ewf_test_memory.h \
+	ewf_test_unused.h
+
+ewf_test_chunk_data_LDADD = \
+	../libewf/libewf.la \
+	@LIBCERROR_LIBADD@
+
+ewf_test_chunk_table_SOURCES = \
+	ewf_test_chunk_table.c \
+	ewf_test_libcdata.h \
+	ewf_test_libcerror.h \
+	ewf_test_libewf.h \
+	ewf_test_macros.h \
+	ewf_test_memory.c ewf_test_memory.h \
+	ewf_test_unused.h
+
+ewf_test_chunk_table_LDADD = \
+	../libewf/libewf.la \
+	@LIBCERROR_LIBADD@
+
+ewf_test_compression_SOURCES = \
+	ewf_test_compression.c \
+	ewf_test_libcerror.h \
+	ewf_test_libewf.h \
+	ewf_test_macros.h \
+	ewf_test_unused.h
+
+ewf_test_compression_LDADD = \
+	../libewf/libewf.la \
+	@LIBCERROR_LIBADD@
+
+ewf_test_deflate_SOURCES = \
+	ewf_test_deflate.c \
+	ewf_test_libcerror.h \
+	ewf_test_libcnotify.h \
+	ewf_test_libewf.h \
+	ewf_test_macros.h \
+	ewf_test_unused.h
+
+ewf_test_deflate_LDADD = \
+	@LIBCNOTIFY_LIBADD@ \
+	../libewf/libewf.la \
+	@LIBCERROR_LIBADD@
+
+ewf_test_error_SOURCES = \
+	ewf_test_error.c \
+	ewf_test_libewf.h \
+	ewf_test_macros.h \
+	ewf_test_unused.h
+
+ewf_test_error_LDADD = \
+	../libewf/libewf.la
+
+ewf_test_file_entry_SOURCES = \
+	ewf_test_file_entry.c \
+	ewf_test_libcdata.h \
+	ewf_test_libcerror.h \
+	ewf_test_libewf.h \
+	ewf_test_macros.h \
+	ewf_test_memory.c ewf_test_memory.h \
+	ewf_test_unused.h
+
+ewf_test_file_entry_LDADD = \
+	../libewf/libewf.la \
+	@LIBCERROR_LIBADD@
+
 
 ewf_test_glob_SOURCES = \
 	ewf_test_glob.c \

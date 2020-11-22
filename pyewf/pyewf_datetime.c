@@ -1,7 +1,7 @@
 /*
  * Date and time functions
  *
- * Copyright (c) 2008-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2008-2020, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -20,6 +20,7 @@
  */
 
 #include <common.h>
+#include <byte_stream.h>
 #include <types.h>
 
 #include "pyewf_datetime.h"
@@ -27,21 +28,161 @@
 
 #include <datetime.h>
 
+/* Creates a new datetime object from date and time elements
+ * Returns a Python object if successful or NULL on error
+ */
+PyObject *pyewf_datetime_new_from_time_elements(
+           uint16_t year,
+           uint64_t number_of_days,
+           uint8_t hours,
+           uint8_t minutes,
+           uint8_t seconds,
+           uint8_t micro_seconds )
+{
+	PyObject *datetime_object = NULL;
+	static char *function     = "pyewf_datetime_new_from_time_elements";
+	uint32_t days_in_century  = 0;
+	uint16_t days_in_year     = 0;
+	uint8_t day_of_month      = 0;
+	uint8_t days_in_month     = 0;
+	uint8_t month             = 0;
+
+	while( number_of_days > 0 )
+	{
+		if( ( year % 400 ) == 0 )
+		{
+			days_in_century = 36525;
+		}
+		else
+		{
+			days_in_century = 36524;
+		}
+		if( number_of_days <= days_in_century )
+		{
+			break;
+		}
+		number_of_days -= days_in_century;
+
+		year += 100;
+	}
+	while( number_of_days > 0 )
+	{
+		/* Check for a leap year
+		 * The year is ( ( dividable by 4 ) and ( not dividable by 100 ) ) or ( dividable by 400 )
+		 */
+		if( ( ( ( year % 4 ) == 0 )
+		  &&  ( ( year % 100 ) != 0 ) )
+		 || ( ( year % 400 ) == 0 ) )
+		{
+			days_in_year = 366;
+		}
+		else
+		{
+			days_in_year = 365;
+		}
+		if( number_of_days <= days_in_year )
+		{
+			break;
+		}
+		number_of_days -= days_in_year;
+
+		year += 1;
+	}
+	/* Determine the month correct the value to days within the month
+	 */
+	month = 1;
+
+	while( number_of_days > 0 )
+	{
+		/* February (2)
+		 */
+		if( month == 2 )
+		{
+			if( ( ( ( year % 4 ) == 0 )
+			  &&  ( ( year % 100 ) != 0 ) )
+			 || ( ( year % 400 ) == 0 ) )
+			{
+				days_in_month = 29;
+			}
+			else
+			{
+				days_in_month = 28;
+			}
+		}
+		/* April (4), June (6), September (9), November (11)
+		 */
+		else if( ( month == 4 )
+		      || ( month == 6 )
+		      || ( month == 9 )
+		      || ( month == 11 ) )
+		{
+			days_in_month = 30;
+		}
+		/* Januari (1), March (3), May (5), July (7), August (8), October (10), December (12)
+		 */
+		else if( ( month == 1 )
+		      || ( month == 3 )
+		      || ( month == 5 )
+		      || ( month == 7 )
+		      || ( month == 8 )
+		      || ( month == 10 )
+		      || ( month == 12 ) )
+		{
+			days_in_month = 31;
+		}
+		/* This should never happen, but just in case
+		 */
+		else
+		{
+			PyErr_Format(
+			 PyExc_IOError,
+			 "%s: unsupported month: %" PRIu8 ".",
+			 function,
+			 month );
+
+			return( NULL );
+		}
+		if( number_of_days <= days_in_month )
+		{
+			break;
+		}
+		number_of_days -= days_in_month;
+
+		month += 1;
+	}
+	/* Determine the day
+	 */
+	day_of_month = (uint8_t) number_of_days;
+
+	PyDateTime_IMPORT;
+
+	datetime_object = (PyObject *) PyDateTime_FromDateAndTime(
+	                                (int) year,
+	                                (int) month,
+	                                (int) day_of_month,
+	                                (int) hours,
+	                                (int) minutes,
+	                                (int) seconds,
+	                                0 );
+
+	return( datetime_object );
+}
+
 /* Creates a new datetime object from a FAT date time
  * Returns a Python object if successful or NULL on error
  */
 PyObject *pyewf_datetime_new_from_fat_date_time(
            uint32_t fat_date_time )
 {
-	static char *function      = "pyewf_datetime_new_from_fat_date_time";
-	PyObject *date_time_object = NULL;
-	uint16_t year              = 0;
-	uint8_t days_in_month      = 0;
-	uint8_t day_of_month       = 0;
-	uint8_t hours              = 0;
-	uint8_t minutes            = 0;
-	uint8_t month              = 0;
-	uint8_t seconds            = 0;
+	PyObject *datetime_object = NULL;
+	static char *function     = "pyewf_datetime_new_from_fat_date_time";
+	uint16_t year             = 0;
+	uint8_t day_of_month      = 0;
+	uint8_t days_in_month     = 0;
+	uint8_t hours             = 0;
+	uint8_t minutes           = 0;
+	uint8_t month             = 0;
+	uint8_t seconds           = 0;
 
 	/* The day of month is stored in the next 5 bits
 	 */
@@ -132,16 +273,16 @@ PyObject *pyewf_datetime_new_from_fat_date_time(
 	}
 	PyDateTime_IMPORT;
 
-	date_time_object = (PyObject *) PyDateTime_FromDateAndTime(
-	                                 (int) year,
-	                                 (int) month,
-	                                 (int) day_of_month,
-	                                 (int) hours,
-	                                 (int) minutes,
-	                                 (int) seconds,
-	                                 0 );
+	datetime_object = (PyObject *) PyDateTime_FromDateAndTime(
+	                                (int) year,
+	                                (int) month,
+	                                (int) day_of_month,
+	                                (int) hours,
+	                                (int) minutes,
+	                                (int) seconds,
+	                                0 );
 
-	return( date_time_object );
+	return( datetime_object );
 }
 
 /* Creates a new datetime object from a FILETIME
@@ -150,18 +291,12 @@ PyObject *pyewf_datetime_new_from_fat_date_time(
 PyObject *pyewf_datetime_new_from_filetime(
            uint64_t filetime )
 {
-	static char *function      = "pyewf_datetime_new_from_filetime";
-	PyObject *date_time_object = NULL;
-	uint32_t micro_seconds     = 0;
-	uint32_t days_in_century   = 0;
-	uint16_t days_in_year      = 0;
-	uint16_t year              = 0;
-	uint8_t day_of_month       = 0;
-	uint8_t days_in_month      = 0;
-	uint8_t hours              = 0;
-	uint8_t minutes            = 0;
-	uint8_t month              = 0;
-	uint8_t seconds            = 0;
+	PyObject *datetime_object = NULL;
+	uint32_t micro_seconds    = 0;
+	uint16_t year             = 0;
+	uint8_t hours             = 0;
+	uint8_t minutes           = 0;
+	uint8_t seconds           = 0;
 
 	/* The timestamp is in units of 100 nano seconds correct the value to seconds
 	 */
@@ -198,7 +333,52 @@ PyObject *pyewf_datetime_new_from_filetime(
 
 		filetime -= 36159;
 	}
-	while( filetime > 0 )
+	datetime_object = pyewf_datetime_new_from_time_elements(
+	                   year,
+	                   filetime,
+	                   hours,
+	                   minutes,
+	                   seconds,
+	                   micro_seconds );
+
+	return( datetime_object );
+}
+
+/* Creates a new datetime object from a floatingtime
+ * Returns a Python object if successful or NULL on error
+ */
+PyObject *pyewf_datetime_new_from_floatingtime(
+           uint64_t floatingtime )
+{
+	byte_stream_float64_t timestamp;
+
+	PyObject *datetime_object = NULL;
+	static char *function     = "pyewf_datetime_new_from_floatingtime";
+	uint32_t days_in_century  = 0;
+	uint32_t micro_seconds    = 0;
+	uint16_t days_in_year     = 0;
+	uint16_t year             = 0;
+	uint8_t day_of_month      = 0;
+	uint8_t days_in_month     = 0;
+	uint8_t hours             = 0;
+	uint8_t minutes           = 0;
+	uint8_t month             = 0;
+	uint8_t seconds           = 0;
+
+	timestamp.integer = floatingtime;
+
+	/* Determine the number of years starting at '30 Dec 1899 00:00:00'
+	 * correct the value to days within the year
+	 */
+	year = 1899;
+
+	if( timestamp.floating_point >= 2 )
+	{
+		year = 1900;
+
+		timestamp.floating_point -= 2;
+	}
+	while( timestamp.floating_point > 0 )
 	{
 		if( ( year % 400 ) == 0 )
 		{
@@ -208,15 +388,15 @@ PyObject *pyewf_datetime_new_from_filetime(
 		{
 			days_in_century = 36524;
 		}
-		if( filetime <= days_in_century )
+		if( timestamp.floating_point <= days_in_century )
 		{
 			break;
 		}
-		filetime -= days_in_century;
+		timestamp.floating_point -= days_in_century;
 
 		year += 100;
 	}
-	while( filetime > 0 )
+	while( timestamp.floating_point > 0 )
 	{
 		/* Check for a leap year
 		 * The year is ( ( dividable by 4 ) and ( not dividable by 100 ) ) or ( dividable by 400 )
@@ -231,11 +411,11 @@ PyObject *pyewf_datetime_new_from_filetime(
 		{
 			days_in_year = 365;
 		}
-		if( filetime <= days_in_year )
+		if( timestamp.floating_point <= days_in_year )
 		{
 			break;
 		}
-		filetime -= days_in_year;
+		timestamp.floating_point -= days_in_year;
 
 		year += 1;
 	}
@@ -243,7 +423,7 @@ PyObject *pyewf_datetime_new_from_filetime(
 	 */
 	month = 1;
 
-	while( filetime > 0 )
+	while( timestamp.floating_point > 0 )
 	{
 		/* February (2)
 		 */
@@ -293,48 +473,121 @@ PyObject *pyewf_datetime_new_from_filetime(
 
 			return( NULL );
 		}
-		if( filetime <= days_in_month )
+		if( timestamp.floating_point <= days_in_month )
 		{
 			break;
 		}
-		filetime -= days_in_month;
+		timestamp.floating_point -= days_in_month;
 
 		month += 1;
 	}
 	/* Determine the day
 	 */
-	day_of_month = (uint8_t) filetime;
+	day_of_month              = (uint8_t) timestamp.floating_point;
+	timestamp.floating_point -= day_of_month;
+
+	/* There are 24 hours in a day correct the value to hours
+	 */
+	timestamp.floating_point *= 24;
+	hours                     = (uint8_t) timestamp.floating_point;
+	timestamp.floating_point -= hours;
+
+	/* There are 60 minutes in an hour correct the value to minutes
+	 */
+	timestamp.floating_point *= 60;
+	minutes                   = (uint8_t) timestamp.floating_point;
+	timestamp.floating_point -= minutes;
+
+	/* There are 60 seconds in a minute correct the value to seconds
+	 */
+	timestamp.floating_point *= 60;
+	seconds                   = (uint8_t) timestamp.floating_point;
+	timestamp.floating_point -= seconds;
+
+	/* There are 1000 micro seconds in a seconds correct the value to micro seconds
+	 */
+	timestamp.floating_point *= 1000000;
+	micro_seconds             = (uint8_t) timestamp.floating_point;
+	timestamp.floating_point -= micro_seconds;
 
 	PyDateTime_IMPORT;
 
-	date_time_object = (PyObject *) PyDateTime_FromDateAndTime(
-	                                 (int) year,
-	                                 (int) month,
-	                                 (int) day_of_month,
-	                                 (int) hours,
-	                                 (int) minutes,
-	                                 (int) seconds,
-	                                 (int) micro_seconds );
+	datetime_object = (PyObject *) PyDateTime_FromDateAndTime(
+	                                (int) year,
+	                                (int) month,
+	                                (int) day_of_month,
+	                                (int) hours,
+	                                (int) minutes,
+	                                (int) seconds,
+	                                (int) micro_seconds );
 
-	return( date_time_object );
+	return( datetime_object );
+}
+
+/* Creates a new datetime object from a HFS time
+ * Returns a Python object if successful or NULL on error
+ */
+PyObject *pyewf_datetime_new_from_hfs_time(
+           uint32_t hfs_time )
+{
+	PyObject *datetime_object = NULL;
+	uint16_t year             = 0;
+	uint8_t hours             = 0;
+	uint8_t minutes           = 0;
+	uint8_t seconds           = 0;
+
+	/* There are 60 seconds in a minute correct the value to minutes
+	 */
+	seconds   = (uint8_t) ( hfs_time % 60 );
+	hfs_time /= 60;
+
+	/* There are 60 minutes in an hour correct the value to hours
+	 */
+	minutes   = (uint8_t) ( hfs_time % 60 );
+	hfs_time /= 60;
+
+	/* There are 24 hours in a day correct the value to days
+	 */
+	hours     = (uint8_t) ( hfs_time % 24 );
+	hfs_time /= 24;
+
+	/* Add 1 day to compensate that Jan 1 1904 is represented as 0
+	 */
+	hfs_time += 1;
+
+	/* Determine the number of years starting at '1 Jan 1904 00:00:00'
+	 * correct the value to days within the year
+	 */
+	year = 1904;
+
+	if( hfs_time >= 35064 )
+	{
+		year = 2000;
+
+		hfs_time -= 35064;
+	}
+	datetime_object = pyewf_datetime_new_from_time_elements(
+	                   year,
+	                   (uint64_t) hfs_time,
+	                   hours,
+	                   minutes,
+	                   seconds,
+	                   0 );
+
+	return( datetime_object );
 }
 
 /* Creates a new datetime object from a POSIX time
  * Returns a Python object if successful or NULL on error
  */
 PyObject *pyewf_datetime_new_from_posix_time(
-           uint32_t posix_time )
+           int64_t posix_time )
 {
-	static char *function      = "pyewf_datetime_new_from_posix_time";
-	PyObject *date_time_object = NULL;
-	uint16_t days_in_year      = 0;
-	uint16_t year              = 0;
-	uint8_t day_of_month       = 0;
-	uint8_t days_in_month      = 0;
-	uint8_t hours              = 0;
-	uint8_t minutes            = 0;
-	uint8_t month              = 0;
-	uint8_t seconds            = 0;
+	PyObject *datetime_object = NULL;
+	uint16_t year             = 0;
+	uint8_t hours             = 0;
+	uint8_t minutes           = 0;
+	uint8_t seconds           = 0;
 
 	/* There are 60 seconds in a minute correct the value to minutes
 	 */
@@ -366,106 +619,73 @@ PyObject *pyewf_datetime_new_from_posix_time(
 
 		posix_time -= 10957;
 	}
-	while( posix_time > 0 )
-	{
-		/* Check for a leap year
-		 * The year is ( ( dividable by 4 ) and ( not dividable by 100 ) ) or ( dividable by 400 )
-		 */
-		if( ( ( ( year % 4 ) == 0 )
-		  &&  ( ( year % 100 ) != 0 ) )
-		 || ( ( year % 400 ) == 0 ) )
-		{
-			days_in_year = 366;
-		}
-		else
-		{
-			days_in_year = 365;
-		}
-		if( posix_time <= days_in_year )
-		{
-			break;
-		}
-		posix_time -= days_in_year;
+	datetime_object = pyewf_datetime_new_from_time_elements(
+	                   year,
+	                   (uint64_t) posix_time,
+	                   hours,
+	                   minutes,
+	                   seconds,
+	                   0 );
 
-		year += 1;
-	}
-	/* Determine the month correct the value to days within the month
+	return( datetime_object );
+}
+
+/* Creates a new datetime object from a POSIX time in micro seconds
+ * Returns a Python object if successful or NULL on error
+ */
+PyObject *pyewf_datetime_new_from_posix_time_in_micro_seconds(
+           int64_t posix_time )
+{
+	PyObject *datetime_object = NULL;
+	uint32_t micro_seconds    = 0;
+	uint16_t year             = 0;
+	uint8_t hours             = 0;
+	uint8_t minutes           = 0;
+	uint8_t seconds           = 0;
+
+	/* There are 1000000 micro seconds in a second correct the value to seconds
 	 */
-	month = 1;
+	micro_seconds = (uint32_t) ( posix_time % 1000000 );
+	posix_time   /= 1000000;
 
-	while( posix_time > 0 )
-	{
-		/* February (2)
-		 */
-		if( month == 2 )
-		{
-			if( ( ( ( year % 4 ) == 0 )
-			  &&  ( ( year % 100 ) != 0 ) )
-			 || ( ( year % 400 ) == 0 ) )
-			{
-				days_in_month = 29;
-			}
-			else
-			{
-				days_in_month = 28;
-			}
-		}
-		/* April (4), June (6), September (9), November (11)
-		 */
-		else if( ( month == 4 )
-		      || ( month == 6 )
-		      || ( month == 9 )
-		      || ( month == 11 ) )
-		{
-			days_in_month = 30;
-		}
-		/* Januari (1), March (3), May (5), July (7), August (8), October (10), December (12)
-		 */
-		else if( ( month == 1 )
-		      || ( month == 3 )
-		      || ( month == 5 )
-		      || ( month == 7 )
-		      || ( month == 8 )
-		      || ( month == 10 )
-		      || ( month == 12 ) )
-		{
-			days_in_month = 31;
-		}
-		/* This should never happen, but just in case
-		 */
-		else
-		{
-			PyErr_Format(
-			 PyExc_IOError,
-			 "%s: unsupported month: %" PRIu8 ".",
-			 function,
-			 month );
-
-			return( NULL );
-		}
-		if( posix_time <= days_in_month )
-		{
-			break;
-		}
-		posix_time -= days_in_month;
-
-		month += 1;
-	}
-	/* Determine the day
+	/* There are 60 seconds in a minute correct the value to minutes
 	 */
-	day_of_month = (uint8_t) posix_time;
+	seconds     = posix_time % 60;
+	posix_time /= 60;
 
-	PyDateTime_IMPORT;
+	/* There are 60 minutes in an hour correct the value to hours
+	 */
+	minutes     = posix_time % 60;
+	posix_time /= 60;
 
-	date_time_object = (PyObject *) PyDateTime_FromDateAndTime(
-	                                 (int) year,
-	                                 (int) month,
-	                                 (int) day_of_month,
-	                                 (int) hours,
-	                                 (int) minutes,
-	                                 (int) seconds,
-	                                 0 );
+	/* There are 24 hours in a day correct the value to days
+	 */
+	hours       = posix_time % 24;
+	posix_time /= 24;
 
-	return( date_time_object );
+	/* Add 1 day to compensate that Jan 1 1970 is represented as 0
+	 */
+	posix_time += 1;
+
+	/* Determine the number of years starting at '1 Jan 1970 00:00:00'
+	 * correct the value to days within the year
+	 */
+	year = 1970;
+
+	if( posix_time >= 10957 )
+	{
+		year = 2000;
+
+		posix_time -= 10957;
+	}
+	datetime_object = pyewf_datetime_new_from_time_elements(
+	                   year,
+	                   (uint64_t) posix_time,
+	                   hours,
+	                   minutes,
+	                   seconds,
+	                   micro_seconds );
+
+	return( datetime_object );
 }
 

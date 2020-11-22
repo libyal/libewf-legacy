@@ -1,6 +1,23 @@
 dnl Checks for libuna or required headers and functions
 dnl
-dnl Version: 20190308
+dnl Version: 20200711
+
+dnl Function to detect if a specific libuna definition is available.
+AC_DEFUN([AX_LIBUNA_CHECK_DEFINITION],
+  [AC_CACHE_CHECK(
+    [if `$1' is defined],
+    [$2],
+    [AC_LANG_PUSH(C)
+    AC_LINK_IFELSE(
+      [AC_LANG_PROGRAM(
+        [[#include <libuna.h>]],
+        [[int test = $1;
+
+return( 0 ); ]] )],
+      [$2=yes],
+      [$2=no])
+    AC_LANG_POP(C)])
+  ])
 
 dnl Function to detect if libuna is available
 dnl ac_libuna_dummy is used to prevent AC_CHECK_LIB adding unnecessary -l<library> arguments
@@ -26,7 +43,7 @@ AC_DEFUN([AX_LIBUNA_CHECK_LIB],
         [test "x$cross_compiling" != "xyes" && test "x$PKGCONFIG" != "x"],
         [PKG_CHECK_MODULES(
           [libuna],
-          [libuna >= 20181006],
+          [libuna >= 20200711],
           [ac_cv_libuna=yes],
           [ac_cv_libuna=check])
         ])
@@ -410,6 +427,21 @@ AC_DEFUN([AX_LIBUNA_CHECK_LIB],
           libuna_utf8_string_with_index_copy_from_utf32,
           [ac_cv_libuna_dummy=yes],
           [ac_cv_libuna=no])
+        AC_CHECK_LIB(
+          una,
+          libuna_utf8_string_size_from_scsu_stream,
+          [ac_cv_libuna_dummy=yes],
+          [ac_cv_libuna=no])
+        AC_CHECK_LIB(
+          una,
+          libuna_utf8_string_copy_from_scsu_stream,
+          [ac_cv_libuna_dummy=yes],
+          [ac_cv_libuna=no])
+        AC_CHECK_LIB(
+          una,
+          libuna_utf8_string_with_index_copy_from_scsu_stream,
+          [ac_cv_libuna_dummy=yes],
+          [ac_cv_libuna=no])
 
         dnl UTF-16 string functions
         AC_CHECK_LIB(
@@ -517,6 +549,21 @@ AC_DEFUN([AX_LIBUNA_CHECK_LIB],
           libuna_utf16_string_with_index_copy_from_utf32,
           [ac_cv_libuna_dummy=yes],
           [ac_cv_libuna=no])
+        AC_CHECK_LIB(
+          una,
+          libuna_utf16_string_size_from_scsu_stream,
+          [ac_cv_libuna_dummy=yes],
+          [ac_cv_libuna=no])
+        AC_CHECK_LIB(
+          una,
+          libuna_utf16_string_copy_from_scsu_stream,
+          [ac_cv_libuna_dummy=yes],
+          [ac_cv_libuna=no])
+        AC_CHECK_LIB(
+          una,
+          libuna_utf16_string_with_index_copy_from_scsu_stream,
+          [ac_cv_libuna_dummy=yes],
+          [ac_cv_libuna=no])
 
         dnl UTF-32 string functions
         AC_CHECK_LIB(
@@ -622,6 +669,43 @@ AC_DEFUN([AX_LIBUNA_CHECK_LIB],
           una,
           libuna_utf32_string_with_index_copy_from_utf16,
           [ac_cv_libuna_dummy=yes],
+          [ac_cv_libuna=no])
+        AC_CHECK_LIB(
+          una,
+          libuna_utf32_string_size_from_scsu_stream,
+          [ac_cv_libuna_dummy=yes],
+          [ac_cv_libuna=no])
+        AC_CHECK_LIB(
+          una,
+          libuna_utf32_string_copy_from_scsu_stream,
+          [ac_cv_libuna_dummy=yes],
+          [ac_cv_libuna=no])
+        AC_CHECK_LIB(
+          una,
+          libuna_utf32_string_with_index_copy_from_scsu_stream,
+          [ac_cv_libuna_dummy=yes],
+          [ac_cv_libuna=no])
+
+        dnl Check for definitions
+        AX_LIBUNA_CHECK_DEFINITION(
+          LIBUNA_COMPARE_LESS,
+          [ac_cv_libuna_defines_compare_less])
+        AS_IF(
+          [test "x$ac_cv_libuna_defines_compare_less" != xyes],
+          [ac_cv_libuna=no])
+
+        AX_LIBUNA_CHECK_DEFINITION(
+          LIBUNA_COMPARE_EQUAL,
+          [ac_cv_libuna_defines_compare_equal])
+        AS_IF(
+          [test "x$ac_cv_libuna_defines_compare_less" != xyes],
+          [ac_cv_libuna=no])
+
+        AX_LIBUNA_CHECK_DEFINITION(
+          LIBUNA_COMPARE_GREATER,
+          [ac_cv_libuna_defines_compare_greater])
+        AS_IF(
+          [test "x$ac_cv_libuna_defines_compare_less" != xyes],
           [ac_cv_libuna=no])
 
         ac_cv_libuna_LIBADD="-luna"])

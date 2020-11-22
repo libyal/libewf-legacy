@@ -1,0 +1,29 @@
+coverage:
+  precision: 2
+  round: down
+  range: 70...100
+  status:
+    project: true
+    patch: true
+    changes: false
+  ignore:
+    - "libbfio/*"
+    - "libcdata/*"
+    - "libcdatetime/*"
+    - "libcerror/*"
+    - "libcfile/*"
+    - "libclocale/*"
+    - "libcnotify/*"
+    - "libcpath/*"
+    - "libcsplit/*"
+    - "libcthreads/*"
+    - "libfcache/*"
+    - "libfdata/*"
+    - "libfvalue/*"
+    - "libhmac/*"
+    - "libmfdata/*"
+    - "libodraw/*"
+    - "libsmdev/*"
+    - "libsmraw/*"
+    - "libuna/*"
+    - "tests/*"

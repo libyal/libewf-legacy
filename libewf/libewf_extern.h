@@ -1,7 +1,7 @@
 /*
  * The internal extern definition
  *
- * Copyright (C) 2006-2019, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2020, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -30,7 +30,11 @@
 
 #include <libewf/extern.h>
 
+#if defined( __CYGWIN__ )
+#define LIBEWF_EXTERN_VARIABLE	extern
+#else
 #define LIBEWF_EXTERN_VARIABLE	LIBEWF_EXTERN
+#endif
 
 #else
 #define LIBEWF_EXTERN		/* extern */
