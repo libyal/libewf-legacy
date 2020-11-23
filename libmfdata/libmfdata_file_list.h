@@ -25,9 +25,9 @@
 #include <common.h>
 #include <types.h>
 
+#include "libmfdata_array.h"
 #include "libmfdata_extern.h"
 #include "libmfdata_libbfio.h"
-#include "libmfdata_libcdata.h"
 #include "libmfdata_libcerror.h"
 #include "libmfdata_types.h"
 
@@ -41,7 +41,7 @@ struct libmfdata_internal_file_list
 {
 	/* The files (array)
 	 */
-	libcdata_array_t *files;
+	libmfdata_array_t *files;
 
 	/* The flags
 	 */

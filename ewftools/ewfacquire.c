@@ -624,7 +624,7 @@ int ewfacquire_read_input(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 		 LIBCERROR_RUNTIME_ERROR_VALUE_EXCEEDS_MAXIMUM,
-		 "%s: invalid imaging handle - acquire size value exceeds maximum.",
+		 "%s: invalid imaging handle - acquiry size value exceeds maximum.",
 		 function );
 
 		return( -1 );
@@ -640,14 +640,13 @@ int ewfacquire_read_input(
 
 		return( -1 );
 	}
-	if( ( imaging_handle->acquiry_size > imaging_handle->input_media_size )
-	 || ( imaging_handle->acquiry_size > (ssize64_t) INT64_MAX ) )
+	if( imaging_handle->acquiry_size > imaging_handle->input_media_size )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 		 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-		 "%s: invalid acquire size value out of bounds.",
+		 "%s: invalid acquiry size value exceeds input media size.",
 		 function );
 
 		return( -1 );
@@ -1191,6 +1190,7 @@ int ewfacquire_read_input(
 	{
 		if( device_handle_read_errors_fprint(
 		     device_handle,
+		     ewfacquire_imaging_handle->bytes_per_sector,
 		     imaging_handle->notify_stream,
 		     error ) != 1 )
 		{
@@ -1221,6 +1221,7 @@ int ewfacquire_read_input(
 		{
 			if( device_handle_read_errors_fprint(
 			     device_handle,
+			     ewfacquire_imaging_handle->bytes_per_sector,
 			     log_handle->log_stream,
 			     error ) != 1 )
 			{
@@ -2007,11 +2008,20 @@ int main( int argc, char * const argv[] )
 		     &( ewfacquire_imaging_handle->bytes_per_sector ),
 		     &error ) != 1 )
 		{
+			ewfacquire_imaging_handle->bytes_per_sector = 512;
+
 			fprintf(
 			 stderr,
-			 "Unable to retrieve bytes per sector from device.\n" );
+			 "Unable to retrieve bytes per sector from device defaulting to: %" PRIu32 ".\n",
+			 ewfacquire_imaging_handle->bytes_per_sector );
 
-			goto on_error;
+#if defined( HAVE_VERBOSE_OUTPUT )
+			libcnotify_print_error_backtrace(
+			 error );
+#endif
+			libcerror_error_free(
+			 &error );
+
 		}
 	}
 	if( option_sectors_per_chunk != NULL )
@@ -2175,6 +2185,14 @@ int main( int argc, char * const argv[] )
 	 */
 	if( ewfacquire_imaging_handle->acquiry_size == 0 )
 	{
+		if( ewfacquire_imaging_handle->input_media_size == 0 )
+		{
+			fprintf(
+			 stderr,
+			 "Unable to determine input media size.\n" );
+
+			goto on_error;
+		}
 		ewfacquire_imaging_handle->acquiry_size = ewfacquire_imaging_handle->input_media_size
 		                                        - ewfacquire_imaging_handle->acquiry_offset;
 	}

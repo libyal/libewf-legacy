@@ -3052,10 +3052,10 @@ int imaging_handle_set_compression_values(
      const system_character_t *string,
      libcerror_error_t **error )
 {
-	system_character_t *string_segment    = NULL;
+	system_character_t *string_segment               = NULL;
 	static char *function                            = "imaging_handle_set_compression_values";
-	size_t string_segment_size                       = 0;
 	size_t string_length                             = 0;
+	size_t string_segment_size                       = 0;
 	int number_of_segments                           = 0;
 	int result                                       = 0;
 	int segment_index                                = 0;

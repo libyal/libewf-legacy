@@ -60,5 +60,5 @@
  */
 #define EWF_MAXIMUM_OFFSETS_IN_TABLE_ENCASE6	65534
 
-#endif
+#endif /* !defined( _EWF_DEFINIONS_H ) */
 

@@ -15,6 +15,7 @@ AM_CPPFLAGS = \
 noinst_LTLIBRARIES = libmfdata.la
 
 libmfdata_la_SOURCES = \
+	libmfdata_array.c libmfdata_array.h \
 	libmfdata_date_time.h \
 	libmfdata_definitions.h \
 	libmfdata_error.c libmfdata_error.h \
@@ -24,7 +25,6 @@ libmfdata_la_SOURCES = \
 	libmfdata_group.c libmfdata_group.h \
 	libmfdata_inline.h \
 	libmfdata_libbfio.h \
-	libmfdata_libcdata.h \
 	libmfdata_libcerror.h \
 	libmfdata_libcnotify.h \
 	libmfdata_libfcache.h \

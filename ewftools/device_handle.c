@@ -2811,13 +2811,13 @@ int device_handle_media_information_fprint(
  */
 int device_handle_read_errors_fprint(
      device_handle_t *device_handle,
+     uint32_t bytes_per_sector,
      FILE *stream,
      libcerror_error_t **error )
 {
 	static char *function     = "device_handle_read_errors_fprint";
 	off64_t read_error_offset = 0;
 	size64_t read_error_size  = 0;
-	uint32_t bytes_per_sector = 0;
 	int number_of_read_errors = 0;
 	int read_error_index      = 0;
 	int result                = 1;
@@ -2833,6 +2833,17 @@ int device_handle_read_errors_fprint(
 
 		return( -1 );
 	}
+	if( bytes_per_sector == 0 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_VALUE_OUT_OF_BOUNDS,
+		 "%s: invalid bytes per sector value out of bounds.",
+		 function );
+
+		return( -1 );
+	}
 	if( stream == NULL )
 	{
 		libcerror_error_set(
@@ -2840,31 +2851,6 @@ int device_handle_read_errors_fprint(
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
 		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
 		 "%s: invalid stream.",
-		 function );
-
-		return( -1 );
-	}
-	if( device_handle_get_bytes_per_sector(
-	     device_handle,
-	     &bytes_per_sector,
-	     error ) != 1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
-		 "%s: unable to retrieve bytes per sector.",
-		 function );
-
-		return( -1 );
-	}
-	if( bytes_per_sector == 0 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_VALUE_MISSING,
-		 "%s: invalid bytes per sector returned.",
 		 function );
 
 		return( -1 );

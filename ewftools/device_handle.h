@@ -277,6 +277,7 @@ int device_handle_media_information_fprint(
 
 int device_handle_read_errors_fprint(
      device_handle_t *device_handle,
+     uint32_t bytes_per_sector,
      FILE *stream,
      libcerror_error_t **error );
 
@@ -294,5 +295,5 @@ int device_handle_tracks_fprint(
 }
 #endif
 
-#endif
+#endif /* !defined( _DEVICE_HANDLE_H ) */
 

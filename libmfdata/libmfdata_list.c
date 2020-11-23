@@ -23,10 +23,10 @@
 #include <memory.h>
 #include <types.h>
 
+#include "libmfdata_array.h"
 #include "libmfdata_date_time.h"
 #include "libmfdata_definitions.h"
 #include "libmfdata_libbfio.h"
-#include "libmfdata_libcdata.h"
 #include "libmfdata_libcerror.h"
 #include "libmfdata_libcnotify.h"
 #include "libmfdata_libfcache.h"
@@ -147,7 +147,7 @@ int libmfdata_list_initialize(
 
 		goto on_error;
 	}
-	if( libcdata_array_initialize(
+	if( libmfdata_array_initialize(
 	     &( internal_list->elements ),
 	     0,
 	     error ) != 1 )
@@ -208,7 +208,7 @@ int libmfdata_list_free(
 		internal_list = (libmfdata_internal_list_t *) *list;
 		*list         = NULL;
 
-		if( libcdata_array_free(
+		if( libmfdata_array_free(
 		     &( internal_list->elements ),
 		     (int (*)(intptr_t **, libcerror_error_t **)) &libmfdata_list_element_free,
 		     error ) != 1 )
@@ -440,7 +440,7 @@ int libmfdata_list_clone_elements(
 	}
 	internal_source_list = (libmfdata_internal_list_t *) source_list;
 
-	if( libcdata_array_get_number_of_entries(
+	if( libmfdata_array_get_number_of_entries(
 	     internal_source_list->elements,
 	     &number_of_elements,
 	     error ) != 1 )
@@ -454,7 +454,7 @@ int libmfdata_list_clone_elements(
 
 		goto on_error;
 	}
-	if( libcdata_array_empty(
+	if( libmfdata_array_empty(
 	     internal_destination_list->elements,
 	     (int (*)(intptr_t **, libcerror_error_t **)) &libmfdata_list_element_free,
 	     error ) != 1 )
@@ -468,7 +468,7 @@ int libmfdata_list_clone_elements(
 
 		goto on_error;
 	}
-	if( libcdata_array_resize(
+	if( libmfdata_array_resize(
 	     internal_destination_list->elements,
 	     number_of_elements,
 	     (int (*)(intptr_t **, libcerror_error_t **)) &libmfdata_list_element_free,
@@ -487,7 +487,7 @@ int libmfdata_list_clone_elements(
 	     element_index < number_of_elements;
 	     element_index++ )
 	{
-		if( libcdata_array_get_entry_by_index(
+		if( libmfdata_array_get_entry_by_index(
 		     internal_source_list->elements,
 		     element_index,
 		     (intptr_t **) &source_list_element,
@@ -566,7 +566,7 @@ int libmfdata_list_clone_elements(
 				destination_group_element = destination_list_element;
 			}
 		}
-		if( libcdata_array_set_entry_by_index(
+		if( libmfdata_array_set_entry_by_index(
 		     internal_destination_list->elements,
 		     element_index,
 		     (intptr_t *) destination_list_element,
@@ -633,7 +633,7 @@ int libmfdata_list_resize(
 	}
 	internal_list = (libmfdata_internal_list_t *) list;
 
-	if( libcdata_array_resize(
+	if( libmfdata_array_resize(
 	     internal_list->elements,
 	     number_of_elements,
 	     (int (*)(intptr_t **, libcerror_error_t **)) &libmfdata_list_element_free,
@@ -675,7 +675,7 @@ int libmfdata_list_get_number_of_elements(
 	}
 	internal_list = (libmfdata_internal_list_t *) list;
 
-	if( libcdata_array_get_number_of_entries(
+	if( libmfdata_array_get_number_of_entries(
 	     internal_list->elements,
 	     number_of_elements,
 	     error ) != 1 )
@@ -717,7 +717,7 @@ int libmfdata_list_get_element_by_index(
 	}
 	internal_list = (libmfdata_internal_list_t *) list;
 
-	if( libcdata_array_get_entry_by_index(
+	if( libmfdata_array_get_entry_by_index(
 	     internal_list->elements,
 	     element_index,
 	     (intptr_t **) element,
@@ -789,7 +789,7 @@ int libmfdata_list_get_element_by_offset(
 
 		return( -1 );
 	}
-	if( libcdata_array_get_number_of_entries(
+	if( libmfdata_array_get_number_of_entries(
 	     internal_list->elements,
 	     &number_of_elements,
 	     error ) != 1 )
@@ -807,7 +807,7 @@ int libmfdata_list_get_element_by_offset(
 	     *element_index < number_of_elements;
 	     *element_index += 1 )
 	{
-		if( libcdata_array_get_entry_by_index(
+		if( libmfdata_array_get_entry_by_index(
 		     internal_list->elements,
 		     *element_index,
 		     (intptr_t **) element,
@@ -886,7 +886,7 @@ int libmfdata_list_set_element_by_index(
 	}
 	internal_list = (libmfdata_internal_list_t *) list;
 
-	if( libcdata_array_get_entry_by_index(
+	if( libmfdata_array_get_entry_by_index(
 	     internal_list->elements,
 	     element_index,
 	     (intptr_t **) &list_element,
@@ -942,7 +942,7 @@ int libmfdata_list_set_element_by_index(
 		}
 		else if( result != 0 )
 		{
-			if( libcdata_array_set_entry_by_index(
+			if( libmfdata_array_set_entry_by_index(
 			     internal_list->elements,
 			     element_index,
 			     NULL,
@@ -995,7 +995,7 @@ int libmfdata_list_set_element_by_index(
 
 			return( -1 );
 		}
-		if( libcdata_array_set_entry_by_index(
+		if( libmfdata_array_set_entry_by_index(
 		     internal_list->elements,
 		     element_index,
 		     (intptr_t *) list_element,
@@ -1084,7 +1084,7 @@ int libmfdata_list_append_element(
 
 		goto on_error;
 	}
-	if( libcdata_array_append_entry(
+	if( libmfdata_array_append_entry(
 	     internal_list->elements,
 	     element_index,
 	     (intptr_t *) list_element,
@@ -1174,7 +1174,7 @@ int libmfdata_list_is_set(
 	}
 	internal_list = (libmfdata_internal_list_t *) list;
 
-	if( libcdata_array_get_number_of_entries(
+	if( libmfdata_array_get_number_of_entries(
 	     internal_list->elements,
 	     &number_of_elements,
 	     error ) != 1 )
@@ -1193,7 +1193,7 @@ int libmfdata_list_is_set(
 	{
 		return( 0 );
 	}
-	if( libcdata_array_get_entry_by_index(
+	if( libmfdata_array_get_entry_by_index(
 	     internal_list->elements,
 	     element_index,
 	     (intptr_t **) &element,
@@ -1242,7 +1242,7 @@ int libmfdata_list_is_group(
 	}
 	internal_list = (libmfdata_internal_list_t *) list;
 
-	if( libcdata_array_get_entry_by_index(
+	if( libmfdata_array_get_entry_by_index(
 	     internal_list->elements,
 	     element_index,
 	     (intptr_t **) &element,
@@ -1311,7 +1311,7 @@ int libmfdata_list_get_group_by_index(
 	}
 	internal_list = (libmfdata_internal_list_t *) list;
 
-	if( libcdata_array_get_entry_by_index(
+	if( libmfdata_array_get_entry_by_index(
 	     internal_list->elements,
 	     element_index,
 	     (intptr_t **) &list_element,
@@ -1488,7 +1488,7 @@ int libmfdata_list_set_group_by_index(
 	}
 	while( number_of_elements > 0 )
 	{
-		if( libcdata_array_get_entry_by_index(
+		if( libmfdata_array_get_entry_by_index(
 		     internal_list->elements,
 		     element_index,
 		     (intptr_t **) &list_element,
@@ -1526,7 +1526,7 @@ int libmfdata_list_set_group_by_index(
 			}
 			internal_list->value_size -= previous_size;
 		}
-		if( libcdata_array_set_entry_by_index(
+		if( libmfdata_array_set_entry_by_index(
 		     internal_list->elements,
 		     element_index,
 		     (intptr_t *) group_list_element,
@@ -1682,7 +1682,7 @@ int libmfdata_list_append_group(
 	}
 	while( number_of_elements > 0 )
 	{
-		if( libcdata_array_append_entry(
+		if( libmfdata_array_append_entry(
 		     internal_list->elements,
 		     element_index,
 		     (intptr_t *) group_list_element,
@@ -1975,7 +1975,7 @@ int libmfdata_list_get_data_range_by_index(
 	}
 	internal_list = (libmfdata_internal_list_t *) list;
 
-	if( libcdata_array_get_entry_by_index(
+	if( libmfdata_array_get_entry_by_index(
 	     internal_list->elements,
 	     element_index,
 	     (intptr_t **) &list_element,
@@ -2087,7 +2087,7 @@ int libmfdata_list_get_data_range_by_offset(
 
 		return( -1 );
 	}
-	if( libcdata_array_get_number_of_entries(
+	if( libmfdata_array_get_number_of_entries(
 	     internal_list->elements,
 	     &number_of_elements,
 	     error ) != 1 )
@@ -2105,7 +2105,7 @@ int libmfdata_list_get_data_range_by_offset(
 	     *element_index < number_of_elements;
 	     *element_index += 1 )
 	{
-		if( libcdata_array_get_entry_by_index(
+		if( libmfdata_array_get_entry_by_index(
 		     internal_list->elements,
 		     *element_index,
 		     (intptr_t **) &list_element,
@@ -2181,7 +2181,7 @@ int libmfdata_list_set_data_range_by_index(
 	}
 	internal_list = (libmfdata_internal_list_t *) list;
 
-	if( libcdata_array_get_entry_by_index(
+	if( libmfdata_array_get_entry_by_index(
 	     internal_list->elements,
 	     element_index,
 	     (intptr_t **) &list_element,
@@ -2273,7 +2273,7 @@ int libmfdata_list_get_backup_data_range_by_index(
 	}
 	internal_list = (libmfdata_internal_list_t *) list;
 
-	if( libcdata_array_get_entry_by_index(
+	if( libmfdata_array_get_entry_by_index(
 	     internal_list->elements,
 	     element_index,
 	     (intptr_t **) &list_element,
@@ -2339,7 +2339,7 @@ int libmfdata_list_set_backup_data_range_by_index(
 	}
 	internal_list = (libmfdata_internal_list_t *) list;
 
-	if( libcdata_array_get_entry_by_index(
+	if( libmfdata_array_get_entry_by_index(
 	     internal_list->elements,
 	     element_index,
 	     (intptr_t **) &list_element,
@@ -2461,7 +2461,7 @@ int libmfdata_list_get_element_index_at_value_offset(
 
 		return( -1 );
 	}
-	if( libcdata_array_get_number_of_entries(
+	if( libmfdata_array_get_number_of_entries(
 	     internal_list->elements,
 	     &number_of_elements,
 	     error ) != 1 )
@@ -2481,7 +2481,7 @@ int libmfdata_list_get_element_index_at_value_offset(
 		     calculated_element_index < number_of_elements;
 		     calculated_element_index++ )
 		{
-			if( libcdata_array_get_entry_by_index(
+			if( libmfdata_array_get_entry_by_index(
 			     internal_list->elements,
 			     calculated_element_index,
 			     (intptr_t **) &list_element,
@@ -2550,7 +2550,7 @@ int libmfdata_list_get_element_index_at_value_offset(
 	     calculated_element_index < number_of_elements;
 	     calculated_element_index++ )
 	{
-		if( libcdata_array_get_entry_by_index(
+		if( libmfdata_array_get_entry_by_index(
 		     internal_list->elements,
 		     calculated_element_index,
 		     (intptr_t **) &list_element,
@@ -2707,7 +2707,7 @@ int libmfdata_list_get_element_index_at_value_offset(
 		     calculated_element_index >= 0;
 		     calculated_element_index-- )
 		{
-			if( libcdata_array_get_entry_by_index(
+			if( libmfdata_array_get_entry_by_index(
 			     internal_list->elements,
 			     calculated_element_index,
 			     (intptr_t **) &list_element,
@@ -2965,7 +2965,7 @@ int libmfdata_list_get_element_index_at_value_index(
 
 		return( -1 );
 	}
-	if( libcdata_array_get_number_of_entries(
+	if( libmfdata_array_get_number_of_entries(
 	     internal_list->elements,
 	     &number_of_elements,
 	     error ) != 1 )
@@ -2983,7 +2983,7 @@ int libmfdata_list_get_element_index_at_value_index(
 	     calculated_element_index < number_of_elements;
 	     calculated_element_index++ )
 	{
-		if( libcdata_array_get_entry_by_index(
+		if( libmfdata_array_get_entry_by_index(
 		     internal_list->elements,
 		     *element_index,
 		     (intptr_t **) &list_element,
@@ -3399,7 +3399,7 @@ int libmfdata_list_get_element_value_by_index(
 	}
 	internal_list = (libmfdata_internal_list_t *) list;
 
-	if( libcdata_array_get_entry_by_index(
+	if( libmfdata_array_get_entry_by_index(
 	     internal_list->elements,
 	     element_index,
 	     (intptr_t **) &list_element,
@@ -3749,7 +3749,7 @@ int libmfdata_list_set_element_value_by_index(
 	}
 	internal_list = (libmfdata_internal_list_t *) list;
 
-	if( libcdata_array_get_entry_by_index(
+	if( libmfdata_array_get_entry_by_index(
 	     internal_list->elements,
 	     element_index,
 	     (intptr_t **) &list_element,

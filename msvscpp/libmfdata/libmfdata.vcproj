@@ -151,6 +151,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\..\libmfdata\libmfdata_array.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\libmfdata\libmfdata_error.c"
 				>
 			</File>
@@ -201,6 +205,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath="..\..\libmfdata\libmfdata_array.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\libmfdata\libmfdata_date_time.h"
 				>
 			</File>
@@ -234,10 +242,6 @@
 			</File>
 			<File
 				RelativePath="..\..\libmfdata\libmfdata_libbfio.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\libmfdata\libmfdata_libcdata.h"
 				>
 			</File>
 			<File

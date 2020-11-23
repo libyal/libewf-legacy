@@ -931,7 +931,7 @@ int libewf_write_io_handle_initialize_resume(
 				 error,
 				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 				 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-				 "%s: number of unusable chunk cannot be greater than number of chunk.",
+				 "%s: number of unusable chunks cannot be greater than number of chunks.",
 				 function );
 
 				return( -1 );

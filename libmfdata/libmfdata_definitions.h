@@ -151,7 +151,11 @@ enum LIBMFDATA_SEGMENT_TABLE_FLAGS
         LIBMFDATA_SEGMENT_TABLE_FLAG_CALCULATE_VALUE_OFFSETS		= 0x10,
 };
 
-#endif
+/* Limiting the maximum size of the array entries to 1 GiB
+ */
+#define LIBMFDATA_ARRAY_ENTRIES_MEMORY_LIMIT	1024 * 1024 * 1024
 
-#endif
+#endif /* !defined( HAVE_LOCAL_LIBMFDATA ) */
+
+#endif /* !defined( _LIBMFDATA_INTERNAL_DEFINITIONS_H ) */
 
