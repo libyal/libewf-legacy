@@ -302,5 +302,5 @@ int libewf_write_io_handle_finalize_write_sections_corrections(
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBEWF_WRITE_IO_HANDLE_H ) */
 

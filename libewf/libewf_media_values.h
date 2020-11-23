@@ -96,5 +96,4 @@ int libewf_media_values_clone(
 }
 #endif
 
-#endif
-
+#endif /* !defined( _LIBEWF_MEDIA_VALUES_H ) */

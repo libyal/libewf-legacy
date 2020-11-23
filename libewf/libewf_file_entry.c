@@ -81,6 +81,17 @@ int libewf_file_entry_initialize(
 
 		return( -1 );
 	}
+	if( file_entry_tree_node == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid file entry tree node.",
+		 function );
+
+		return( -1 );
+	}
 	internal_file_entry = memory_allocate_structure(
 	                       libewf_internal_file_entry_t );
 

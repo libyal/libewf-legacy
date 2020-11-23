@@ -7,8 +7,8 @@ EXIT_SUCCESS=0;
 EXIT_FAILURE=1;
 EXIT_IGNORE=77;
 
-LIBRARY_TESTS="chunk_data chunk_table compression deflate error";
-LIBRARY_TESTS_WITH_INPUT="handle";
+LIBRARY_TESTS="checksum chunk_data chunk_table compression date_time date_time_values deflate error file_entry filename hash_sections hash_values io_handle media_values notify read_io_handle sector_range segment_table single_files write_io_handle";
+LIBRARY_TESTS_WITH_INPUT="handle support";
 OPTION_SETS="";
 
 INPUT_GLOB="*.[Ees]01";

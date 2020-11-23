@@ -6,8 +6,8 @@ $ExitSuccess = 0
 $ExitFailure = 1
 $ExitIgnore = 77
 
-$LibraryTests = "chunk_data chunk_table compression deflate error"
-$LibraryTestsWithInput = "handle"
+$LibraryTests = "checksum chunk_data chunk_table compression date_time date_time_values deflate error file_entry filename hash_sections hash_values io_handle media_values notify read_io_handle sector_range segment_table single_files write_io_handle"
+$LibraryTestsWithInput = "handle support"
 $OptionSets = ""
 
 $InputGlob = "*"

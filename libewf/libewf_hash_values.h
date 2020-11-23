@@ -81,9 +81,17 @@ int libewf_hash_values_generate_sha1_hash(
      uint8_t *sha1_hash_set,
      libcerror_error_t **error );
 
+int libewf_hash_values_set_utf8_value(
+     libfvalue_table_t *hash_values,
+     const uint8_t *identifier,
+     size_t identifier_length,
+     const uint8_t *utf8_string,
+     size_t utf8_string_length,
+     libcerror_error_t **error );
+
 #if defined( __cplusplus )
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBEWF_HASH_VALUES_H ) */
 

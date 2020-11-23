@@ -239,20 +239,25 @@ int libewf_segment_table_clone(
 		 "%s: unable to clear source to destination segment table.",
 		 function );
 
-		goto on_error;
+		memory_free(
+		 *destination_segment_table );
+
+		*destination_segment_table = NULL;
+
+		return( -1 );
 	}
 	if( source_segment_table->basename != NULL )
 	{
 		( *destination_segment_table )->basename = system_string_allocate(
 					                    source_segment_table->basename_size );
 
-		if( *destination_segment_table == NULL )
+		if( ( *destination_segment_table )->basename == NULL )
 		{
 			libcerror_error_set(
 			 error,
 			 LIBCERROR_ERROR_DOMAIN_MEMORY,
 			 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
-			 "%s: unable to create destination segment table.",
+			 "%s: unable to create destination segment table basename.",
 			 function );
 
 			goto on_error;
