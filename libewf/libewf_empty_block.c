@@ -20,11 +20,65 @@
  */
 
 #include <common.h>
+#include <memory.h>
 #include <types.h>
 
+#include "libewf_empty_block.h"
 #include "libewf_libcerror.h"
 
-#include "libewf_empty_block.h"
+/* Check for empty block
+ * An empty block is a block that contains the same value for every byte
+ * Returns 1 if block is empty, 0 if not or -1 on error
+ */
+int libewf_empty_block_test(
+     const uint8_t *block_buffer,
+     size_t block_size,
+     libcerror_error_t **error )
+{
+	static char *function = "libewf_empty_block_test";
+
+	if( block_buffer == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid block buffer.",
+		 function );
+
+		return( -1 );
+	}
+	if( block_size > (size_t) SSIZE_MAX )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
+		 "%s: invalid block size value exceeds maximum.",
+		 function );
+
+		return( -1 );
+	}
+	if( block_size == 0 )
+	{
+		return( 0 );
+	}
+	else if( block_size == 1 )
+	{
+		return( 1 );
+	}
+	if( memory_compare(
+	     block_buffer,
+	     &( block_buffer[ 1 ] ),
+	     block_size - 1 ) != 0 )
+	{
+		return( 0 );
+	}
+	return( 1 );
+}
+
+/* Previous version keep for now */
+#ifdef TEST_EMPTY_BLOCK_MEMCMP
 
 /* The largest primary (or scalar) available
  * supported by a single load and store instruction
@@ -40,11 +94,10 @@ int libewf_empty_block_test(
      size_t block_size,
      libcerror_error_t **error )
 {
-	libewf_aligned_t *aligned_block_iterator = NULL;
-	libewf_aligned_t *aligned_block_start    = NULL;
-	uint8_t *block_iterator                  = NULL;
-	uint8_t *block_start                     = NULL;
-	static char *function                    = "libewf_empty_block_test";
+	uint8_t *block_iterator   = NULL;
+	uint8_t *block_start      = NULL;
+	static char *function     = "libewf_empty_block_test";
+	size_t aligned_block_size = 0;
 
 	if( block_buffer == NULL )
 	{
@@ -88,30 +141,17 @@ int libewf_empty_block_test(
 			block_iterator += 1;
 			block_size     -= 1;
 		}
-		/* Align the block iterator
-		 */
-		while( ( (intptr_t) block_iterator % sizeof( libewf_aligned_t ) ) != 0 )
-		{
-			if( *block_start != *block_iterator )
-			{
-				return( 0 );
-			}
-			block_iterator += 1;
-			block_size     -= 1;
-		}
-		aligned_block_start    = (libewf_aligned_t *) block_start;
-		aligned_block_iterator = (libewf_aligned_t *) block_iterator;
+		aligned_block_size = ( block_size / sizeof( libewf_aligned_t ) ) * sizeof( libewf_aligned_t );
 
-		while( block_size > sizeof( libewf_aligned_t ) )
+		if( memory_compare(
+		     block_start,
+		     &( block_start[ sizeof( libewf_aligned_t ) ] ),
+		     aligned_block_size - sizeof( libewf_aligned_t ) ) != 0 )
 		{
-			if( *aligned_block_start != *aligned_block_iterator )
-			{
-				return( 0 );
-			}
-			aligned_block_iterator += 1;
-			block_size             -= sizeof( libewf_aligned_t );
+			return( 0 );
 		}
-		block_iterator = (uint8_t *) aligned_block_iterator;
+		block_iterator = &( block_start[ aligned_block_size ] );
+		block_size    -= aligned_block_size;
 	}
 	while( block_size != 0 )
 	{
@@ -124,4 +164,6 @@ int libewf_empty_block_test(
 	}
 	return( 1 );
 }
+
+#endif /* TEST_EMPTY_BLOCK_MEMCMP */
 

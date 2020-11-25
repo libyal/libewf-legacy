@@ -40,5 +40,5 @@ int libewf_empty_block_test(
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBEWF_EMPTY_BLOCK_H ) */
 

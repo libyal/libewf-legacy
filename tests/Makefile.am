@@ -77,6 +77,7 @@ check_PROGRAMS = \
 	ewf_test_date_time \
 	ewf_test_date_time_values \
 	ewf_test_deflate \
+	ewf_test_empty_block \
 	ewf_test_error \
 	ewf_test_file_entry \
 	ewf_test_filename \
@@ -182,6 +183,17 @@ ewf_test_deflate_SOURCES = \
 
 ewf_test_deflate_LDADD = \
 	@LIBCNOTIFY_LIBADD@ \
+	../libewf/libewf.la \
+	@LIBCERROR_LIBADD@
+
+ewf_test_empty_block_SOURCES = \
+	ewf_test_empty_block.c \
+	ewf_test_libcerror.h \
+	ewf_test_libewf.h \
+	ewf_test_macros.h \
+	ewf_test_unused.h
+
+ewf_test_empty_block_LDADD = \
 	../libewf/libewf.la \
 	@LIBCERROR_LIBADD@
 

@@ -5264,12 +5264,6 @@ ssize_t libewf_handle_prepare_write_chunk(
 		if( ( compression_level != EWF_COMPRESSION_NONE )
 		 || ( ( internal_handle->io_handle->compression_flags & LIBEWF_FLAG_COMPRESS_EMPTY_BLOCK ) != 0 ) )
 		{
-#if defined( TEST_EMPTY_BLOCK_MEMCMP )
-			if( memory_compare(
-			     chunk_buffer,
-			     &( ( (uint8_t *) chunk_buffer )[ 1 ] ),
-			     chunk_buffer_size - 1 ) == 0 )
-#else
 			result = libewf_empty_block_test(
 				  chunk_buffer,
 				  chunk_buffer_size,
@@ -5287,7 +5281,6 @@ ssize_t libewf_handle_prepare_write_chunk(
 				return( -1 );
 			}
 			else if( result == 1 )
-#endif
 			{
 				if( ( (uint8_t *) chunk_buffer )[ 0 ] == 0 )
 				{

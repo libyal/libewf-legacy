@@ -230,12 +230,6 @@ int libewf_chunk_data_pack(
 	if( ( compression_level != EWF_COMPRESSION_NONE )
 	 || ( ( compression_flags & LIBEWF_FLAG_COMPRESS_EMPTY_BLOCK ) != 0 ) )
 	{
-#if defined( TEST_EMPTY_BLOCK_MEMCMP )
-		if( memory_compare(
-		     chunk_data->data,
-		     &( chunk_data->data[ 1 ] )
-		     chunk_data->data_size - 1 ) == 0 )
-#else
 		result = libewf_empty_block_test(
 			  chunk_data->data,
 			  chunk_data->data_size,
@@ -253,7 +247,6 @@ int libewf_chunk_data_pack(
 			return( -1 );
 		}
 		else if( result == 1 )
-#endif
 		{
 			if( ( chunk_data->data )[ 0 ] == 0 )
 			{
