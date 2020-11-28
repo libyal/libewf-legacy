@@ -1,4 +1,6 @@
 environment:
+  nuget_token:
+    secure: s3Sl1ZiRw+J7YD+2wr1elu0unq6koZek+JmOcYKfDPfwrz2NigSu5SD8WvlwdIcH
   matrix:
   - TARGET: vs2008
     BUILD_ENVIRONMENT: msbuild
@@ -153,7 +155,8 @@ install:
 - cmd: git clone https://github.com/codecov/codecov-bash.git ..\codecov-bash
 - cmd: if [%BUILD_ENVIRONMENT%]==[msbuild] (
     git clone https://github.com/libyal/vstools.git ..\vstools )
-- ps: .\syncwinflexbison.ps1
+- ps: If ($env:BUILD_ENVIRONMENT -eq "msbuild") {
+    .\syncwinflexbison.ps1 }
 - ps: If ($env:BUILD_ENVIRONMENT -eq "msbuild") {
     .\synczlib.ps1 }
 - ps: If ($env:BUILD_ENVIRONMENT -eq "msbuild") {
@@ -200,9 +203,9 @@ install:
     Else {
       .\builddokan.ps1 -UseLegacyVersion }
     }
-- sh: if test ${BUILD_ENVIRONMENT} = "xcode" || test ${BUILD_ENVIRONMENT} = "python"; then brew update; fi
-- sh: if test ${BUILD_ENVIRONMENT} = "xcode" || test ${BUILD_ENVIRONMENT} = "python"; then brew install gettext gnu-sed || true; fi
-- sh: if test ${BUILD_ENVIRONMENT} = "python"; then brew python3 || true; fi
+- sh: if test ${BUILD_ENVIRONMENT} = "xcode" || test ${BUILD_ENVIRONMENT} = "python"; then brew update -q; fi
+- sh: if test ${BUILD_ENVIRONMENT} = "xcode" || test ${BUILD_ENVIRONMENT} = "python"; then brew install -q gettext gnu-sed || true; fi
+- sh: if test ${BUILD_ENVIRONMENT} = "python"; then brew install -q python3 || true; fi
 - ps: If ($env:BUILD_ENVIRONMENT -eq "python") {
     Invoke-Expression "${env:PYTHON} -m pip install -U pip setuptools twine wheel" }
 - cmd: if [%BUILD_ENVIRONMENT%]==[cygwin] (
@@ -231,6 +234,10 @@ build_script:
 - ps: If ($env:TARGET -eq "vs2017") {
     .\build.ps1 -VisualStudioVersion 2017 -Platform Win32 -VSToolsOptions "--extend-with-x64 --no-python-dll --with-dokany";
     .\build.ps1 -VisualStudioVersion 2017 -Platform x64 -VSToolsOptions "--extend-with-x64 --no-python-dll --with-dokany" }
+- cmd: if [%TARGET%]==[vs2017] (
+    move msvscpp vs2008 &&
+    move vs2017 msvscpp &&
+    nuget pack libewf.nuspec )
 - ps: If ($env:TARGET -eq "vs2019") {
     .\build.ps1 -VisualStudioVersion 2019 -VSToolsOptions "--extend-with-x64 --no-python-dll --with-dokany" }
 - sh: if test ${BUILD_ENVIRONMENT} = "xcode" || test ${BUILD_ENVIRONMENT} = "python"; then export PATH="/usr/local/opt/gettext/bin:$PATH"; export SED="/usr/local/bin/gsed"; tests/build.sh ${CONFIGURE_OPTIONS}; fi
@@ -272,14 +279,9 @@ after_test:
 
 artifacts:
 - path: \*.nupkg
+- path: dist\*.whl
 
-deploy:
-- provider: NuGet
-  skip_symbols: true
-  api_key:
-    secure: gCkz3PNGORdxJGl+aegOa7OJ4IQFHC/FqgCzbirMk7nyNFCuZzc1/ne2174eYxsw
-  artifact: /.*\.nupkg/
-  on:
-    branch: master
-    appveyor_repo_tag: true
-    target: vs2017
+deploy_script:
+- ps: If ($env:APPVEYOR_REPO_TAG -eq "true" -and $isWindows -and $env:TARGET -eq "vs2017") {
+    Invoke-Expression "nuget push *.nupkg -NonInteractive -NoSymbols -Source https://api.nuget.org/v3/index.json -ApiKey ${env:NUGET_TOKEN}" }
+

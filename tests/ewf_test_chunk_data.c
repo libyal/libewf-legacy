@@ -611,9 +611,13 @@ int main(
 	 "libewf_chunk_data_free",
 	 ewf_test_chunk_data_free );
 
+#if defined( HAVE_WRITE_SUPPORT )
+
 	EWF_TEST_RUN(
 	 "libewf_chunk_data_pack",
 	 ewf_test_chunk_data_pack );
+
+#endif /* defined( HAVE_WRITE_SUPPORT ) */
 
 	EWF_TEST_RUN(
 	 "libewf_chunk_data_unpack",

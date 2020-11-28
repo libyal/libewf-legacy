@@ -179,7 +179,7 @@ int libmfdata_list_element_free(
 		{
 			if( internal_element->group_values != NULL )
 			{
-				if( internal_element->group_values->number_of_elements == 1 )
+				if( internal_element->group_values->number_of_elements <= 1 )
 				{
 					if( libmfdata_group_free(
 					     &( internal_element->group_values ),

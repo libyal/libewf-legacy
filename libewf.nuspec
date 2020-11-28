@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>libewf</id>
-    <version>20140810</version>
+    <version>20140811</version>
     <authors>Joachim Metz</authors>
     <owners>joachimmetz</owners>
     <license type="expression">LGPL-3.0-or-later</license>

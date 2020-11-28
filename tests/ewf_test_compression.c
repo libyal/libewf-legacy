@@ -1083,9 +1083,13 @@ int main(
 
 #if defined( __GNUC__ ) && !defined( LIBEWF_DLL_IMPORT )
 
+#if defined( HAVE_WRITE_SUPPORT )
+
 	EWF_TEST_RUN(
 	 "libewf_compress_data",
 	 ewf_test_compress_data );
+
+#endif /* defined( HAVE_WRITE_SUPPORT ) */
 
 	EWF_TEST_RUN(
 	 "libewf_decompress_data",

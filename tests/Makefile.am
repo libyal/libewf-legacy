@@ -26,23 +26,28 @@ TESTS_PYEWF = \
 	test_pyewf.sh
 endif
 
+if HAVE_WRITE_TESTS
+TESTS_WRITE = \
+	test_write.sh \
+	test_read_write.sh \
+	test_read_write_delta.sh \
+	test_ewfacquire.sh \
+	test_ewfacquire_optical.sh \
+	test_ewfacquirestream.sh \
+	test_ewfacquire_resume.sh \
+	test_ewfexport.sh \
+	test_ewfexport_logical.sh
+endif
+
 TESTS = \
 	test_library.sh \
 	test_glob.sh \
 	test_seek.sh \
 	test_read.sh \
-	test_write.sh \
-	test_read_write.sh \
-	test_read_write_delta.sh \
 	test_ewfverify.sh \
 	test_ewfverify_logical.sh \
-	test_ewfacquire.sh \
-	test_ewfacquire_optical.sh \
-	test_ewfacquirestream.sh \
-	test_ewfacquire_resume.sh \
 	test_ewfinfo.sh \
-	test_ewfexport.sh \
-	test_ewfexport_logical.sh \
+	$(TESTS_WRITE) \
 	$(TESTS_PYEWF)
 
 check_SCRIPTS = \

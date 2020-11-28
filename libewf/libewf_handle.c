@@ -1016,6 +1016,19 @@ int libewf_handle_open(
 
 		return( -1 );
 	}
+#if !defined( HAVE_WRITE_SUPPORT )
+	if( ( access_flags & LIBEWF_ACCESS_FLAG_WRITE ) != 0 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_UNSUPPORTED_VALUE,
+		 "%s: write access currently not supported - compiled without zlib.",
+		 function );
+
+		return( -1 );
+	}
+#endif
 	if( libbfio_pool_initialize(
 	     &file_io_pool,
 	     0,
@@ -1418,6 +1431,19 @@ int libewf_handle_open_wide(
 
 		return( -1 );
 	}
+#if !defined( HAVE_WRITE_SUPPORT )
+	if( ( access_flags & LIBEWF_ACCESS_FLAG_WRITE ) != 0 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_UNSUPPORTED_VALUE,
+		 "%s: write access currently not supported - compiled without zlib.",
+		 function );
+
+		return( -1 );
+	}
+#endif
 	if( libbfio_pool_initialize(
 	     &file_io_pool,
 	     0,
@@ -1738,7 +1764,8 @@ on_error:
 	}
 	return( -1 );
 }
-#endif
+
+#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */
 
 /* Opens a set of EWF file(s) using a Basic File IO (bfio) pool
  * Returns 1 if successful or -1 on error
@@ -1894,6 +1921,19 @@ int libewf_handle_open_file_io_pool(
 
 		return( -1 );
 	}
+#if !defined( HAVE_WRITE_SUPPORT )
+	if( ( access_flags & LIBEWF_ACCESS_FLAG_WRITE ) != 0 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_UNSUPPORTED_VALUE,
+		 "%s: write access currently not supported - compiled without zlib.",
+		 function );
+
+		return( -1 );
+	}
+#endif
 	if( internal_handle->segment_table == NULL )
 	{
 		if( libewf_segment_table_initialize(
@@ -3937,7 +3977,7 @@ int libewf_handle_close(
 			 "%s: unable to finalize write.",
 			 function );
 
-			return( -1 );
+			result = -1;
 		}
 	}
 	if( internal_handle->file_io_pool_created_in_library != 0 )
@@ -3984,6 +4024,22 @@ int libewf_handle_close(
 		 function );
 
 		result = -1;
+	}
+	if( internal_handle->chunk_data != NULL )
+	{
+		if( libewf_chunk_data_free(
+		     &( internal_handle->chunk_data ),
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
+			 "%s: unable to free chunk data.",
+			 function );
+
+			result = -1;
+		}
 	}
 	if( internal_handle->read_io_handle != NULL )
 	{

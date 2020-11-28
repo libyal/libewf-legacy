@@ -215,9 +215,9 @@ HAVE_WITH_PTHREAD=$?;
 
 echo "${CONFIGURE_HELP}" | grep -- '--with-zlib' > /dev/null;
 
-# HAVE_WITH_ZLIB=$?;
-#
-# echo "${CONFIGURE_HELP}" | grep -- '--with-openssl' > /dev/null;
+HAVE_WITH_ZLIB=$?;
+
+echo "${CONFIGURE_HELP}" | grep -- '--with-openssl' > /dev/null;
 
 HAVE_WITH_OPENSSL=$?;
 
@@ -272,18 +272,18 @@ then
 	fi
 fi
 
-# if test ${HAVE_WITH_ZLIB} -eq 0;
-# then
+if test ${HAVE_WITH_ZLIB} -eq 0;
+then
 	# Test "./configure && make && make check" with fallback zlib implementation.
 
-# 	run_configure_make_check "--with-zlib=no";
-# 	RESULT=$?;
+	run_configure_make_check "--with-zlib=no";
+	RESULT=$?;
 
-# 	if test ${RESULT} -ne ${EXIT_SUCCESS};
-# 	then
-# 		exit ${EXIT_FAILURE};
-# 	fi
-# fi
+	if test ${RESULT} -ne ${EXIT_SUCCESS};
+	then
+		exit ${EXIT_FAILURE};
+	fi
+fi
 
 if test ${HAVE_WITH_OPENSSL} -eq 0;
 then

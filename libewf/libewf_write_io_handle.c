@@ -253,7 +253,12 @@ int libewf_write_io_handle_clone(
 		 "%s: unable to copy source to destination write IO handle.",
 		 function );
 
-		goto on_error;
+		memory_free(
+		 *destination_write_io_handle );
+
+		*destination_write_io_handle = NULL;
+
+		return( -1 );
 	}
 	( *destination_write_io_handle )->data_section            = NULL;
 	( *destination_write_io_handle )->table_offsets           = NULL;

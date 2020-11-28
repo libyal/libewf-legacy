@@ -24,7 +24,7 @@
 #include <narrow_string.h>
 #include <types.h>
 
-#if defined( HAVE_STDLIB_H )
+#if defined( HAVE_STDLIB_H ) || defined( HAVE_WINAPI )
 #include <stdlib.h>
 #endif
 
@@ -40,11 +40,13 @@
 #include "pyewf_unused.h"
 
 #if !defined( LIBEWF_HAVE_BFIO )
+
 LIBEWF_EXTERN \
 int libewf_check_file_signature_file_io_handle(
      libbfio_handle_t *file_io_handle,
      libewf_error_t **error );
-#endif
+
+#endif /* !defined( LIBEWF_HAVE_BFIO ) */
 
 /* The pyewf module methods
  */
@@ -66,7 +68,7 @@ PyMethodDef pyewf_module_methods[] = {
 	{ "check_file_signature_file_object",
 	  (PyCFunction) pyewf_check_file_signature_file_object,
 	  METH_VARARGS | METH_KEYWORDS,
-	  "check_file_signature_file_object(filename) -> Boolean\n"
+	  "check_file_signature_file_object(file_object) -> Boolean\n"
 	  "\n"
 	  "Checks if a file has an Expert Witness Compression Format (EWF) signature using a file-like object." },
 
@@ -89,10 +91,7 @@ PyMethodDef pyewf_module_methods[] = {
 /* TODO: open file-like object using pool - list of file objects */
 
 	/* Sentinel */
-	{ NULL,
-	  NULL,
-	  0,
-	  NULL}
+	{ NULL, NULL, 0, NULL }
 };
 
 /* Retrieves the pyewf/libewf version
@@ -207,7 +206,7 @@ PyObject *pyewf_check_file_signature_file_object(
 	if( PyArg_ParseTupleAndKeywords(
 	     arguments,
 	     keywords,
-	     "|O",
+	     "O|",
 	     keyword_list,
 	     &file_object ) == 0 )
 	{
@@ -487,8 +486,9 @@ PyMODINIT_FUNC initpyewf(
 		return;
 #endif
 	}
+#if PY_VERSION_HEX < 0x03070000
 	PyEval_InitThreads();
-
+#endif
 	gil_state = PyGILState_Ensure();
 
 	/* Setup the handle type object
