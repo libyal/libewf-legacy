@@ -315,43 +315,28 @@ int libewf_chunk_table_read_chunk(
 		if( ( element_data_flags & LIBMFDATA_RANGE_FLAG_IS_COMPRESSED ) != 0 )
 		{
 			libcnotify_printf(
-			 "%s: reading compressed chunk: %d from file IO pool entry: %d at offset: %" PRIi64 " of size: %" PRIu64 "\n",
+			 "%s: reading compressed chunk: %d from file IO pool entry: %d at offset: %" PRIi64 " (0x%08" PRIx64 ") of size: %" PRIu64 "\n",
 			 function,
 			 element_index,
 			 file_io_pool_entry,
+			 element_data_offset,
 			 element_data_offset,
 			 element_data_size );
 		}
 		else
 		{
 			libcnotify_printf(
-			 "%s: reading uncompressed chunk: %d from file IO pool entry: %d at offset: %" PRIi64 " of size: %" PRIu64 "\n",
+			 "%s: reading uncompressed chunk: %d from file IO pool entry: %d at offset: %" PRIi64 " (0x%08" PRIx64 ") of size: %" PRIu64 "\n",
 			 function,
 			 element_index,
 			 file_io_pool_entry,
 			 element_data_offset,
+			 element_data_offset,
 			 element_data_size );
 		}
 	}
-#endif
-	if( libbfio_pool_seek_offset(
-	     file_io_pool,
-	     file_io_pool_entry,
-	     element_data_offset,
-	     SEEK_SET,
-	     error ) == -1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_IO,
-		 LIBCERROR_IO_ERROR_SEEK_FAILED,
-		 "%s: unable to seek chunk offset: %" PRIi64 " in file IO pool entry: %d.",
-		 function,
-		 element_data_offset,
-		 file_io_pool_entry );
+#endif /* defined( HAVE_DEBUG_OUTPUT ) */
 
-		goto on_error;
-	}
 	if( libewf_chunk_data_initialize(
 	     &chunk_data,
 	     (size_t) element_data_size,
@@ -377,11 +362,12 @@ int libewf_chunk_table_read_chunk(
 
 		goto on_error;
 	}
-	read_count = libbfio_pool_read_buffer(
+	read_count = libbfio_pool_read_buffer_at_offset(
 		      file_io_pool,
 		      file_io_pool_entry,
 		      chunk_data->data,
 		      (size_t) element_data_size,
+		      element_data_offset,
 		      error );
 
 	if( read_count != (ssize_t) element_data_size )
@@ -390,8 +376,11 @@ int libewf_chunk_table_read_chunk(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_IO,
 		 LIBCERROR_IO_ERROR_READ_FAILED,
-		 "%s: unable to read chunk data.",
-		 function );
+		 "%s: unable to read chunk data from file IO pool entry: %d at offset: %" PRIi64 " (0x%08" PRIx64 ").",
+		 function,
+		 file_io_pool_entry,
+		 element_data_offset,
+		 element_data_offset );
 
 		goto on_error;
 	}

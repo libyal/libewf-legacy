@@ -312,27 +312,12 @@ ssize_t libewf_segment_file_read_file_header(
 		 function );
 	}
 #endif
-	if( libbfio_pool_seek_offset(
-	     file_io_pool,
-	     file_io_pool_entry,
-	     0,
-	     SEEK_SET,
-	     error ) == -1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_IO,
-		 LIBCERROR_IO_ERROR_SEEK_FAILED,
-		 "%s: unable to seek file header offset: 0.",
-		 function );
-
-		return( -1 );
-	}
-	read_count = libbfio_pool_read_buffer(
+	read_count = libbfio_pool_read_buffer_at_offset(
 	              file_io_pool,
 	              file_io_pool_entry,
 	              (uint8_t *) &file_header,
 	              sizeof( ewf_file_header_t ),
+	              0,
 	              error );
 
 	if( read_count != (ssize_t) sizeof( ewf_file_header_t ) )
@@ -341,7 +326,7 @@ ssize_t libewf_segment_file_read_file_header(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_IO,
 		 LIBCERROR_IO_ERROR_READ_FAILED,
-		 "%s: unable to read file header.",
+		 "%s: unable to read file header at offset: 0 (0x00000000).",
 		 function );
 
 		return( -1 );

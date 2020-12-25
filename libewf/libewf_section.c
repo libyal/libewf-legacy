@@ -409,35 +409,19 @@ ssize_t libewf_section_start_read(
 	if( libcnotify_verbose != 0 )
 	{
 		libcnotify_printf(
-		 "%s: reading section start from file IO pool entry: %d at offset: %" PRIi64 "\n",
+		 "%s: reading section start from file IO pool entry: %d at offset: %" PRIi64 " (0x%08" PRIx64 ")\n",
 		 function,
 		 file_io_pool_entry,
+		 file_offset,
 		 file_offset );
 	}
 #endif
-	if( libbfio_pool_seek_offset(
-	     file_io_pool,
-	     file_io_pool_entry,
-	     file_offset,
-	     SEEK_SET,
-	     error ) == -1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_IO,
-		 LIBCERROR_IO_ERROR_SEEK_FAILED,
-		 "%s: unable to seek section start offset: %" PRIi64 " in file IO pool entry: %d.",
-		 function,
-		 file_offset,
-		 file_io_pool_entry );
-
-		return( -1 );
-	}
-	read_count = libbfio_pool_read_buffer(
+	read_count = libbfio_pool_read_buffer_at_offset(
 	              file_io_pool,
 	              file_io_pool_entry,
 	              (uint8_t *) &section_start,
 	              sizeof( ewf_section_start_t ),
+	              file_offset,
 	              error );
 
 	if( read_count != (ssize_t) sizeof( ewf_section_start_t ) )
@@ -446,9 +430,11 @@ ssize_t libewf_section_start_read(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_IO,
 		 LIBCERROR_IO_ERROR_READ_FAILED,
-		 "%s: unable to read section start from file IO pool entry: %d.",
+		 "%s: unable to read section start from file IO pool entry: %d at offset: %" PRIi64 " (0x%08" PRIx64 ").",
 		 function,
-		 file_io_pool_entry );
+		 file_io_pool_entry,
+		 file_offset,
+		 file_offset );
 
 		return( -1 );
 	}
