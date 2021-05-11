@@ -247,17 +247,17 @@ build_script:
     "%PYTHON%" setup.py bdist_msi bdist_wheel )
 - sh: if test ${BUILD_ENVIRONMENT} = "python"; then ${PYTHON} setup.py bdist_wheel; fi
 - cmd: if [%BUILD_ENVIRONMENT%]==[cygwin] (
-    xcopy /i /q /s C:\projects\libewf C:\cygwin\home\appveyor\libewf &&
-    C:\cygwin\bin\bash -e -l -c "cd libewf && tests/build.sh ${CONFIGURE_OPTIONS}" )
+    xcopy /i /q /s C:\projects\libewf-legacy C:\cygwin\home\appveyor\libewf-legacy &&
+    C:\cygwin\bin\bash -e -l -c "cd libewf-legacy && tests/build.sh ${CONFIGURE_OPTIONS}" )
 - cmd: if [%BUILD_ENVIRONMENT%]==[cygwin64] (
-    xcopy /i /q /s C:\projects\libewf C:\cygwin64\home\appveyor\libewf &&
-    C:\cygwin64\bin\bash -e -l -c "cd libewf && tests/build.sh ${CONFIGURE_OPTIONS}" )
+    xcopy /i /q /s C:\projects\libewf-legacy C:\cygwin64\home\appveyor\libewf-legacy &&
+    C:\cygwin64\bin\bash -e -l -c "cd libewf-legacy && tests/build.sh ${CONFIGURE_OPTIONS}" )
 - cmd: if [%BUILD_ENVIRONMENT%]==[mingw] (
-    xcopy /i /q /s C:\projects\libewf C:\MinGW\msys\1.0\home\appveyor\libewf &&
-    C:\MinGW\msys\1.0\bin\bash -e -l -c "cd libewf && sed 's/@VERSION@/0.29/g' m4/pkg.m4.in > m4/pkg.m4 && tests/build.sh ${CONFIGURE_OPTIONS}" )
+    xcopy /i /q /s C:\projects\libewf-legacy C:\MinGW\msys\1.0\home\appveyor\libewf-legacy &&
+    C:\MinGW\msys\1.0\bin\bash -e -l -c "cd libewf-legacy && sed 's/@VERSION@/0.29/g' m4/pkg.m4.in > m4/pkg.m4 && tests/build.sh ${CONFIGURE_OPTIONS}" )
 - cmd: if [%BUILD_ENVIRONMENT%]==[mingw-w64] (
-    xcopy /i /q /s C:\projects\libewf C:\msys64\home\appveyor\libewf &&
-    C:\msys64\usr\bin\bash -e -l -c "cd libewf && tests/build.sh ${CONFIGURE_OPTIONS}" )
+    xcopy /i /q /s C:\projects\libewf-legacy C:\msys64\home\appveyor\libewf-legacy &&
+    C:\msys64\usr\bin\bash -e -l -c "cd libewf-legacy && tests/build.sh ${CONFIGURE_OPTIONS}" )
 
 test_script:
 - cmd: rem Run tests
@@ -266,18 +266,18 @@ test_script:
 - sh: if test ${BUILD_ENVIRONMENT} = "xcode" && test ${TARGET} != "macos-pkgbuild"; then tests/runtests.sh; fi
 - sh: if test ${TARGET} = "macos-pkgbuild"; then tests/pkgbuild.sh; fi
 - cmd: if [%BUILD_ENVIRONMENT%]==[cygwin] (
-    C:\cygwin\bin\bash -l -c "cd libewf && tests/runtests.sh" )
+    C:\cygwin\bin\bash -l -c "cd libewf-legacy && tests/runtests.sh" )
 - cmd: if [%BUILD_ENVIRONMENT%]==[cygwin64] (
-    C:\cygwin64\bin\bash -l -c "cd libewf && tests/runtests.sh" )
+    C:\cygwin64\bin\bash -l -c "cd libewf-legacy && tests/runtests.sh" )
 - cmd: if [%BUILD_ENVIRONMENT%]==[mingw] (
-    C:\MinGW\msys\1.0\bin\bash -l -c "cd libewf && tests/runtests.sh" )
+    C:\MinGW\msys\1.0\bin\bash -l -c "cd libewf-legacy && tests/runtests.sh" )
 - cmd: if [%BUILD_ENVIRONMENT%]==[mingw-w64] (
-    C:\msys64\usr\bin\bash -l -c "cd libewf && tests/runtests.sh" )
+    C:\msys64\usr\bin\bash -l -c "cd libewf-legacy && tests/runtests.sh" )
 
 after_test:
 - cmd: if [%TARGET%]==[mingw-gcc-no-optimization] (
-    copy C:\projects\codecov-bash\codecov C:\MinGW\msys\1.0\home\appveyor\libewf\codecov.sh &&
-    C:\MinGW\msys\1.0\bin\bash -e -l -c "cd libewf && chmod a+x ./codecov.sh && ./codecov.sh -n ${TARGET}" )
+    copy C:\projects\codecov-bash\codecov C:\MinGW\msys\1.0\home\appveyor\libewf-legacy\codecov.sh &&
+    C:\MinGW\msys\1.0\bin\bash -e -l -c "cd libewf-legacy && chmod a+x ./codecov.sh && ./codecov.sh -n ${TARGET}" )
 
 artifacts:
 - path: \*.nupkg
