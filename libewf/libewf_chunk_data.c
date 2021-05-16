@@ -555,7 +555,6 @@ int libewf_chunk_data_unpack(
 			  &( chunk_data->data_size ),
 			  error );
 
-/* TODO handle chunk with zlib data corruption */
 		if( result == -1 )
 		{
 			libcerror_error_set(
@@ -565,9 +564,21 @@ int libewf_chunk_data_unpack(
 			 "%s: unable to decompress chunk data.",
 			 function );
 
-			return( -1 );
+#if defined( HAVE_DEBUG_OUTPUT )
+			if( libcnotify_verbose != 0 )
+			{
+				if( ( error != NULL )
+				 && ( *error != NULL ) )
+				{
+					libcnotify_print_error_backtrace(
+					 *error );
+				}
+			}
+#endif
+			libcerror_error_free(
+			 error );
 		}
-		else if( result == 0 )
+		if( result != 1 )
 		{
 #if defined( HAVE_VERBOSE_OUTPUT )
 			if( libcnotify_verbose != 0 )

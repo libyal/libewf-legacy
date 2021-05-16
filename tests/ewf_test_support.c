@@ -1108,14 +1108,10 @@ int ewf_test_glob_free(
 	libcerror_error_free(
 	 &error );
 
-	filenames = (char **) 0x12345678UL;
-
 	result = libewf_glob_free(
 	          filenames,
 	          -1,
 	          &error );
-
-	filenames = NULL;
 
 	EWF_TEST_ASSERT_EQUAL_INT(
 	 "result",
