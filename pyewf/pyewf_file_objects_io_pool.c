@@ -1,7 +1,7 @@
 /*
  * Python file objects IO pool functions
  *
- * Copyright (c) 2008-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2008-2021, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -41,10 +41,11 @@ int pyewf_file_objects_pool_initialize(
 	libbfio_handle_t *file_io_handle = NULL;
 	PyObject *file_object            = NULL;
 	static char *function            = "pyewf_file_objects_pool_initialize";
-        Py_ssize_t sequence_size         = 0;
+	Py_ssize_t sequence_size         = 0;
 	int element_index                = 0;
 	int file_io_pool_entry           = 0;
 	int number_of_elements           = 0;
+	int result                       = 0;
 
 	if( pool == NULL )
 	{
@@ -71,7 +72,7 @@ int pyewf_file_objects_pool_initialize(
 	sequence_size = PySequence_Size(
 	                 sequence_object );
 
-        if( sequence_size > (Py_ssize_t) INT_MAX )
+	if( sequence_size > (Py_ssize_t) INT_MAX )
 	{
 		libcerror_error_set(
 		 error,
@@ -118,6 +119,40 @@ int pyewf_file_objects_pool_initialize(
 
 			goto on_error;
 		}
+		PyErr_Clear();
+
+		result = PyObject_HasAttrString(
+		          file_object,
+		          "read" );
+
+		if( result != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
+			 "%s: unsupported file object - missing read attribute.",
+			 function );
+
+			goto on_error;
+		}
+		PyErr_Clear();
+
+		result = PyObject_HasAttrString(
+		          file_object,
+		          "seek" );
+
+		if( result != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
+			 "%s: unsupported file object - missing seek attribute.",
+			 function );
+
+			goto on_error;
+		}
 		if( pyewf_file_object_initialize(
 		     &file_io_handle,
 		     file_object,
@@ -132,6 +167,13 @@ int pyewf_file_objects_pool_initialize(
 
 			goto on_error;
 		}
+		/* Remove the reference created by PySequence_GetItem
+		 */
+		Py_DecRef(
+		 (PyObject *) file_object );
+
+		file_object = NULL;
+
 		if( libbfio_pool_append_handle(
 		     *pool,
 		     &file_io_pool_entry,
@@ -153,6 +195,11 @@ int pyewf_file_objects_pool_initialize(
 	return( 1 );
 
 on_error:
+	if( file_object != NULL )
+	{
+		Py_DecRef(
+		 (PyObject *) file_object );
+	}
 	if( file_io_handle != NULL )
 	{
 		libbfio_handle_free(
