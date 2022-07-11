@@ -2698,7 +2698,7 @@ on_error:
 	if( *header != NULL )
 	{
 		memory_free(
-		 header );
+		 *header );
 
 		*header = NULL;
 	}
@@ -5321,7 +5321,7 @@ on_error:
 	if( *header2 != NULL )
 	{
 		memory_free(
-		 header2 );
+		 *header2 );
 
 		*header2 = NULL;
 	}
