@@ -496,7 +496,7 @@ function can be used to append an Adler-32 checksum error (a validation error in
 .Pp
 The
 .Fn libewf_handle_append_session
-function can be used to append a sesssion to be written into a set of EWF files. Note that the only the start offset is stored in a set of EWF files. Libewf ignores the number of sectors on write and determines the session sizes using the available session and media information on read.
+function can be used to append a session to be written into a set of EWF files. Note that the only the start offset is stored in a set of EWF files. Libewf ignores the number of sectors on write and determines the session sizes using the available session and media information on read.
 .Pp
 The
 .Fn libewf_handle_copy_*
@@ -535,11 +535,11 @@ To have other code to determine if libewf was compiled with wide character suppo
 .sp
 The header in a set of EWF files contains an extended ASCII string using the codepage of the system it was created on. The function 
 .Ar libewf_handle_set_header_codepage
- allows to set the required codepage for reading and writing. The default codepage is ASCII and replaces all extended characters to the Unicode replacement character (U+fffd) when reading and the ASCII substitude character (0x1a) when writing. 
+ allows one to set the required codepage for reading and writing. The default codepage is ASCII and replaces all extended characters to the Unicode replacement character (U+fffd) when reading and the ASCII substitute character (0x1a) when writing. 
 .sp
 The header2 contains UTF-16 little endian stream and the xheader and xhash contain a UTF-8 stream without or with byte order mark (as of version 20080903).
 .sp
-libewf allows to be compiled with chained IO support using libbfio.
+libewf allows one to be compiled with chained IO support using libbfio.
 libewf will automatically detect if a compatible version of libbfio is available.
 .sp
 To have other code to determine if libewf was compiled with libbfio support it defines
