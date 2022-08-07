@@ -2,7 +2,7 @@ AC_PREREQ([2.71])
 
 AC_INIT(
  [libewf],
- [20140814],
+ [20140815],
  [joachim.metz@gmail.com])
 
 AC_CONFIG_SRCDIR(

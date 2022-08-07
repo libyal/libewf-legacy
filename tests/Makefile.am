@@ -75,6 +75,7 @@ EXTRA_DIST = \
 	$(check_SCRIPTS)
 
 check_PROGRAMS = \
+	ewf_test_bit_stream \
 	ewf_test_checksum \
 	ewf_test_chunk_data \
 	ewf_test_chunk_table \
@@ -90,6 +91,7 @@ check_PROGRAMS = \
 	ewf_test_handle \
 	ewf_test_hash_sections \
 	ewf_test_hash_values \
+	ewf_test_huffman_tree \
 	ewf_test_io_handle \
 	ewf_test_media_values \
 	ewf_test_notify \
@@ -106,6 +108,18 @@ check_PROGRAMS = \
 	ewf_test_write \
 	ewf_test_write_chunk \
 	ewf_test_write_io_handle
+
+ewf_test_bit_stream_SOURCES = \
+	ewf_test_bit_stream.c \
+	ewf_test_libcerror.h \
+	ewf_test_libewf.h \
+	ewf_test_macros.h \
+	ewf_test_memory.c ewf_test_memory.h \
+	ewf_test_unused.h
+
+ewf_test_bit_stream_LDADD = \
+	../libewf/libewf.la \
+	@LIBCERROR_LIBADD@
 
 ewf_test_checksum_SOURCES = \
 	ewf_test_checksum.c \
@@ -295,6 +309,18 @@ ewf_test_hash_values_LDADD = \
 	@LIBUNA_LIBADD@ \
 	@LIBCNOTIFY_LIBADD@ \
 	@LIBCDATA_LIBADD@ \
+	../libewf/libewf.la \
+	@LIBCERROR_LIBADD@
+
+ewf_test_huffman_tree_SOURCES = \
+	ewf_test_huffman_tree.c \
+	ewf_test_libcerror.h \
+	ewf_test_libewf.h \
+	ewf_test_macros.h \
+	ewf_test_memory.c ewf_test_memory.h \
+	ewf_test_unused.h
+
+ewf_test_huffman_tree_LDADD = \
 	../libewf/libewf.la \
 	@LIBCERROR_LIBADD@
 

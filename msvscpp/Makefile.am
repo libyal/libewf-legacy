@@ -1,5 +1,6 @@
 MSVSCPP_FILES = \
 	ewf.net/ewf.net.vcproj \
+	ewf_test_bit_stream/ewf_test_bit_stream.vcproj \
 	ewf_test_checksum/ewf_test_checksum.vcproj \
 	ewf_test_chunk_data/ewf_test_chunk_data.vcproj \
 	ewf_test_chunk_table/ewf_test_chunk_table.vcproj \
@@ -15,6 +16,7 @@ MSVSCPP_FILES = \
 	ewf_test_handle/ewf_test_handle.vcproj \
 	ewf_test_hash_sections/ewf_test_hash_sections.vcproj \
 	ewf_test_hash_values/ewf_test_hash_values.vcproj \
+	ewf_test_huffman_tree/ewf_test_huffman_tree.vcproj \
 	ewf_test_io_handle/ewf_test_io_handle.vcproj \
 	ewf_test_media_values/ewf_test_media_values.vcproj \
 	ewf_test_notify/ewf_test_notify.vcproj \
