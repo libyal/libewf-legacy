@@ -1972,9 +1972,9 @@ int imaging_handle_prompt_for_compression_method(
      libcerror_error_t **error )
 {
 	system_character_t *fixed_string_variable = NULL;
-	static char *function                                = "imaging_handle_prompt_for_compression_method";
-	uint8_t compression_methods_amount                   = 0;
-	int result                                           = 0;
+	static char *function                     = "imaging_handle_prompt_for_compression_method";
+	uint8_t compression_methods_amount        = 0;
+	int result                                = 0;
 
 	if( imaging_handle == NULL )
 	{
@@ -1987,18 +1987,8 @@ int imaging_handle_prompt_for_compression_method(
 
 		return( -1 );
 	}
-/* experimental version only
-	if( imaging_handle->ewf_format != LIBEWF_FORMAT_V2_ENCASE7 )
-*/
-	{
-		compression_methods_amount = 1;
-	}
-/* experimental version only
-	else
-	{
-		compression_methods_amount = EWFINPUT_COMPRESSION_METHODS_AMOUNT;
-	}
-*/
+	compression_methods_amount = 1;
+
 	result = ewfinput_get_fixed_string_variable(
 	          imaging_handle->notify_stream,
 	          imaging_handle->input_buffer,
@@ -3194,16 +3184,11 @@ int imaging_handle_set_compression_values(
 
 			goto on_error;
 		}
-/* experimental version only
-		if( imaging_handle->ewf_format != LIBEWF_FORMAT_V2_ENCASE7 )
-*/
+		if( imaging_handle->compression_method != LIBEWF_COMPRESSION_METHOD_DEFLATE )
 		{
-			if( imaging_handle->compression_method != LIBEWF_COMPRESSION_METHOD_DEFLATE )
-			{
-				imaging_handle->compression_method = LIBEWF_COMPRESSION_METHOD_DEFLATE;
+			imaging_handle->compression_method = LIBEWF_COMPRESSION_METHOD_DEFLATE;
 
-				result = 0;
-			}
+			result = 0;
 		}
 		segment_index++;
 	}
@@ -4511,22 +4496,6 @@ int imaging_handle_set_output_values(
 
 		return( -1 );
 	}
-/* experimental version only
-	if( libewf_handle_set_compression_method(
-	     imaging_handle->output_handle,
-	     imaging_handle->compression_method,
-	     error ) != 1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
-		 "%s: unable to set compression method.",
-		 function );
-
-		return( -1 );
-	}
-*/
 	if( libewf_handle_set_compression_values(
 	     imaging_handle->output_handle,
 	     imaging_handle->compression_level,
@@ -4677,22 +4646,6 @@ int imaging_handle_set_output_values(
 
 			return( -1 );
 		}
-/* experimental version only
-		if( libewf_handle_set_compression_method(
-		     imaging_handle->secondary_output_handle,
-		     imaging_handle->compression_method,
-		     error ) != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
-			 "%s: unable to set compression method in secondary output handle.",
-			 function );
-
-			return( -1 );
-		}
-*/
 		if( libewf_handle_set_compression_values(
 		     imaging_handle->secondary_output_handle,
 		     imaging_handle->compression_level,
@@ -5796,14 +5749,6 @@ int imaging_handle_print_parameters(
 			 "EnCase 6 (.E01)" );
 			break;
 
-/* experimental version only
-		case LIBEWF_FORMAT_ENCASE7:
-			fprintf(
-			 imaging_handle->notify_stream,
-			 "EnCase 7 (.E01)" );
-			break;
-*/
-
 		case LIBEWF_FORMAT_SMART:
 			fprintf(
 			 imaging_handle->notify_stream,
@@ -5828,20 +5773,6 @@ int imaging_handle_print_parameters(
 			 "linen 6 (.E01)" );
 			break;
 
-/* experimental version only
-		case LIBEWF_FORMAT_LINEN7:
-			fprintf(
-			 imaging_handle->notify_stream,
-			 "linen 7 (.E01)" );
-			break;
-
-		case LIBEWF_FORMAT_V2_ENCASE7:
-			fprintf(
-			 imaging_handle->notify_stream,
-			 "EnCase 7 (.Ex01)" );
-			break;
-*/
-
 		case LIBEWF_FORMAT_EWFX:
 			fprintf(
 			 imaging_handle->notify_stream,
@@ -5854,27 +5785,7 @@ int imaging_handle_print_parameters(
 
 	fprintf(
 	 imaging_handle->notify_stream,
-	 "Compression method:\t\t\t" );
-
-/* experimental version only
-	if( imaging_handle->compression_method == LIBEWF_COMPRESSION_METHOD_DEFLATE )
-*/
-	{
-		fprintf(
-		 imaging_handle->notify_stream,
-		 "deflate" );
-	}
-/* experimental version only
-	else if( imaging_handle->compression_method == LIBEWF_COMPRESSION_METHOD_BZIP2 )
-	{
-		fprintf(
-		 imaging_handle->notify_stream,
-		 "bzip2" );
-	}
-*/
-	fprintf(
-	 imaging_handle->notify_stream,
-	 "\n" );
+	 "Compression method:\t\t\tdeflate\n" );
 
 	fprintf(
 	 imaging_handle->notify_stream,

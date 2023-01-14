@@ -625,9 +625,9 @@ int process_status_stop(
 {
 	system_character_t time_string[ 32 ];
 
-	static char *function                              = "process_status_start";
-	const system_character_t *status_string = NULL;
-	int64_t total_number_of_seconds                    = 0;
+	const system_character_t *status_string = _SYSTEM_STRING( "" );
+	static char *function                   = "process_status_start";
+	int64_t total_number_of_seconds         = 0;
 
 	if( process_status == NULL )
 	{

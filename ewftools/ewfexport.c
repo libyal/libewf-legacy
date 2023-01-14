@@ -140,8 +140,7 @@ void usage_fprint(
 	                 "\t           formats)\n" );
 	fprintf( stream, "\t-B:        specify the number of bytes to export (default is all bytes)\n" );
 	fprintf( stream, "\t-c:        specify the compression values as: level or method:level\n"
-	                 "\t           compression method options: deflate (default), bzip2\n"
-	                 "\t           (bzip2 is only supported by EWF2 formats)\n"
+	                 "\t           compression method options: deflate (default)\n"
 	                 "\t           compression level options: none (default), empty-block,\n"
 	                 "\t           fast or best\n" );
 	fprintf( stream, "\t-d:        calculate additional digest (hash) types besides md5,\n"

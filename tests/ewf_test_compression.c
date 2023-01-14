@@ -919,8 +919,6 @@ int ewf_test_decompress_data(
 	 "error",
 	 error );
 
-/* TODO add bzip2 compression method data test */
-
 	/* Test error cases
 	 */
 	uncompressed_data_size = 8196;

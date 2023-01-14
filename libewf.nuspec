@@ -11,7 +11,7 @@
     <title>libewf</title>
     <description>Library to access the Expert Witness Compression Format (EWF) format</description>
     <releaseNotes>Release of libewf 20140815</releaseNotes>
-    <copyright>Copyright (C) 2006-2022</copyright>
+    <copyright>Copyright (C) 2006-2023</copyright>
     <tags>native</tags>
   </metadata>
   <files>

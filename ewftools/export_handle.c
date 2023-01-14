@@ -2094,18 +2094,8 @@ int export_handle_prompt_for_compression_method(
 
 		return( -1 );
 	}
-/* experimental version only
-	if( export_handle->ewf_format != LIBEWF_FORMAT_V2_ENCASE7 )
-*/
-	{
-		compression_methods_amount = 1;
-	}
-/* experimental version only
-	else
-	{
-		compression_methods_amount = EWFINPUT_COMPRESSION_METHODS_AMOUNT;
-	}
-*/
+	compression_methods_amount = 1;
+
 	result = ewfinput_get_fixed_string_variable(
 	          export_handle->notify_stream,
 	          export_handle->input_buffer,
@@ -2852,16 +2842,11 @@ int export_handle_set_compression_values(
 
 			goto on_error;
 		}
-/* experimental version only
-		if( export_handle->ewf_format != LIBEWF_FORMAT_V2_ENCASE7 )
-*/
+		if( export_handle->compression_method != LIBEWF_COMPRESSION_METHOD_DEFLATE )
 		{
-			if( export_handle->compression_method != LIBEWF_COMPRESSION_METHOD_DEFLATE )
-			{
-				export_handle->compression_method = LIBEWF_COMPRESSION_METHOD_DEFLATE;
+			export_handle->compression_method = LIBEWF_COMPRESSION_METHOD_DEFLATE;
 
-				result = 0;
-			}
+			result = 0;
 		}
 		segment_index++;
 	}
@@ -3924,22 +3909,6 @@ int export_handle_set_output_values(
 		}
 		if( copy_input_values != 0 )
 		{
-/* experimental version only
-			if( libewf_handle_get_compression_method(
-			     export_handle->input_handle,
-			     &( export_handle->compression_method ),
-			     error ) != 1 )
-			{
-				libcerror_error_set(
-				 error,
-				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-				 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
-				 "%s: unable to retrieve compression method.",
-				 function );
-
-				return( -1 );
-			}
-*/
 			if( libewf_handle_get_compression_values(
 			     export_handle->input_handle,
 			     &( export_handle->compression_level ),
@@ -3956,29 +3925,6 @@ int export_handle_set_output_values(
 				return( -1 );
 			}
 		}
-/* experimental version only
-		if( export_handle->ewf_format != LIBEWF_FORMAT_V2_ENCASE7 )
-		{
-			if( export_handle->compression_method != LIBEWF_COMPRESSION_METHOD_DEFLATE )
-			{
-				export_handle->compression_method = LIBEWF_COMPRESSION_METHOD_DEFLATE;
-			}
-		}
-		if( libewf_handle_set_compression_method(
-		     export_handle->ewf_output_handle,
-		     export_handle->compression_method,
-		     error ) != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
-			 "%s: unable to set compression method.",
-			 function );
-
-			return( -1 );
-		}
-*/
 		if( libewf_handle_set_compression_values(
 		     export_handle->ewf_output_handle,
 		     export_handle->compression_level,
