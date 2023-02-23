@@ -24,14 +24,11 @@
 
 #include <common.h>
 
-#if defined( TIME_WITH_SYS_TIME )
+#if defined( HAVE_SYS_TIME_H )
 #include <sys/time.h>
-#include <time.h>
-#elif defined( HAVE_SYS_TIME_H )
-#include <sys/time.h>
-#else
-#include <time.h>
 #endif
+
+#include <time.h>
 
 #if defined( __cplusplus )
 extern "C" {
@@ -44,5 +41,5 @@ extern "C" {
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBMFDATA_DATE_TIME_H ) */
 
