@@ -27,7 +27,7 @@ AC_PROG_INSTALL
 dnl Check for C++ preprocessor and compiler for ewftools-mt
 AC_PROG_CXXCPP
 AC_PROG_CXX
-AX_CXX_COMPILE_STDCXX_11(noext, optional)
+AX_CXX_COMPILE_STDCXX([11], [noext], [optional])
 
 dnl Check for libtool
 AC_SUBST(LIBTOOL_DEPS)
