@@ -401,7 +401,6 @@ PyObject *pyewf_handle_get_header_value(
 	PyObject *string_object               = NULL;
 	static char *function                 = "pyewf_handle_get_header_value";
 	static char *keyword_list[]           = { "identifier", NULL };
-	const char *errors                    = NULL;
 	char *header_value_identifier         = NULL;
 	char *header_value                    = NULL;
 	size_t header_value_identifier_length = 0;
@@ -520,7 +519,7 @@ PyObject *pyewf_handle_get_header_value(
 	string_object = PyUnicode_DecodeUTF8(
 	                 header_value,
 	                 (Py_ssize_t) header_value_size - 1,
-	                 errors );
+	                 NULL );
 
 	if( string_object == NULL )
 	{
@@ -557,7 +556,6 @@ PyObject *pyewf_handle_get_header_values(
 	PyObject *dictionary_object           = NULL;
 	PyObject *string_object               = NULL;
 	static char *function                 = "pyewf_handle_get_header_values";
-	const char *errors                    = NULL;
 	char *header_value                    = NULL;
 	char *header_value_identifier         = NULL;
 	size_t header_value_identifier_length = 0;
@@ -745,7 +743,7 @@ PyObject *pyewf_handle_get_header_values(
 			string_object = PyUnicode_DecodeUTF8(
 			                 header_value,
 			                 header_value_size - 1,
-			                 errors );
+			                 NULL );
 
 			if( string_object == NULL )
 			{
@@ -820,7 +818,6 @@ PyObject *pyewf_handle_get_hash_value(
 	PyObject *string_object             = NULL;
 	static char *function               = "pyewf_handle_get_hash_value";
 	static char *keyword_list[]         = { "identifier", NULL };
-	const char *errors                  = NULL;
 	char *hash_value_identifier         = NULL;
 	char *hash_value                    = NULL;
 	size_t hash_value_identifier_length = 0;
@@ -939,7 +936,7 @@ PyObject *pyewf_handle_get_hash_value(
 	string_object = PyUnicode_DecodeUTF8(
 	                 hash_value,
 	                 (Py_ssize_t) hash_value_size - 1,
-	                 errors );
+	                 NULL );
 
 	if( string_object == NULL )
 	{
@@ -976,7 +973,6 @@ PyObject *pyewf_handle_get_hash_values(
 	PyObject *dictionary_object         = NULL;
 	PyObject *string_object             = NULL;
 	static char *function               = "pyewf_handle_get_hash_values";
-	const char *errors                  = NULL;
 	char *hash_value                    = NULL;
 	char *hash_value_identifier         = NULL;
 	size_t hash_value_identifier_length = 0;
@@ -1164,7 +1160,7 @@ PyObject *pyewf_handle_get_hash_values(
 			string_object = PyUnicode_DecodeUTF8(
 			                 hash_value,
 			                 hash_value_size - 1,
-			                 errors );
+			                 NULL );
 
 			if( string_object == NULL )
 			{
