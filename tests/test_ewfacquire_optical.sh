@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # ewfacquire testing script for optical disc (split) RAW image input
 #

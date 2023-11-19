@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # ewfacquire testing script for (split) RAW image input
 #

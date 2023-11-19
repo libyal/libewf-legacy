@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Expert Witness Compression Format (EWF) library seek offset testing script
 #

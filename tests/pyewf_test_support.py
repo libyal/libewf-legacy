@@ -2,7 +2,7 @@
 #
 # Python-bindings support functions test script
 #
-# Copyright (C) 2006-2021, Joachim Metz <joachim.metz@gmail.com>
+# Copyright (C) 2006-2023, Joachim Metz <joachim.metz@gmail.com>
 #
 # Refer to AUTHORS for acknowledgements.
 #
@@ -37,7 +37,7 @@ class SupportFunctionsTests(unittest.TestCase):
 
   def test_check_file_signature(self):
     """Tests the check_file_signature function."""
-    test_source = unittest.source
+    test_source = getattr(unittest, "source", None)
     if not test_source:
       raise unittest.SkipTest("missing source")
 
@@ -46,7 +46,7 @@ class SupportFunctionsTests(unittest.TestCase):
 
   def test_check_file_signature_file_object(self):
     """Tests the check_file_signature_file_object function."""
-    test_source = unittest.source
+    test_source = getattr(unittest, "source", None)
     if not test_source:
       raise unittest.SkipTest("missing source")
 

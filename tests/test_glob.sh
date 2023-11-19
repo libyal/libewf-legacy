@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Library glob testing script
 #
 # Version: 20180317

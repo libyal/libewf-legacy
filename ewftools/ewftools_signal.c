@@ -1,7 +1,7 @@
 /*
  * Signal handling functions
  *
- * Copyright (C) 2006-2021, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2006-2023, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -40,7 +40,7 @@ void (*ewftools_signal_signal_handler)( ewftools_signal_t ) = NULL;
 /* Signal handler for Ctrl+C or Ctrl+Break signals
  */
 BOOL WINAPI ewftools_signal_handler(
-             unsigned long signal )
+             ewftools_signal_t signal )
 {
 	static char *function = "ewftools_signal_handler";
 
@@ -112,7 +112,7 @@ int ewftools_signal_attach(
 	ewftools_signal_signal_handler = signal_handler;
 
 	if( SetConsoleCtrlHandler(
-	     ewftools_signal_handler,
+	     (PHANDLER_ROUTINE) ewftools_signal_handler,
 	     TRUE ) == 0 )
 	{
 		libcerror_error_set(
@@ -179,7 +179,7 @@ int ewftools_signal_detach(
 	static char *function = "ewftools_signal_detach";
 
 	if( SetConsoleCtrlHandler(
-	     ewftools_signal_handler,
+	     (PHANDLER_ROUTINE) ewftools_signal_handler,
 	     FALSE ) == 0 )
 	{
 		libcerror_error_set(
