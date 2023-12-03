@@ -26,8 +26,6 @@ SUBDIRS = \
 	ewftools \
 	ewf.net \
 	pyewf \
-	pyewf-python2 \
-	pyewf-python3 \
 	po \
 	documents \
 	manuals \
