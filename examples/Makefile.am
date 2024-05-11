@@ -17,9 +17,7 @@ EXTRA_DIST = \
 	$(LIBEWF_EXAMPLES) \
 	$(PYEWF_EXAMPLES)
 
-MAINTAINERCLEANFILES = \
+DISTCLEANFILES = \
+	Makefile \
 	Makefile.in
-
-distclean: clean
-	-rm -f Makefile
 

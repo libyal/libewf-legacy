@@ -344,7 +344,7 @@ AC_DEFUN([AX_LIBMFDATA_CHECK_ENABLE],
    [HAVE_LOCAL_LIBMFDATA],
    [1])
 
-  ac_cv_libmfdata_CPPFLAGS="-I../libmfdata";
+  ac_cv_libmfdata_CPPFLAGS="-I../libmfdata -I\$(top_srcdir)/libmfdata";
   ac_cv_libmfdata_LIBADD="../libmfdata/libmfdata.la";
 
   ac_cv_libmfdata=local

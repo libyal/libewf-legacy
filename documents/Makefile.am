@@ -3,9 +3,7 @@ EXTRA_DIST = \
 	header2.txt \
 	programming.txt
 
-MAINTAINERCLEANFILES = \
+DISTCLEANFILES = \
+	Makefile \
 	Makefile.in
-
-distclean: clean
-	-rm -f Makefile
 

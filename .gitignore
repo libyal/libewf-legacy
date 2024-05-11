@@ -186,6 +186,7 @@ stamp-h[1-9]
 /tests/input_raw
 /tests/input_raw_more
 /tests/input_raw_optical
+/tests/notify_stream.log
 /tests/tmp*
 
 # Local library dependencies specific files
