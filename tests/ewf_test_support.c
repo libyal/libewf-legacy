@@ -1317,7 +1317,7 @@ int ewf_test_glob_wide(
 	libcerror_error_free(
 	 &error );
 
-	filenames = (char **) 0x12345678UL;
+	filenames = (wchar_t **) 0x12345678UL;
 
 	result = libewf_glob_wide(
 	          wide_source,
