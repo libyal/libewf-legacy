@@ -351,12 +351,12 @@ build_script:
 - sh: if test `uname -s` = "Darwin" && test ${BUILD_ENVIRONMENT} = "python-tox"; then export PATH="/usr/local/opt/gettext/bin:$PATH"; export SED="/usr/local/bin/gsed"; ./synclibs.sh && ./autogen.sh && ./configure --disable-nls --disable-shared-libs && make sources >/dev/null && tox -e${TOXENV}; fi
 - sh: if test `uname -s` = "Linux" && test ${BUILD_ENVIRONMENT} = "python-tox"; then ./synclibs.sh && ./autogen.sh && ./configure --disable-nls --disable-shared-libs && make sources >/dev/null && tox -e${TOXENV} && tox -eauditwheel -- --plat ${AUDITWHEEL_PLAT} dist/*.whl && rm -f dist/*.whl && mv wheelhouse/*.whl dist/; fi
 - cmd: if [%BUILD_ENVIRONMENT%]==[cygwin64] (
-    xcopy /i /q /s C:\projects\libewf C:\cygwin64\home\appveyor\libewf &&
-    C:\cygwin64\bin\bash -e -l -c "cd libewf && wget -q 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD' -O './config.guess' && wget -q 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD' -O './config.sub'" &&
-    C:\cygwin64\bin\bash -e -l -c "cd libewf && tests/build.sh ${CONFIGURE_OPTIONS}" )
+    xcopy /i /q /s C:\projects\libewf-legacy C:\cygwin64\home\appveyor\libewf-legacy &&
+    C:\cygwin64\bin\bash -e -l -c "cd libewf-legacy && wget -q 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD' -O './config.guess' && wget -q 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD' -O './config.sub'" &&
+    C:\cygwin64\bin\bash -e -l -c "cd libewf-legacy && tests/build.sh ${CONFIGURE_OPTIONS}" )
 - cmd: if [%BUILD_ENVIRONMENT%]==[mingw-w64] (
-    xcopy /i /q /s C:\projects\libewf C:\msys64\home\appveyor\libewf &&
-    C:\msys64\usr\bin\bash -e -l -c "cd libewf && tests/build.sh ${CONFIGURE_OPTIONS}" )
+    xcopy /i /q /s C:\projects\libewf-legacy C:\msys64\home\appveyor\libewf-legacy &&
+    C:\msys64\usr\bin\bash -e -l -c "cd libewf-legacy && tests/build.sh ${CONFIGURE_OPTIONS}" )
 
 test_script:
 - cmd: rem Run tests
@@ -365,17 +365,17 @@ test_script:
 - sh: if test ${BUILD_ENVIRONMENT} = "xcode" && test ${TARGET} != "macos-pkgbuild"; then tests/runtests.sh; fi
 - sh: if test ${TARGET} = "macos-pkgbuild"; then tests/pkgbuild.sh; fi
 - cmd: if [%BUILD_ENVIRONMENT%]==[cygwin64] (
-    C:\cygwin64\bin\bash -l -c "cd libewf && tests/runtests.sh" )
+    C:\cygwin64\bin\bash -l -c "cd libewf-legacy && tests/runtests.sh" )
 - cmd: if [%BUILD_ENVIRONMENT%]==[mingw-w64] (
-    C:\msys64\usr\bin\bash -l -c "cd libewf && tests/runtests.sh" )
+    C:\msys64\usr\bin\bash -l -c "cd libewf-legacy && tests/runtests.sh" )
 
 after_test:
 - cmd: if [%TARGET%]==[cygwin64-gcc-no-optimization] (
-    C:\cygwin64\bin\bash -e -l -c "cd libewf && for DIRECTORY in `find . -maxdepth 1 -type d`; do (cd ${DIRECTORY} && find . -maxdepth 1 -name \*.gcno -type f -exec gcov -pb {} \;) done" &&
-    C:\projects\codecov.exe -R \cygwin64\home\appveyor\libewf --name %TARGET% )
+    C:\cygwin64\bin\bash -e -l -c "cd libewf-legacy && for DIRECTORY in `find . -maxdepth 1 -type d`; do (cd ${DIRECTORY} && find . -maxdepth 1 -name \*.gcno -type f -exec gcov -pb {} \;) done" &&
+    C:\projects\codecov.exe -R \cygwin64\home\appveyor\libewf-legacy --name %TARGET% )
 - cmd: if [%TARGET%]==[mingw-w64-gcc-no-optimization] (
-    C:\msys64\usr\bin\bash -e -l -c "cd libewf && for DIRECTORY in `find . -maxdepth 1 -type d`; do (cd ${DIRECTORY} && find . -maxdepth 1 -name \*.gcno -type f -exec gcov -pb {} \;) done" &&
-    C:\projects\codecov.exe -R \msys64\home\appveyor\libewf --name %TARGET% )
+    C:\msys64\usr\bin\bash -e -l -c "cd libewf-legacy && for DIRECTORY in `find . -maxdepth 1 -type d`; do (cd ${DIRECTORY} && find . -maxdepth 1 -name \*.gcno -type f -exec gcov -pb {} \;) done" &&
+    C:\projects\codecov.exe -R \msys64\home\appveyor\libewf-legacy --name %TARGET% )
 
 artifacts:
 - path: \*.nupkg
