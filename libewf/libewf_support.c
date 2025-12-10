@@ -1215,5 +1215,5 @@ int libewf_glob_wide_free(
 	return( 1 );
 }
 
-#endif
+#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */
 

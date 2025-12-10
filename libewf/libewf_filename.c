@@ -292,7 +292,7 @@ int libewf_filename_set_extension_wide(
 	return( 1 );
 }
 
-#endif
+#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */
 
 /* Creates a filename for a certain segment file
  * Returns 1 if successful or -1 on error
