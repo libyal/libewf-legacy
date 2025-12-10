@@ -1,16 +1,16 @@
 # Script to generate the necessary files for a msvscpp build
 #
-# Version: 20240306
+# Version: 20241014
 
 $WinFlex = "..\win_flex_bison\win_flex.exe"
 $WinBison = "..\win_flex_bison\win_bison.exe"
 
-$Library = Get-Content -Path configure.ac | select -skip 3 -first 1 | % { $_ -Replace " \[","" } | % { $_ -Replace "\],","" }
-$Version = Get-Content -Path configure.ac | select -skip 4 -first 1 | % { $_ -Replace " \[","" } | % { $_ -Replace "\],","" }
+$Library = Get-Content -Path configure.ac | select -skip 3 -first 1 | % { $_ -Replace "  \[","" } | % { $_ -Replace "\],","" }
+$Version = Get-Content -Path configure.ac | select -skip 4 -first 1 | % { $_ -Replace "  \[","" } | % { $_ -Replace "\],","" }
 $Prefix = ${Library}.Substring(3)
 
-Get-Content -Path "include\${Library}.h.in" | % { $_ -Replace "@HAVE_V1_API@ \|\| ","" } | Out-File -Encoding ascii "include\${Library}.h"
-Get-Content -Path "include\${Library}\definitions.h.in" | % { $_ -Replace "@VERSION@","${Version}" } | % { $_ -Replace "@HAVE_V1_API@","defined( HAVE_V1_API )" } | Out-File -Encoding ascii "include\${Library}\definitions.h"
+Get-Content -Path "include\${Library}.h.in" | Out-File -Encoding ascii "include\${Library}.h"
+Get-Content -Path "include\${Library}\definitions.h.in" | % { $_ -Replace "@VERSION@","${Version}" } | Out-File -Encoding ascii "include\${Library}\definitions.h"
 Get-Content -Path "include\${Library}\features.h.in" | % { $_ -Replace "@[A-Z0-9_]*@","0" } | Out-File -Encoding ascii "include\${Library}\features.h"
 Get-Content -Path "include\${Library}\types.h.in" | % { $_ -Replace "@[A-Z0-9_]*@","0" } | Out-File -Encoding ascii "include\${Library}\types.h"
 Get-Content -Path "common\types.h.in" | % { $_ -Replace "@PACKAGE@","${Library}" } | Out-File -Encoding ascii "common\types.h"
