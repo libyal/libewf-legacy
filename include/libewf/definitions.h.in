@@ -221,5 +221,5 @@ enum LIBEWF_FILE_ENTRY_FLAGS
  */
 #define LIBEWF_SEPARATOR					'\\'
 
-#endif
+#endif /* !defined( _LIBEWF_DEFINITIONS_H ) */
 
