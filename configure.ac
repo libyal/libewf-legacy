@@ -21,7 +21,6 @@ LT_INIT([win32-dll])
 
 dnl Checks for programs
 AC_PROG_CC
-AC_PROG_GCC_TRADITIONAL
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 
@@ -270,7 +269,7 @@ AC_CONFIG_FILES([libewf/libewf.rc])
 AC_CONFIG_FILES([ewf.net/ewf.net.rc])
 AC_CONFIG_FILES([libewf.pc])
 AC_CONFIG_FILES([libewf.spec])
-AC_CONFIG_FILES([setup.cfg])
+AC_CONFIG_FILES([pyproject.toml])
 dnl Generate a source configuration file
 AC_CONFIG_HEADERS([common/config.h])
 

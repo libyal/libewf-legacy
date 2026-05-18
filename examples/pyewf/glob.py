@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python3
 #
 # Python script to glob Expert Witness Compression format file(s) using pyewf
 #
