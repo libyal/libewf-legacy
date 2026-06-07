@@ -33,7 +33,7 @@ TR="tr";
 WC="wc";
 
 test_info()
-{ 
+{
 	INPUT_FILE=$1;
 
 	${EWFINFO} ${INPUT_FILE};

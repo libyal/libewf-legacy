@@ -33,7 +33,7 @@ TR="tr";
 WC="wc";
 
 test_acquire_optical_file()
-{ 
+{
 	TOC_FILE=$1;
 	OUTPUT_FORMAT=$2;
 	COMPRESSION_METHOD=$3;
@@ -94,7 +94,7 @@ EOI
 }
 
 test_acquire_unattended_optical_file()
-{ 
+{
 	TOC_FILE=$1;
 	OUTPUT_FORMAT=$2;
 	COMPRESSION_METHOD=$3;

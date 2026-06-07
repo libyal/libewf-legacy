@@ -32,7 +32,7 @@ TR="tr";
 WC="wc";
 
 test_export_raw()
-{ 
+{
 	INPUT_FILE=$1;
 
 	mkdir ${TMP};
@@ -61,7 +61,7 @@ EOI
 }
 
 test_export_ewf()
-{ 
+{
 	INPUT_FILE=$1;
 	OUTPUT_FORMAT=$2;
 	COMPRESSION_METHOD=$3;
@@ -96,7 +96,7 @@ EOI
 }
 
 test_export_unattended()
-{ 
+{
 	INPUT_FILE=$1;
 	OUTPUT_FORMAT=$2;
 	COMPRESSION_METHOD=$3;

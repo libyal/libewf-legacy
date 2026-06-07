@@ -771,7 +771,7 @@ ssize_t libewf_segment_file_read_table_section(
 	              &number_of_offsets,
 	              &base_offset,
 	              error );
-	
+
 	if( read_count == -1 )
 	{
 		libcerror_error_set(
@@ -915,7 +915,7 @@ ssize_t libewf_segment_file_read_table2_section(
 	              &number_of_offsets,
 	              &base_offset,
 	              error );
-	
+
 	if( read_count == -1 )
 	{
 		libcerror_error_set(
@@ -1098,7 +1098,7 @@ ssize_t libewf_segment_file_read_delta_chunk_section(
 	              &chunk_index,
 	              &chunk_size,
 	              error );
-	
+
 	if( read_count == -1 )
 	{
 		libcerror_error_set(
@@ -1239,7 +1239,6 @@ ssize_t libewf_segment_file_write_headers(
 			goto on_error;
 		}
 		total_write_count += write_count;
-		section_offset    += write_count;
 
 		if( libcdata_list_append_value(
 		     segment_file->section_list,
@@ -1352,7 +1351,6 @@ ssize_t libewf_segment_file_write_headers(
 			goto on_error;
 		}
 		total_write_count += write_count;
-		section_offset    += write_count;
 
 		if( libcdata_list_append_value(
 		     segment_file->section_list,
@@ -1530,7 +1528,6 @@ ssize_t libewf_segment_file_write_headers(
 			goto on_error;
 		}
 		total_write_count += write_count;
-		section_offset    += write_count;
 
 		if( libcdata_list_append_value(
 		     segment_file->section_list,
@@ -1723,7 +1720,6 @@ ssize_t libewf_segment_file_write_headers(
 			goto on_error;
 		}
 		total_write_count += write_count;
-		section_offset    += write_count;
 
 		if( libcdata_list_append_value(
 		     segment_file->section_list,
@@ -2029,7 +2025,6 @@ ssize_t libewf_segment_file_write_start(
 			}
 		}
 		total_write_count += write_count;
-		section_offset    += write_count;
 
 		if( libcdata_list_append_value(
 		     segment_file->section_list,
@@ -2074,7 +2069,7 @@ ssize_t libewf_segment_file_write_chunks_section_start(
          uint32_t number_of_chunks_written,
          uint32_t chunks_per_section,
          libcerror_error_t **error )
-{	
+{
 	libewf_section_t *section = NULL;
 	static char *function     = "libewf_segment_file_write_chunks_section_start";
 	ssize_t write_count       = 0;
@@ -2431,7 +2426,6 @@ ssize_t libewf_segment_file_write_chunks_section_correction(
 
 			return( -1 );
 		}
-		group_section = section;
 	}
 	else if( io_handle->ewf_format == EWF_FORMAT_E01 )
 	{
@@ -2479,7 +2473,8 @@ ssize_t libewf_segment_file_write_chunks_section_correction(
 
 		goto on_error;
 	}
-	section = NULL;
+	group_section = section;
+	section       = NULL;
 
 #if defined( HAVE_DEBUG_OUTPUT )
 	if( libcnotify_verbose != 0 )
@@ -2606,7 +2601,6 @@ ssize_t libewf_segment_file_write_chunks_section_correction(
 
 			return( -1 );
 		}
-		section_offset    += write_count;
 		total_write_count += write_count;
 
 		if( libcdata_list_append_value(
@@ -2624,7 +2618,7 @@ ssize_t libewf_segment_file_write_chunks_section_correction(
 			goto on_error;
 		}
 		backup_group_section = section;
-	
+
 		section = NULL;
 	}
 	/* Group the elements to reduce the memory usage
@@ -3672,7 +3666,6 @@ ssize_t libewf_segment_file_write_close(
 		goto on_error;
 	}
 	total_write_count += write_count;
-	section_offset    += write_count;
 
 	segment_file->number_of_chunks = number_of_chunks_written_to_segment;
 
@@ -3789,7 +3782,7 @@ int libewf_segment_file_write_sections_correction(
 		libcnotify_printf(
 		 "%s: correcting sections in segment file: %" PRIu16 ".\n",
 		 function,
-		 segment_file->segment_number );	
+		 segment_file->segment_number );
 	}
 #endif
 	if( libcdata_list_get_first_element(

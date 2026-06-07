@@ -319,7 +319,7 @@ ssize_t ewfacquirestream_read_chunk(
 
 		return( -1 );
 	}
-	
+
 	while( buffer_size > 0 )
 	{
 		/* Determine the number of bytes to read from the input
@@ -334,7 +334,7 @@ ssize_t ewfacquirestream_read_chunk(
 			read_size = chunk_size;
 		}
 		bytes_to_read = read_size;
-		
+
 		/* Read one chunk till EOF is returned, an error occoures, or the chunk is full
 		 */
 		chunk_offset = 0;
@@ -419,7 +419,7 @@ ssize_t ewfacquirestream_read_chunk(
 					 */
 					chunk_offset      += read_count;
 					bytes_to_read     -= read_count;
-				}				
+				}
 				if( ewfacquirestream_abort != 0 )
 				{
 					return( buffer_offset + chunk_offset );
@@ -603,7 +603,7 @@ int ewfacquirestream_read_input(
 	    || ( acquiry_count < (size64_t) imaging_handle->acquiry_size ) )
 	{
 		read_size = process_buffer_size;
-		
+
 		// Create a new buffer
 		storage_media_buffer = NULL;
 		if( storage_media_buffer_initialize(
@@ -742,12 +742,12 @@ int ewfacquirestream_read_input(
 			goto on_error;
 		}
 		// compression and write to disk is done in other threads
-		// this thread is used for reading the data and controlling the other threads		
+		// this thread is used for reading the data and controlling the other threads
 		process_count = add_buffer_to_queue(
 		                 storage_media_buffer,
 		                 threading_data,
 		                 error );
-		
+
 		if( process_count < 0 )
 		{
 			libcerror_error_set(
@@ -1168,7 +1168,7 @@ int main( int argc, char * const argv[] )
 				verbose = 1;
 
 				break;
-			
+
 			case (system_integer_t) 'V':
 				ewftools_output_version_fprint(
 				 stdout,

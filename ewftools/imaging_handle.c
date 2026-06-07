@@ -421,7 +421,7 @@ int imaging_handle_signal_abort(
 		return( -1 );
 	}
 	if( imaging_handle->secondary_output_handle != NULL )
-	{	
+	{
 		if( libewf_handle_signal_abort(
 		     imaging_handle->output_handle,
 		     error ) != 1 )
@@ -3187,8 +3187,6 @@ int imaging_handle_set_compression_values(
 		if( imaging_handle->compression_method != LIBEWF_COMPRESSION_METHOD_DEFLATE )
 		{
 			imaging_handle->compression_method = LIBEWF_COMPRESSION_METHOD_DEFLATE;
-
-			result = 0;
 		}
 		segment_index++;
 	}

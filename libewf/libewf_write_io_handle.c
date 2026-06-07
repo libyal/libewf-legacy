@@ -1314,7 +1314,7 @@ int libewf_write_io_handle_set_compressed_zero_byte_empty_block(
 	                                     sizeof( uint8_t ) * (size_t) media_values->chunk_size );
 
 	if( zero_byte_empty_block == NULL )
-	{	
+	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_MEMORY,
@@ -1344,7 +1344,7 @@ int libewf_write_io_handle_set_compressed_zero_byte_empty_block(
 			                                sizeof( uint8_t ) * write_io_handle->compressed_zero_byte_empty_block_size );
 
 	if( compressed_zero_byte_empty_block == NULL )
-	{	
+	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_MEMORY,
@@ -1398,7 +1398,7 @@ int libewf_write_io_handle_set_compressed_zero_byte_empty_block(
 			 "%s: unable to resize compressed zero byte empty block.",
 			 function );
 
-			return( -1 );
+			goto on_error;
 		}
 		compressed_zero_byte_empty_block = (uint8_t *) reallocation;
 

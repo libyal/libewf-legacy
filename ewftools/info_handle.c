@@ -4288,13 +4288,13 @@ int dfxml_build_environment_fprint(
 #if defined( __MINGW64_VERSION_MAJOR ) && defined( __MINGW64_VERSION_MINOR )
 	fprintf(
 	 stream,
-	 "\t\t\t<compiler>MinGW64 %d.%d</compiler>\n",
+	 "\t\t\t<compiler>MinGW-w64 %d.%d</compiler>\n",
 	 __MINGW64_VERSION_MAJOR,
 	 __MINGW64_VERSION_MINOR );
 #elif defined( __MINGW32_MAJOR_VERSION ) && defined( __MINGW32_MINOR_VERSION )
 	fprintf(
 	 stream,
-	 "\t\t\t<compiler>MinGW32 %d.%d</compiler>\n",
+	 "\t\t\t<compiler>MinGW %d.%d</compiler>\n",
 	 __MINGW32_MAJOR_VERSION,
 	 __MINGW32_MINOR_VERSION );
 #endif
@@ -4310,7 +4310,7 @@ int dfxml_build_environment_fprint(
 	 "\t\t\t<compiler>GCC %d</compiler>\n",
 	 __GNUC__ );
 #endif
-#endif		
+#endif
 	fprintf(
 	 stream,
 	 "\t\t\t<compilation_date>" __DATE__ " " __TIME__ "</compilation_date>\n" );

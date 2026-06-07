@@ -26,10 +26,11 @@
 #include <types.h>
 #include <wide_string.h>
 
-#if defined( WINAPI )
+#if defined( HAVE_RPCDCE_H ) && ( defined( HAVE_LIBRPCRT4 ) || defined( WINAPI ) )
 #include <rpcdce.h>
+#endif
 
-#elif defined( HAVE_UUID_UUID_H )
+#if defined( HAVE_UUID_UUID_H ) || defined( HAVE_LIBUUID )
 #include <uuid/uuid.h>
 #endif
 

@@ -12,7 +12,7 @@ chr()
 	local CHR_VALUE=`expr \( \( $1 / 64 \) \* 100 \) + \( \( \( $1 % 64 \) / 8 \) \* 10 \) + \( $1 % 8 \)`;
 
 	printf \\${CHR_VALUE};
-} 
+}
 
 seq()
 {
@@ -37,7 +37,7 @@ seq()
 }
 
 test_glob_sequence2()
-{ 
+{
 	local TEST_EXECUTABLE=$1;
 	local BASENAME=$2;
 	local SCHEMA=$3;
@@ -90,7 +90,7 @@ test_glob_sequence2()
 }
 
 test_glob_sequence3()
-{ 
+{
 	local TEST_EXECUTABLE=$1;
 	local BASENAME=$2;
 	local SCHEMA=$3;
@@ -269,7 +269,7 @@ test_glob_sequence3()
 }
 
 test_glob_sequence4()
-{ 
+{
 	local TEST_EXECUTABLE=$1;
 	local BASENAME=$2;
 	local SCHEMA=$3;

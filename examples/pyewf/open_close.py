@@ -54,7 +54,7 @@ try:
 except:
 	print "Unable to close file(s)\n"
 	print sys.exc_info()
- 
+
 	sys.exit( 1 )
 
 sys.exit( 0 )

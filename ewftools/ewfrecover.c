@@ -30,20 +30,20 @@
 #include <sys/resource.h>
 #endif
 
-#if defined( HAVE_IO_H ) || defined( WINAPI )
-#include <io.h>
-#endif
-
 #if defined( HAVE_FCNTL_H ) || defined( WINAPI )
 #include <fcntl.h>
 #endif
 
-#if defined( HAVE_STDLIB_H ) || defined( WINAPI )
-#include <stdlib.h>
-#endif
-
 #if defined( HAVE_GLOB_H )
 #include <glob.h>
+#endif
+
+#if defined( HAVE_IO_H ) || defined( WINAPI )
+#include <io.h>
+#endif
+
+#if defined( HAVE_STDLIB_H ) || defined( WINAPI )
+#include <stdlib.h>
 #endif
 
 #include "ewfcommon.h"
@@ -185,6 +185,11 @@ int main( int argc, char * const argv[] )
 	uint8_t verbose                                            = 0;
 	int number_of_filenames                                    = 0;
 	int result                                                 = 1;
+
+#if defined( __MINGW32__ ) && defined( HAVE_MINGW_BINMODE )
+	_setmode( _fileno( stdout ), _O_BINARY );
+	_setmode( _fileno( stderr ), _O_BINARY );
+#endif
 
 	libcnotify_stream_set(
 	 stderr,
@@ -404,6 +409,9 @@ int main( int argc, char * const argv[] )
 
 		goto on_error;
 	}
+#if defined( __clang_analyzer__ )
+	__builtin_assume( ewfrecover_export_handle != NULL );
+#endif
 #if defined( HAVE_GETRLIMIT )
 	if( getrlimit(
             RLIMIT_NOFILE,

@@ -2878,7 +2878,7 @@ int device_handle_read_errors_fprint(
 		 stream,
 		 "\ttotal number: %d\n",
 		 number_of_read_errors );
-		
+
 		for( read_error_index = 0;
 		     read_error_index < number_of_read_errors;
 		     read_error_index++ )
@@ -2976,7 +2976,7 @@ int device_handle_sessions_fprint(
 		fprintf(
 		 stream,
 		 "Sessions:\n" );
-		
+
 		fprintf(
 		 stream,
 		 "\ttotal number: %d\n",
@@ -3084,7 +3084,7 @@ int device_handle_tracks_fprint(
 		fprintf(
 		 stream,
 		 "Tracks:\n" );
-		
+
 		fprintf(
 		 stream,
 		 "\ttotal number: %d\n",

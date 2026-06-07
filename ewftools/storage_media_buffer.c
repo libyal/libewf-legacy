@@ -145,7 +145,7 @@ int storage_media_buffer_initialize(
 #else
 		( *buffer )->raw_buffer = (uint8_t *) memory_allocate(
 		                                       sizeof( uint8_t ) * raw_buffer_size );
-			
+
 		if( ( *buffer )->raw_buffer == NULL )
 		{
 			libcerror_error_set(
@@ -167,7 +167,7 @@ int storage_media_buffer_initialize(
 
 			( *buffer )->compression_buffer = (uint8_t *) memory_allocate(
 			                                               sizeof( uint8_t ) * ( size * 2 ) );
-			
+
 			if( ( *buffer )->compression_buffer == NULL )
 			{
 				libcerror_error_set(
@@ -239,6 +239,31 @@ int storage_media_buffer_free(
 
 		*buffer = NULL;
 	}
+	return( 1 );
+}
+
+/* Empties the storage media buffer
+ * Returns 1 if successful or -1 on error
+ */
+int storage_media_buffer_empty(
+     storage_media_buffer_t *buffer,
+     libcerror_error_t **error )
+{
+	static char *function = "storage_media_buffer_empty";
+
+	if( buffer == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid buffer.",
+		 function );
+
+		return( -1 );
+	}
+	buffer->raw_buffer_data_size = 0;
+
 	return( 1 );
 }
 
@@ -356,5 +381,87 @@ int storage_media_buffer_get_data(
 		*data_size = buffer->compression_buffer_data_size;
 	}
 	return( 1 );
+}
+
+/* Extends the storage media buffer with additional data
+ * Returns the number of bytes addes to the storage media buffer if successful or -1 on error
+ */
+ssize_t storage_media_buffer_add_data(
+         storage_media_buffer_t *buffer,
+         const uint8_t *data,
+         size_t data_size,
+         libcerror_error_t **error )
+{
+	static char *function = "storage_media_buffer_add_data";
+
+	if( buffer == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid buffer.",
+		 function );
+
+		return( -1 );
+	}
+	if( buffer->raw_buffer_data_size > buffer->raw_buffer_size )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
+		 "%s: invalid buffer - raw buffer data size value out of bounds.",
+		 function );
+
+		return( -1 );
+	}
+	if( data == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid data.",
+		 function );
+
+		return( -1 );
+	}
+	if( data_size > (size_t) SSIZE_MAX )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
+		 "%s: invalid data size value exceeds maximum.",
+		 function );
+
+		return( -1 );
+	}
+	if( data_size == 0 )
+	{
+		return( 0 );
+	}
+	if( data_size > ( buffer->raw_buffer_size - buffer->raw_buffer_data_size ) )
+	{
+		data_size = buffer->raw_buffer_size - buffer->raw_buffer_data_size;
+	}
+	if( memory_copy(
+	     &( buffer->raw_buffer[ buffer->raw_buffer_data_size ] ),
+	     data,
+	     data_size ) == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_MEMORY,
+		 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
+		 "%s: unable to copy data to raw buffer.",
+		 function );
+
+		return( -1 );
+	}
+	buffer->raw_buffer_data_size += data_size;
+
+	return( (ssize_t) data_size );
 }
 

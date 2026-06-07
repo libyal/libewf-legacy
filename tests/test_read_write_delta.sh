@@ -33,7 +33,7 @@ LS="ls";
 TR="tr";
 
 test_read_write_delta()
-{ 
+{
 	MEDIA_SIZE=$1;
 	CHUNK_SIZE=$2;
 	COMPRESSION_LEVEL=$3;

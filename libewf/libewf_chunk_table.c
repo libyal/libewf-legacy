@@ -165,7 +165,8 @@ int libewf_chunk_table_clone(
      intptr_t *source_chunk_table,
      libcerror_error_t **error )
 {
-	static char *function = "libewf_chunk_table_clone";
+	libewf_chunk_table_t *safe_destination_chunk_table = NULL;
+	static char *function                              = "libewf_chunk_table_clone";
 
 	if( destination_chunk_table == NULL )
 	{
@@ -195,10 +196,10 @@ int libewf_chunk_table_clone(
 
 		return( 1 );
 	}
-	*destination_chunk_table = memory_allocate_structure_as_value(
-	                            libewf_chunk_table_t );
+	safe_destination_chunk_table = memory_allocate_structure(
+	                                libewf_chunk_table_t );
 
-	if( *destination_chunk_table == NULL )
+	if( safe_destination_chunk_table == NULL )
 	{
 		libcerror_error_set(
 		 error,
@@ -210,7 +211,7 @@ int libewf_chunk_table_clone(
 		goto on_error;
 	}
 	if( memory_copy(
-	     *destination_chunk_table,
+	     safe_destination_chunk_table,
 	     source_chunk_table,
 	     sizeof( libewf_chunk_table_t ) ) == NULL )
 	{
@@ -223,15 +224,15 @@ int libewf_chunk_table_clone(
 
 		goto on_error;
 	}
+	*destination_chunk_table = (intptr_t *) safe_destination_chunk_table;
+
 	return( 1 );
 
 on_error:
-	if( *destination_chunk_table != NULL )
+	if( safe_destination_chunk_table != NULL )
 	{
 		memory_free(
-		 *destination_chunk_table );
-
-		*destination_chunk_table = NULL;
+		 safe_destination_chunk_table );
 	}
 	return( -1 );
 }
@@ -537,7 +538,7 @@ int libewf_chunk_table_read_offsets(
 	              &number_of_offsets,
 	              &base_offset,
 	              error );
-	
+
 	if( read_count < 0 )
 	{
 		libcerror_error_set(
@@ -598,7 +599,7 @@ int libewf_chunk_table_read_offsets(
 		 "%s: invalid element group size value too small.",
 		 function );
 
-		return( -1 );
+		goto on_error;
 	}
 	read_count = libbfio_pool_read_buffer(
 		      file_io_pool,
@@ -645,7 +646,7 @@ int libewf_chunk_table_read_offsets(
 			 "%s: invalid element group size value too small.",
 			 function );
 
-			return( -1 );
+			goto on_error;
 		}
 		read_count = libbfio_pool_read_buffer(
 			      file_io_pool,
@@ -665,8 +666,9 @@ int libewf_chunk_table_read_offsets(
 
 			goto on_error;
 		}
+#if defined( HAVE_VERBOSE_OUTPUT ) || defined( HAVE_DEBUG_OUTPUT )
 		element_group_size -= read_count;
-
+#endif
 		byte_stream_copy_to_uint32_little_endian(
 		 table_offsets_checksum,
 		 stored_checksum );
@@ -697,7 +699,7 @@ int libewf_chunk_table_read_offsets(
 			 "%s: unable to calculate checksum.",
 			 function );
 
-			return( -1 );
+			goto on_error;
 		}
 		if( stored_checksum != calculated_checksum )
 		{

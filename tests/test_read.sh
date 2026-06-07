@@ -35,7 +35,7 @@ UNIQ="uniq";
 WC="wc";
 
 test_read()
-{ 
+{
 	echo "Testing read of input:" $*;
 
 	./${EWF_TEST_READ} $*;

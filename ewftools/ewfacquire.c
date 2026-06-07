@@ -28,12 +28,16 @@
 
 #include <stdio.h>
 
-#if defined( HAVE_STDLIB_H ) || defined( WINAPI )
-#include <stdlib.h>
+#if defined( HAVE_FCNTL_H ) || defined( WINAPI )
+#include <fcntl.h>
 #endif
 
 #if defined( HAVE_IO_H ) || defined( WINAPI )
 #include <io.h>
+#endif
+
+#if defined( HAVE_STDLIB_H ) || defined( WINAPI )
+#include <stdlib.h>
 #endif
 
 #include "byte_size_string.h"
@@ -1328,6 +1332,11 @@ int main( int argc, char * const argv[] )
 	int interactive_mode                                            = 1;
 	int result                                                      = 0;
 
+#if defined( __MINGW32__ ) && defined( HAVE_MINGW_BINMODE )
+	_setmode( _fileno( stdout ), _O_BINARY );
+	_setmode( _fileno( stderr ), _O_BINARY );
+#endif
+
 	libcnotify_stream_set(
 	 stderr,
 	 NULL );
@@ -1627,6 +1636,9 @@ int main( int argc, char * const argv[] )
 
 		goto on_error;
 	}
+#if defined( __clang_analyzer__ )
+	__builtin_assume( ewfacquire_device_handle != NULL );
+#endif
 	if( option_toc_filename != NULL )
 	{
 		if( device_handle_set_string(
@@ -1712,6 +1724,9 @@ int main( int argc, char * const argv[] )
 
 		goto on_error;
 	}
+#if defined( __clang_analyzer__ )
+	__builtin_assume( ewfacquire_imaging_handle != NULL );
+#endif
 	if( device_handle_get_media_size(
 	     ewfacquire_device_handle,
 	     &( ewfacquire_imaging_handle->input_media_size ),

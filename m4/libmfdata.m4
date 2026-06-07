@@ -35,7 +35,7 @@ AC_DEFUN([AX_LIBMFDATA_CHECK_LIB],
    ac_cv_libmfdata_LIBADD="$pkg_cv_libmfdata_LIBS"],
    [dnl Check for headers
    AC_CHECK_HEADERS([libmfdata.h])
-  
+
    AS_IF(
     [test "x$ac_cv_header_libmfdata_h" = xno],
     [ac_cv_libmfdata=no],
@@ -45,7 +45,7 @@ AC_DEFUN([AX_LIBMFDATA_CHECK_LIB],
      libmfdata_get_version,
      [ac_cv_libmfdata_dummy=yes],
      [ac_cv_libmfdata=no])
- 
+
     dnl Cache functions
     AC_CHECK_LIB(
      mfdata,
@@ -62,14 +62,14 @@ AC_DEFUN([AX_LIBMFDATA_CHECK_LIB],
      libmfdata_cache_clone,
      [ac_cv_libmfdata_dummy=yes],
      [ac_cv_libmfdata=no])
- 
+
     dnl File functions
     AC_CHECK_LIB(
      mfdata,
      libmfdata_file_set_file_value,
      [ac_cv_libmfdata_dummy=yes],
      [ac_cv_libmfdata=no])
- 
+
     dnl File list functions
     AC_CHECK_LIB(
      mfdata,
@@ -91,7 +91,7 @@ AC_DEFUN([AX_LIBMFDATA_CHECK_LIB],
      libmfdata_file_list_clone,
      [ac_cv_libmfdata_dummy=yes],
      [ac_cv_libmfdata=no])
- 
+
     AC_CHECK_LIB(
      mfdata,
      libmfdata_file_list_get_number_of_files,
@@ -107,7 +107,7 @@ AC_DEFUN([AX_LIBMFDATA_CHECK_LIB],
      libmfdata_file_list_get_file_value_by_index,
      [ac_cv_libmfdata_dummy=yes],
      [ac_cv_libmfdata=no])
- 
+
     AC_CHECK_LIB(
      mfdata,
      libmfdata_file_list_set_file_by_index,
@@ -118,13 +118,13 @@ AC_DEFUN([AX_LIBMFDATA_CHECK_LIB],
      libmfdata_file_list_set_file_value_by_index,
      [ac_cv_libmfdata_dummy=yes],
      [ac_cv_libmfdata=no])
- 
+
     AC_CHECK_LIB(
      mfdata,
      libmfdata_file_list_append_file,
      [ac_cv_libmfdata_dummy=yes],
      [ac_cv_libmfdata=no])
- 
+
     dnl File functions
     AC_CHECK_LIB(
      mfdata,
@@ -146,7 +146,7 @@ AC_DEFUN([AX_LIBMFDATA_CHECK_LIB],
      libmfdata_list_clone,
      [ac_cv_libmfdata_dummy=yes],
      [ac_cv_libmfdata=no])
- 
+
     AC_CHECK_LIB(
      mfdata,
      libmfdata_list_is_group,
@@ -157,7 +157,7 @@ AC_DEFUN([AX_LIBMFDATA_CHECK_LIB],
      libmfdata_list_is_set,
      [ac_cv_libmfdata_dummy=yes],
      [ac_cv_libmfdata=no])
- 
+
     AC_CHECK_LIB(
      mfdata,
      libmfdata_list_get_number_of_elements,
@@ -178,7 +178,7 @@ AC_DEFUN([AX_LIBMFDATA_CHECK_LIB],
      libmfdata_list_get_group_by_index,
      [ac_cv_libmfdata_dummy=yes],
      [ac_cv_libmfdata=no])
- 
+
     AC_CHECK_LIB(
      mfdata,
      libmfdata_list_set_data_range_by_index,
@@ -204,13 +204,13 @@ AC_DEFUN([AX_LIBMFDATA_CHECK_LIB],
      libmfdata_list_set_group_by_index,
      [ac_cv_libmfdata_dummy=yes],
      [ac_cv_libmfdata=no])
- 
+
     AC_CHECK_LIB(
      mfdata,
      libmfdata_list_append_group,
      [ac_cv_libmfdata_dummy=yes],
      [ac_cv_libmfdata=no])
- 
+
     dnl List element functions
     AC_CHECK_LIB(
      mfdata,
@@ -222,14 +222,14 @@ AC_DEFUN([AX_LIBMFDATA_CHECK_LIB],
      libmfdata_list_element_set_element_value,
      [ac_cv_libmfdata_dummy=yes],
      [ac_cv_libmfdata=no])
- 
+
     dnl Segment table functions
     AC_CHECK_LIB(
      mfdata,
      libmfdata_segment_table_initialize,
      [ac_cv_libmfdata_dummy=yes],
      [ac_cv_libmfdata=no])
-  
+
     AC_CHECK_LIB(
      mfdata,
      libmfdata_segment_table_free,
@@ -260,7 +260,7 @@ AC_DEFUN([AX_LIBMFDATA_CHECK_LIB],
      libmfdata_segment_table_write_buffer,
      [ac_cv_libmfdata_dummy=yes],
      [ac_cv_libmfdata=no])
-  
+
     AC_CHECK_LIB(
      mfdata,
      libmfdata_segment_table_get_file_io_handle,

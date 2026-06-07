@@ -1632,11 +1632,11 @@ off64_t libewf_file_entry_seek_offset(
 		return( -1 );
 	}
 	if( whence == SEEK_CUR )
-	{	
+	{
 		offset += internal_file_entry->offset;
 	}
 	else if( whence == SEEK_END )
-	{	
+	{
 		offset += (off64_t) size;
 	}
 #if defined( HAVE_DEBUG_OUTPUT )

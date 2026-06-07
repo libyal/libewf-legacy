@@ -2845,8 +2845,6 @@ int export_handle_set_compression_values(
 		if( export_handle->compression_method != LIBEWF_COMPRESSION_METHOD_DEFLATE )
 		{
 			export_handle->compression_method = LIBEWF_COMPRESSION_METHOD_DEFLATE;
-
-			result = 0;
 		}
 		segment_index++;
 	}
@@ -4755,10 +4753,6 @@ int export_handle_export_input(
 				{
 					write_size = (size_t) read_process_count;
 				}
-				if( ( output_storage_media_buffer->raw_buffer_data_size + write_size ) > output_chunk_size )
-				{
-					write_size = output_chunk_size -  output_storage_media_buffer->raw_buffer_data_size;
-				}
 				if( storage_media_buffer->data_in_compression_buffer == 1 )
 				{
 					input_buffer = storage_media_buffer->compression_buffer;
@@ -4767,22 +4761,32 @@ int export_handle_export_input(
 				{
 					input_buffer = storage_media_buffer->raw_buffer;
 				}
-				if( memory_copy(
-				     &( output_storage_media_buffer->raw_buffer[ output_storage_media_buffer->raw_buffer_data_size ] ),
+				if( storage_media_buffer_add_data(
+				     output_storage_media_buffer,
 				     input_buffer,
-				     write_size ) == NULL )
+				     write_size,
+				     error ) == -1 )
 				{
 					libcerror_error_set(
 					 error,
-					 LIBCERROR_ERROR_DOMAIN_MEMORY,
-					 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
-					 "%s: unable to copy data from input buffer to output raw buffer.",
+					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+					 LIBCERROR_RUNTIME_ERROR_COPY_FAILED,
+					 "%s: unable to add data from input buffer to storage media buffer.",
 					 function );
 
-					goto on_error;
+					return( -1 );
 				}
-				output_storage_media_buffer->raw_buffer_data_size += write_size;
+				if( output_storage_media_buffer == NULL )
+				{
+					libcerror_error_set(
+					 error,
+					 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+					 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+					 "%s: invalid output storage media buffer.",
+					 function );
 
+					return( -1 );
+				}
 				/* Make sure the output chunk is filled upto the output chunk size
 				 */
 				if( ( export_count < (size64_t) export_handle->export_size )
@@ -4842,7 +4846,19 @@ int export_handle_export_input(
 			}
 			if( storage_media_buffer->mode == STORAGE_MEDIA_BUFFER_MODE_CHUNK_DATA )
 			{
-				output_storage_media_buffer->raw_buffer_data_size = 0;
+				if( storage_media_buffer_empty(
+				     output_storage_media_buffer,
+				     error ) == -1 )
+				{
+					libcerror_error_set(
+					 error,
+					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+					 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+					 "%s: unable to empty storage media buffer.",
+					 function );
+
+					return( -1 );
+				}
 			}
 			read_process_count -= write_process_count;
 		}
@@ -6196,7 +6212,7 @@ int export_handle_checksum_errors_fprint(
 		 stream,
 		 "\ttotal number: %" PRIu32 "\n",
 		 number_of_errors );
-		
+
 		for( error_index = 0;
 		     error_index < number_of_errors;
 		     error_index++ )
@@ -6266,7 +6282,6 @@ int export_handle_checksum_errors_fprint(
 				          &filename_size,
 				          error );
 #endif
-
 				if( result == -1 )
 				{
 					libcerror_error_set(
@@ -6350,6 +6365,7 @@ int export_handle_checksum_errors_fprint(
 						memory_free(
 						 filename );
 					}
+					filename = NULL;
 				}
 				start_sector += export_handle->input_chunk_size;
 			}

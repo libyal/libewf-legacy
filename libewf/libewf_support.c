@@ -758,6 +758,8 @@ int libewf_glob(
 			memory_free(
 			 segment_filename );
 
+			segment_filename = NULL;
+
 			break;
 		}
 		*number_of_filenames += 1;
@@ -1115,6 +1117,8 @@ int libewf_glob_wide(
 		{
 			memory_free(
 			 segment_filename );
+
+			segment_filename = NULL;
 
 			break;
 		}

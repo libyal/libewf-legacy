@@ -390,7 +390,7 @@ int ewf_test_write(
 	 buffer );
 
 	buffer = NULL;
-	
+
 	if( libewf_handle_close(
 	     handle,
 	     error ) != 0 )

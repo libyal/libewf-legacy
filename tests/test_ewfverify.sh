@@ -34,7 +34,7 @@ TR="tr";
 WC="wc";
 
 test_verify()
-{ 
+{
 	INPUT_FILE=$1;
 
 	${EWFVERIFY} -q -d sha1 ${INPUT_FILE};

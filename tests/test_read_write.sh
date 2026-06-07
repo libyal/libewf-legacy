@@ -35,7 +35,7 @@ UNIQ="uniq";
 WC="wc";
 
 test_read_write()
-{ 
+{
 	echo "Testing read/write of input:" $*;
 
 	mkdir ${TMP};

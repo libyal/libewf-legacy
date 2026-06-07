@@ -32,7 +32,7 @@ TR="tr";
 WC="wc";
 
 test_export_logical()
-{ 
+{
 	INPUT_FILE=$1;
 
 	mkdir ${TMP};
@@ -58,7 +58,7 @@ EOI
 }
 
 test_export_logical_unattended()
-{ 
+{
 	OUTPUT_FORMAT=$1;
 	INPUT_FILE=$2;
 

@@ -33,7 +33,7 @@ TR="tr";
 WC="wc";
 
 test_write_resume()
-{ 
+{
 	INPUT_FILE=$1;
 	RESUME_OFFSET=$2;
 

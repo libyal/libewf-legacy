@@ -29,21 +29,54 @@ TMP="tmp";
 CUT="cut";
 
 test_write()
-{ 
+{
 	MEDIA_SIZE=$1;
 	MAXIMUM_SEGMENT_SIZE=$2;
 	COMPRESSION_LEVEL=$3;
 
 	mkdir ${TMP};
 
-	if test "${OSTYPE}" = "msys";
-	then
-		OUTPUT_FILE="${TMP}\\write";
-	else
-		OUTPUT_FILE="${TMP}/write";
-	fi
-	./${EWF_TEST_WRITE} -B ${MEDIA_SIZE} -c `echo ${COMPRESSION_LEVEL} | ${CUT} -c 1` -S ${MAXIMUM_SEGMENT_SIZE} "${OUTPUT_FILE}";
+	OUTPUT_FILE="${TMP}/write";
 
+	OSTYPE_LOWER=`echo "$OSTYPE" | tr '[A-Z]' '[a-z]'`;
+	case "${OSTYPE_LOWER}" in
+		cygwin*|msys*)
+			if test "${TESTS_USE_WINAPI}" = "yes" || test "${MSYSTEM}" = "MINGW32" || test "${MSYSTEM}" = "MINGW64";
+			then
+				OUTPUT_FILE=`cygpath -w "${OUTPUT_FILE}"`;
+			fi
+			;;
+
+		linux-gnu*)
+			if test -n "$WSL_DISTRO_NAME" || grep -qi "microsoft" /proc/version 2>/dev/null;
+			then
+				echo "WSL currently not supported";
+
+				exit ${EXIT_IGNORE};
+			fi
+			if ! test -x ${OBJDUMP};
+			then
+				echo "Missing executable: ${OBJDUMP}";
+
+				exit ${EXIT_IGNORE};
+			fi
+			if test "${TESTS_USE_WINAPI}" = "yes" || ${OBJDUMP} -f "${TEST_EXECUTABLE}" 2>&1 | grep -q "pei-";
+			then
+				OUTPUT_FILE=`winepath -w "${OUTPUT_FILE}" 2>/dev/null`;
+			fi
+			;;
+
+		*)
+			if test "${TESTS_USE_WINAPI}" = "yes";
+			then
+				echo "WINAPI not supported on ${OSTYPE}";
+
+				exit ${EXIT_IGNORE};
+			fi
+			;;
+	esac
+
+	./${EWF_TEST_WRITE} -B ${MEDIA_SIZE} -c `echo ${COMPRESSION_LEVEL} | ${CUT} -c 1` -S ${MAXIMUM_SEGMENT_SIZE} "${OUTPUT_FILE}";
 	RESULT=$?;
 
 	rm -rf ${TMP};
@@ -60,21 +93,54 @@ test_write()
 }
 
 test_write_chunk()
-{ 
+{
 	MEDIA_SIZE=$1;
 	MAXIMUM_SEGMENT_SIZE=$2;
 	COMPRESSION_LEVEL=$3;
 
 	mkdir ${TMP};
 
-	if test "${OSTYPE}" = "msys";
-	then
-		OUTPUT_FILE="${TMP}\\write";
-	else
-		OUTPUT_FILE="${TMP}/write";
-	fi
-	./${EWF_TEST_WRITE_CHUNK} -B ${MEDIA_SIZE} -c `echo ${COMPRESSION_LEVEL} | ${CUT} -c 1` -S ${MAXIMUM_SEGMENT_SIZE} "${OUTPUT_FILE}";
+	OUTPUT_FILE="${TMP}/write";
 
+	OSTYPE_LOWER=`echo "$OSTYPE" | tr '[A-Z]' '[a-z]'`;
+	case "${OSTYPE_LOWER}" in
+		cygwin*|msys*)
+			if test "${TESTS_USE_WINAPI}" = "yes" || test "${MSYSTEM}" = "MINGW32" || test "${MSYSTEM}" = "MINGW64";
+			then
+				OUTPUT_FILE=`cygpath -w "${OUTPUT_FILE}"`;
+			fi
+			;;
+
+		linux-gnu*)
+			if test -n "$WSL_DISTRO_NAME" || grep -qi "microsoft" /proc/version 2>/dev/null;
+			then
+				echo "WSL currently not supported";
+
+				exit ${EXIT_IGNORE};
+			fi
+			if ! test -x ${OBJDUMP};
+			then
+				echo "Missing executable: ${OBJDUMP}";
+
+				exit ${EXIT_IGNORE};
+			fi
+			if test "${TESTS_USE_WINAPI}" = "yes" || ${OBJDUMP} -f "${TEST_EXECUTABLE}" 2>&1 | grep -q "pei-";
+			then
+				OUTPUT_FILE=`winepath -w "${OUTPUT_FILE}" 2>/dev/null`;
+			fi
+			;;
+
+		*)
+			if test "${TESTS_USE_WINAPI}" = "yes";
+			then
+				echo "WINAPI not supported on ${OSTYPE}";
+
+				exit ${EXIT_IGNORE};
+			fi
+			;;
+	esac
+
+	./${EWF_TEST_WRITE_CHUNK} -B ${MEDIA_SIZE} -c `echo ${COMPRESSION_LEVEL} | ${CUT} -c 1` -S ${MAXIMUM_SEGMENT_SIZE} "${OUTPUT_FILE}";
 	RESULT=$?;
 
 	rm -rf ${TMP};

@@ -33,7 +33,7 @@ TR="tr";
 WC="wc";
 
 test_verify_logical()
-{ 
+{
 	INPUT_FILE=$1;
 
 	${EWFVERIFY} -q -f files ${INPUT_FILE};

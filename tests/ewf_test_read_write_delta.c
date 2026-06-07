@@ -358,7 +358,7 @@ int ewf_test_read_write_delta(
 	 buffer );
 
 	buffer = NULL;
-	
+
 	if( libewf_handle_close(
 	     handle,
 	     error ) != 0 )

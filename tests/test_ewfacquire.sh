@@ -33,7 +33,7 @@ TR="tr";
 WC="wc";
 
 test_acquire_file()
-{ 
+{
 	INPUT_FILE=$1;
 	OUTPUT_FORMAT=$2;
 	COMPRESSION_METHOD=$3;
@@ -92,7 +92,7 @@ EOI
 }
 
 test_acquire_unattended_file()
-{ 
+{
 	INPUT_FILE=$1;
 	OUTPUT_FORMAT=$2;
 	COMPRESSION_METHOD=$3;

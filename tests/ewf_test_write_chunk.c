@@ -283,6 +283,19 @@ int ewf_test_write_chunk(
 	chunk_buffer = (uint8_t *) memory_allocate(
 	                            sizeof( uint8_t ) * ( chunk_buffer_size + 4 ) );
 
+	if( chunk_buffer == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_MEMORY,
+		 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
+		 "%s: unable to create chunk buffer.",
+		 function );
+
+		goto on_error;
+	}
+	checksum_buffer = &( chunk_buffer[ chunk_buffer_size - 1 ] );
+
 	/* The compressed data can become larger than the uncompressed data
 	 */
 	compressed_chunk_buffer_size = chunk_buffer_size * 2;
@@ -290,9 +303,16 @@ int ewf_test_write_chunk(
 	compressed_chunk_buffer = (uint8_t *) memory_allocate(
 	                                       sizeof( uint8_t ) * compressed_chunk_buffer_size );
 
-	if( chunk_buffer != NULL )
+	if( compressed_chunk_buffer == NULL )
 	{
-		checksum_buffer = &( chunk_buffer[ chunk_buffer_size - 1 ] );
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_MEMORY,
+		 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
+		 "%s: unable to create compressed chunk buffer.",
+		 function );
+
+		goto on_error;
 	}
 	for( sector_iterator = 0;
 	     sector_iterator < 26;
@@ -389,12 +409,12 @@ int ewf_test_write_chunk(
 	 compressed_chunk_buffer );
 
 	compressed_chunk_buffer = NULL;
-	
+
 	memory_free(
 	 chunk_buffer );
 
 	chunk_buffer = NULL;
-	
+
 	if( libewf_handle_close(
 	     handle,
 	     error ) != 0 )

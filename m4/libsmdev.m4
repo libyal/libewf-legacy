@@ -60,7 +60,7 @@ AC_DEFUN([AX_LIBSMDEV_CHECK_LIB],
           libsmdev_check_device,
           [ac_cv_libsmdev_dummy=yes],
           [ac_cv_libsmdev=no])
-  
+
         AS_IF(
           [test "x$ac_cv_enable_wide_character_type" != xno],
           [AC_CHECK_LIB(
@@ -69,7 +69,7 @@ AC_DEFUN([AX_LIBSMDEV_CHECK_LIB],
            [ac_cv_libsmdev_dummy=yes],
            [ac_cv_libsmdev=no])
           ])
-  
+
         dnl Handle functions
         AC_CHECK_LIB(
           smdev,
@@ -86,7 +86,7 @@ AC_DEFUN([AX_LIBSMDEV_CHECK_LIB],
           libsmdev_handle_signal_abort,
           [ac_cv_libsmdev_dummy=yes],
           [ac_cv_libsmdev=no])
-  
+
         AC_CHECK_LIB(
           smdev,
           libsmdev_handle_open,
@@ -107,7 +107,7 @@ AC_DEFUN([AX_LIBSMDEV_CHECK_LIB],
           libsmdev_handle_seek_offset,
           [ac_cv_libsmdev_dummy=yes],
           [ac_cv_libsmdev=no])
-  
+
         AS_IF(
           [test "x$ac_cv_enable_wide_character_type" != xno],
           [AC_CHECK_LIB(
@@ -116,7 +116,7 @@ AC_DEFUN([AX_LIBSMDEV_CHECK_LIB],
            [ac_cv_libsmdev_dummy=yes],
            [ac_cv_libsmdev=no])
           ])
-  
+
         AC_CHECK_LIB(
           smdev,
           libsmdev_handle_get_bus_type,
@@ -177,7 +177,7 @@ AC_DEFUN([AX_LIBSMDEV_CHECK_LIB],
           libsmdev_handle_get_track,
           [ac_cv_libsmdev_dummy=yes],
           [ac_cv_libsmdev=no])
-  
+
         AC_CHECK_LIB(
           smdev,
           libsmdev_handle_set_error_flags,

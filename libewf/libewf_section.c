@@ -1521,7 +1521,7 @@ ssize_t libewf_section_data_read(
 	              (uint8_t *) data,
 	              sizeof( ewf_data_t ),
 	              error );
-	
+
 	if( read_count != (ssize_t) sizeof( ewf_data_t ) )
 	{
 		libcerror_error_set(
@@ -2683,7 +2683,7 @@ ssize_t libewf_section_error2_read(
 	              (uint8_t *) &error2_header,
 	              sizeof( ewf_error2_header_t ),
 	              error );
-	
+
 	if( read_count != (ssize_t) sizeof( ewf_error2_header_t ) )
 	{
 		libcerror_error_set(
@@ -2806,7 +2806,7 @@ ssize_t libewf_section_error2_read(
 		              (uint8_t *) error2_sectors,
 		              error2_sectors_size,
 	                      error );
-	
+
 		if( read_count != (ssize_t) error2_sectors_size )
 		{
 			libcerror_error_set(
@@ -4057,7 +4057,7 @@ ssize_t libewf_section_ltree_read(
 	              (uint8_t *) ltree_header,
 	              sizeof( ewf_ltree_header_t ),
 	              error );
-	
+
 	if( read_count != (ssize_t) sizeof( ewf_ltree_header_t ) )
 	{
 		libcerror_error_set(
@@ -4505,7 +4505,7 @@ ssize_t libewf_section_session_read(
 		              (uint8_t *) session_entries,
 		              session_entries_size,
 		              error );
-	
+
 		if( read_count != (ssize_t) session_entries_size )
 		{
 			libcerror_error_set(
@@ -5658,7 +5658,7 @@ ssize_t libewf_section_table_header_read(
 	              (uint8_t *) &table_header,
 	              sizeof( ewf_table_header_t ),
 	              error );
-	
+
 	if( read_count != (ssize_t) sizeof( ewf_table_header_t ) )
 	{
 		libcerror_error_set(

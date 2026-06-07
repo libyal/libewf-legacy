@@ -36,7 +36,7 @@ UNIQ="uniq";
 WC="wc";
 
 test_seek()
-{ 
+{
 	echo "Testing seek offset of input:" $*;
 
 	./${EWF_TEST_SEEK} $*;
