@@ -5178,6 +5178,8 @@ int export_handle_export_single_files(
 
 		goto on_error;
 	}
+	/* TODO log export started */
+
 #if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libcpath_path_make_directory_wide(
 	     sanitized_name,
@@ -5227,6 +5229,12 @@ int export_handle_export_single_files(
 	 sanitized_name );
 
 	sanitized_name = NULL;
+
+	fprintf(
+	 export_handle->notify_stream,
+	 "\n" );
+
+	/* TODO log export completed or aborted */
 
 	if( export_handle->abort != 0 )
 	{
@@ -5313,16 +5321,16 @@ int export_handle_export_file_entry(
      log_handle_t *log_handle,
      libcerror_error_t **error )
 {
-	system_character_t *name        = NULL;
-	system_character_t *target_path = NULL;
-	system_character_t *sanitized_name         = NULL;
-	static char *function                      = "export_handle_export_file_entry";
-	size_t name_size                           = 0;
-	size_t sanitized_name_size                 = 0;
-	size_t target_path_size                    = 0;
-	uint8_t file_entry_type                    = 0;
-	int result                                 = 0;
-	int return_value                           = 0;
+	system_character_t *name           = NULL;
+	system_character_t *sanitized_name = NULL;
+	system_character_t *target_path    = NULL;
+	static char *function              = "export_handle_export_file_entry";
+	size_t name_size                   = 0;
+	size_t sanitized_name_size         = 0;
+	size_t target_path_size            = 0;
+	uint8_t file_entry_type            = 0;
+	int result                         = 0;
+	int return_value                   = 0;
 
 	if( export_handle == NULL )
 	{
@@ -5447,11 +5455,6 @@ int export_handle_export_file_entry(
 
 			goto on_error;
 		}
-		memory_free(
-		 name );
-
-		name = NULL;
-
 #if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 		if( libcpath_path_join_wide(
 		     &target_path,
@@ -5512,7 +5515,7 @@ int export_handle_export_file_entry(
 			 error,
 			 LIBCERROR_ERROR_DOMAIN_IO,
 			 LIBCERROR_IO_ERROR_GENERIC,
-			 "%s: unable to determine if %" PRIs_SYSTEM " exists.",
+			 "%s: unable to determine if \"%" PRIs_SYSTEM "\" exists.",
 			 function,
 			 target_path );
 
@@ -5522,7 +5525,8 @@ int export_handle_export_file_entry(
 		{
 			log_handle_printf(
 			 log_handle,
-			 "Skipping file entry it already exists.\n" );
+			 "Skipping file entry: \"%" PRIs_SYSTEM "\" it already exists.\n",
+			 name );
 		}
 		else if( file_entry_type == LIBEWF_FILE_ENTRY_TYPE_FILE )
 		{
@@ -5541,8 +5545,15 @@ int export_handle_export_file_entry(
 			 */
 			fprintf(
 			 export_handle->notify_stream,
-			 "Single file: %" PRIs_SYSTEM "\n",
-			 &( target_path[ file_entry_path_index ] ) );
+			 "Single file: \"%" PRIs_SYSTEM "\" exported to: \"%" PRIs_SYSTEM "\"\n",
+			 name,
+			 target_path );
+
+			log_handle_printf(
+			 log_handle,
+			 "Single file: \"%" PRIs_SYSTEM "\" exported to: \"%" PRIs_SYSTEM "\"\n",
+			 name,
+			 target_path );
 
 			return_value = export_handle_export_file_entry_data(
 				        export_handle,
@@ -5574,9 +5585,6 @@ int export_handle_export_file_entry(
 					 "FAILED\n" );
 				}
 			}
-			fprintf(
-			 export_handle->notify_stream,
-			 "\n" );
 		}
 		else if( file_entry_type == LIBEWF_FILE_ENTRY_TYPE_DIRECTORY )
 		{
@@ -5605,6 +5613,10 @@ int export_handle_export_file_entry(
 			 "Created directory: %" PRIs_SYSTEM ".\n",
 			 target_path );
 		}
+		memory_free(
+		 name );
+
+		name = NULL;
 	}
 	else
 	{

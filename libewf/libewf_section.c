@@ -6311,7 +6311,7 @@ ssize_t libewf_section_volume_e01_read(
 		libcnotify_print_data(
 		 (uint8_t *) volume,
 		 sizeof( ewf_volume_t ),
-		 0 );
+		 LIBCNOTIFY_PRINT_DATA_FLAG_GROUP_DATA );
 	}
 #endif
 	media_values->media_type = volume->media_type;
@@ -6495,7 +6495,7 @@ ssize_t libewf_section_volume_e01_read(
 		libcnotify_print_data(
 		 volume->unknown6,
 		 963,
-		 0 );
+		 LIBCNOTIFY_PRINT_DATA_FLAG_GROUP_DATA );
 
 		libcnotify_printf(
 		 "%s: signature:\n",
@@ -6513,7 +6513,8 @@ ssize_t libewf_section_volume_e01_read(
 		libcnotify_printf(
 		 "\n" );
 	}
-#endif
+#endif /* defined( HAVE_DEBUG_OUTPUT ) */
+
 	if( libewf_checksum_calculate_adler32(
 	     &calculated_checksum,
 	     (uint8_t *) volume,

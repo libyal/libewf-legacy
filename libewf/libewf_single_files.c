@@ -1676,16 +1676,22 @@ int libewf_single_files_parse_file_entry(
 			if( type_string[ 0 ] == (uint8_t) 'p' )
 			{
 				/* p = 1 if directory
-				 * p = empty if file
+				 * p = empty or 0 if file
 				 */
 				if( value_string == NULL )
 				{
 					single_file_entry->type = LIBEWF_FILE_ENTRY_TYPE_FILE;
 				}
-				else if( ( value_string_size == 2 )
-				      && ( value_string[ 0 ] == (uint8_t) '1' ) )
+				else if( value_string_size == 2 )
 				{
-					single_file_entry->type = LIBEWF_FILE_ENTRY_TYPE_DIRECTORY;
+					if( value_string[ 0 ] == (uint8_t) '0' )
+					{
+						single_file_entry->type = LIBEWF_FILE_ENTRY_TYPE_FILE;
+					}
+					else if( value_string[ 0 ] == (uint8_t) '1' )
+					{
+						single_file_entry->type = LIBEWF_FILE_ENTRY_TYPE_DIRECTORY;
+					}
 				}
 			}
 		}
