@@ -13,8 +13,12 @@ AM_EXTRA_RECURSIVE_TARGETS([sources splint])
 
 AC_CONFIG_MACRO_DIR([m4])
 
+AC_CONFIG_TESTDIR([tests])
+
 dnl Check for host type
 AC_CANONICAL_HOST
+
+AC_PROG_CXX
 
 dnl Check for libtool DLL support
 LT_INIT([win32-dll])
@@ -26,7 +30,6 @@ AC_PROG_INSTALL
 
 dnl Check for C++ preprocessor and compiler for ewftools-mt
 AC_PROG_CXXCPP
-AC_PROG_CXX
 AX_CXX_COMPILE_STDCXX([11], [noext], [optional])
 
 dnl Check for libtool
@@ -279,6 +282,8 @@ AC_CONFIG_FILES([ewf.net/ewf.net.rc])
 AC_CONFIG_FILES([libewf.pc])
 AC_CONFIG_FILES([libewf.spec])
 AC_CONFIG_FILES([pyproject.toml])
+dnl Generate test configuration files
+AC_CONFIG_FILES([tests/atlocal])
 dnl Generate a source configuration file
 AC_CONFIG_HEADERS([common/config.h])
 

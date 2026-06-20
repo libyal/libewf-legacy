@@ -665,6 +665,8 @@ int ewf_test_file_entry_initialize(
 
 	/* Clean up
 	 */
+	single_files->ltree_data = NULL;
+
 	result = libewf_single_files_free(
 	          &single_files,
 	          &error );
@@ -698,6 +700,8 @@ on_error:
 	}
 	if( single_files != NULL )
 	{
+		single_files->ltree_data = NULL;
+
 		libewf_single_files_free(
 		 &single_files,
 		 NULL );
@@ -2586,6 +2590,8 @@ int main(
 	 "error",
 	 error );
 
+	single_files->ltree_data = NULL;
+
 	result = libewf_single_files_free(
 	          &single_files,
 	          &error );
@@ -2623,6 +2629,8 @@ on_error:
 	}
 	if( single_files != NULL )
 	{
+		single_files->ltree_data = NULL;
+
 		libewf_single_files_free(
 		 &single_files,
 		 NULL );

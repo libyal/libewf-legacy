@@ -22,61 +22,39 @@ AM_CPPFLAGS = \
 	@LIBSMRAW_CPPFLAGS@
 
 AM_TESTS_ENVIRONMENT = \
-	export PYTHON="@PYTHON@"; \
 	export TESTS_USE_WINAPI="@TESTS_USE_WINAPI@";
 
-if HAVE_PYTHON
-TESTS_PYEWF = \
-	test_pyewf.sh
-endif
+BUILT_SOURCES = package.m4
 
 if HAVE_WRITE_TESTS
 TESTS_WRITE = \
-	test_write.sh \
 	test_read_write.sh \
-	test_read_write_delta.sh \
-	test_ewfacquire.sh \
-	test_ewfacquire_optical.sh \
-	test_ewfacquirestream.sh \
-	test_ewfacquire_resume.sh \
-	test_ewfexport.sh \
-	test_ewfexport_logical.sh
+	test_read_write_delta.sh
 endif
 
 TESTS = \
-	test_library.sh \
-	test_glob.sh \
-	test_seek.sh \
-	test_read.sh \
-	test_ewfverify.sh \
-	test_ewfverify_logical.sh \
-	test_ewfinfo.sh \
-	$(TESTS_WRITE) \
-	$(TESTS_PYEWF)
+	test_glob.sh
+
+check_AUTOTESTS = \
+	test_library \
+	test_tools
+
+if HAVE_WRITE_TESTS
+check_AUTOTESTS += test_library_write
+endif
+if HAVE_PYTHON_TESTS
+check_AUTOTESTS += test_python_module
+endif
+if HAVE_WRITE_TESTS
+check_AUTOTESTS += test_tools_write
+endif
 
 check_SCRIPTS = \
-	test_ewfacquire.sh \
-	test_ewfacquire_optical.sh \
-	test_ewfacquire_resume.sh \
-	test_ewfacquirestream.sh \
-	test_ewfinfo.sh \
-	test_ewfexport.sh \
-	test_ewfexport_logical.sh \
-	test_ewfverify.sh \
-	test_ewfverify_logical.sh \
+	pyewf_test_support.py \
 	test_glob.sh \
-	test_library.sh \
-	test_manpage.sh \
-	test_pyewf.sh \
-	test_read.sh \
 	test_read_write.sh \
 	test_read_write_delta.sh \
-	test_runner.sh \
-	test_seek.sh \
-	test_write.sh
-
-EXTRA_DIST = \
-	$(check_SCRIPTS)
+	test_runner.sh
 
 check_PROGRAMS = \
 	ewf_test_bit_stream \
@@ -365,8 +343,10 @@ ewf_test_notify_LDADD = \
 
 ewf_test_read_SOURCES = \
 	ewf_test_definitions.h \
+	ewf_test_getopt.c ewf_test_getopt.h \
 	ewf_test_libcerror.h \
 	ewf_test_libewf.h \
+	ewf_test_macros.h \
 	ewf_test_read.c
 
 ewf_test_read_LDADD = \
@@ -424,8 +404,10 @@ ewf_test_sector_range_LDADD = \
 	@LIBCERROR_LIBADD@
 
 ewf_test_seek_SOURCES = \
+	ewf_test_getopt.c ewf_test_getopt.h \
 	ewf_test_libcerror.h \
 	ewf_test_libewf.h \
+	ewf_test_macros.h \
 	ewf_test_seek.c
 
 ewf_test_seek_LDADD = \
@@ -548,8 +530,130 @@ ewf_test_write_io_handle_LDADD = \
 	../libewf/libewf.la \
 	@LIBCERROR_LIBADD@
 
-DISTCLEANFILES = \
-	Makefile \
-	Makefile.in \
+AUTOM4TE = autom4te
+AUTOTEST = $(AUTOM4TE) --language=autotest
+
+SUFFIXES = .at
+
+.at:
+	$(AM_V_GEN)rm -f $@ $@.tmp; \
+	$(AUTOTEST) -I '$(srcdir)' -o $@.tmp $< && \
+	mv $@.tmp $@
+
+atconfig: $(top_builddir)/config.status
+	cd $(top_builddir) && $(SHELL) ./config.status tests/$@
+
+check-build: $(check_PROGRAMS)
+
+check-local: $(check_AUTOTESTS)
+	@fail=0; \
+	for test_suite in $(check_AUTOTESTS); do \
+		$(AM_TESTS_ENVIRONMENT) $(SHELL) "./$$test_suite" $(TESTSUITEFLAGS) || fail=1; \
+		echo ""; \
+	done; \
+	exit $$fail
+
+clean-local:
+	for test_suite in $(check_AUTOTESTS); do \
+		test ! -f "$$test_suite" || $(SHELL) "./$$test_suite" --clean; \
+	done
+
+package.m4: $(top_srcdir)/configure.ac
+	$(AM_V_GEN):; \
+	{ \
+	  echo 'm4_define([AT_PACKAGE_NAME], [$(PACKAGE_NAME)])' ; \
+	  echo 'm4_define([AT_PACKAGE_TARNAME], [$(PACKAGE_TARNAME)])' ; \
+	  echo 'm4_define([AT_PACKAGE_VERSION], [$(PACKAGE_VERSION)])' ; \
+	  echo 'm4_define([AT_PACKAGE_STRING], [$(PACKAGE_STRING)])' ; \
+	  echo 'm4_define([AT_PACKAGE_BUGREPORT], [$(PACKAGE_BUGREPORT)])' ; \
+	} > $@
+
+test_inputs_libewf_legacy.at: generate_test_inputs.sh
+	$(SHELL) $(srcdir)/generate_test_inputs.sh $(PACKAGE_NAME) libewf_legacy
+
+test_inputs_pyewf_legacy.at: generate_test_inputs.sh
+	$(SHELL) $(srcdir)/generate_test_inputs.sh $(PACKAGE_NAME) pyewf_legacy
+
+test_inputs_ewfexport_legacy.at: generate_test_inputs.sh
+	$(SHELL) $(srcdir)/generate_test_inputs.sh $(PACKAGE_NAME) ewfexport_legacy
+
+test_inputs_ewfexport_logical_legacy.at: generate_test_inputs.sh
+	$(SHELL) $(srcdir)/generate_test_inputs.sh $(PACKAGE_NAME) ewfexport_logical_legacy
+
+test_inputs_ewfexport_write.at: generate_test_inputs.sh
+	$(SHELL) $(srcdir)/generate_test_inputs.sh $(PACKAGE_NAME) ewfexport_write
+
+test_inputs_ewfinfo_legacy.at: generate_test_inputs.sh
+	$(SHELL) $(srcdir)/generate_test_inputs.sh $(PACKAGE_NAME) ewfinfo_legacy
+
+test_inputs_ewfverify_legacy.at: generate_test_inputs.sh
+	$(SHELL) $(srcdir)/generate_test_inputs.sh $(PACKAGE_NAME) ewfverify_legacy
+
+test_inputs_ewfverify_logical_legacy.at: generate_test_inputs.sh
+	$(SHELL) $(srcdir)/generate_test_inputs.sh $(PACKAGE_NAME) ewfverify_logical_legacy
+
+test_inputs_ewfacquire.at: generate_test_inputs.sh
+	$(SHELL) $(srcdir)/generate_test_inputs.sh $(PACKAGE_NAME) ewfacquire
+
+test_inputs_ewfacquire_optical.at: generate_test_inputs.sh
+	$(SHELL) $(srcdir)/generate_test_inputs.sh $(PACKAGE_NAME) ewfacquire_optical
+
+test_inputs_ewfacquirestream.at: generate_test_inputs.sh
+	$(SHELL) $(srcdir)/generate_test_inputs.sh $(PACKAGE_NAME) ewfacquirestream
+
+test_library: \
+	package.m4 \
+	test_inputs_libewf_legacy.at \
+	test_library.at \
+	test_macros.at
+
+test_library_write: \
+	package.m4 \
+	test_library_write.at \
+	test_macros.at
+
+test_python_module: \
+	package.m4 \
+	test_inputs_pyewf_legacy.at \
+	test_macros.at \
+	test_python_module.at
+
+test_tools: \
+	package.m4 \
+	test_inputs_ewfexport_legacy.at \
+	test_inputs_ewfexport_logical_legacy.at \
+	test_inputs_ewfinfo_legacy.at \
+	test_inputs_ewfverify_legacy.at \
+	test_inputs_ewfverify_logical_legacy.at \
+	test_macros.at \
+	test_tools.at
+
+test_tools_write: \
+	package.m4 \
+	test_inputs_ewfacquire.at \
+	test_inputs_ewfacquire_optical.at \
+	test_inputs_ewfacquirestream.at \
+	test_inputs_ewfexport_write.at \
+	test_macros.at \
+	test_tools_write.at
+
+EXTRA_DIST = \
+	$(check_AUTOTESTS:=.at) \
+	package.m4 \
+	pyewf_test_support.py \
+	test_glob.sh \
+	test_macros.at \
+	test_runner.sh
+
+CLEANFILES = \
+	$(check_AUTOTESTS) \
+	*.exe \
+	*.tmp \
 	notify_stream.log
+
+DISTCLEANFILES = \
+	*.log \
+	atconfig \
+	Makefile \
+	Makefile.in
 

@@ -516,11 +516,13 @@ int libewf_glob(
 {
 	libbfio_handle_t *file_io_handle = NULL;
 	char *segment_filename           = NULL;
+	char **safe_filenames            = NULL;
 	void *reallocation               = NULL;
 	static char *function            = "libewf_glob";
 	size_t additional_length         = 4;
 	size_t segment_filename_length   = 0;
 	int result                       = 0;
+	int safe_number_of_filenames     = 0;
 	uint8_t segment_file_type        = 0;
 	uint8_t ewf_format               = 0;
 
@@ -578,6 +580,17 @@ int libewf_glob(
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
 		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
 		 "%s: invalid filenames.",
+		 function );
+
+		return( -1 );
+	}
+	if( *filenames != NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
+		 "%s: invalid filenames value already set.",
 		 function );
 
 		return( -1 );
@@ -665,9 +678,7 @@ int libewf_glob(
 
 		goto on_error;
 	}
-	*number_of_filenames = 0;
-
-	while( *number_of_filenames < (int) UINT16_MAX )
+	while( safe_number_of_filenames < (int) UINT16_MAX )
 	{
 		segment_filename_length = filename_length + additional_length;
 
@@ -705,7 +716,7 @@ int libewf_glob(
 		}
 		if( libewf_filename_set_extension(
 		     &( segment_filename[ segment_filename_length - 3 ] ),
-		     (uint16_t) ( *number_of_filenames + 1 ),
+		     (uint16_t) ( safe_number_of_filenames + 1 ),
 		     UINT16_MAX,
 		     segment_file_type,
 		     format,
@@ -762,11 +773,9 @@ int libewf_glob(
 
 			break;
 		}
-		*number_of_filenames += 1;
-
 		reallocation = memory_reallocate(
-		                *filenames,
-		                sizeof( char * ) * *number_of_filenames );
+		                safe_filenames,
+		                sizeof( char * ) * ( safe_number_of_filenames + 1 ) );
 
 		if( reallocation == NULL )
 		{
@@ -779,9 +788,11 @@ int libewf_glob(
 
 			goto on_error;
 		}
-		*filenames = (char **) reallocation;
+		safe_filenames = (char **) reallocation;
 
-		( *filenames )[ *number_of_filenames - 1 ] = segment_filename;
+		safe_filenames[ safe_number_of_filenames ] = segment_filename;
+
+		safe_number_of_filenames += 1;
 	}
 	if( libbfio_handle_free(
 	     &file_io_handle,
@@ -796,6 +807,9 @@ int libewf_glob(
 
 		goto on_error;
 	}
+	*filenames           = safe_filenames;
+	*number_of_filenames = safe_number_of_filenames;
+
 	return( 1 );
 
 on_error:
@@ -808,6 +822,13 @@ on_error:
 	{
 		libbfio_handle_free(
 		 &file_io_handle,
+		 NULL );
+	}
+	if( safe_filenames != NULL )
+	{
+		libewf_glob_free(
+		 safe_filenames,
+		 safe_number_of_filenames,
 		 NULL );
 	}
 	return( -1 );
@@ -876,11 +897,13 @@ int libewf_glob_wide(
 {
 	libbfio_handle_t *file_io_handle = NULL;
 	wchar_t *segment_filename        = NULL;
+	wchar_t **safe_filenames         = NULL;
 	void *reallocation               = NULL;
 	static char *function            = "libewf_glob_wide";
 	size_t additional_length         = 4;
 	size_t segment_filename_length   = 0;
 	int result                       = 0;
+	int safe_number_of_filenames     = 0;
 	uint8_t segment_file_type        = 0;
 	uint8_t ewf_format               = 0;
 
@@ -938,6 +961,17 @@ int libewf_glob_wide(
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
 		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
 		 "%s: invalid filenames.",
+		 function );
+
+		return( -1 );
+	}
+	if( *filenames != NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
+		 "%s: invalid filenames value already set.",
 		 function );
 
 		return( -1 );
@@ -1025,9 +1059,7 @@ int libewf_glob_wide(
 
 		goto on_error;
 	}
-	*number_of_filenames = 0;
-
-	while( *number_of_filenames < (int) UINT16_MAX )
+	while( safe_number_of_filenames < (int) UINT16_MAX )
 	{
 		segment_filename_length = filename_length + additional_length;
 
@@ -1065,7 +1097,7 @@ int libewf_glob_wide(
 		}
 		if( libewf_filename_set_extension_wide(
 		     &( segment_filename[ segment_filename_length - 3 ] ),
-		     (uint16_t) ( *number_of_filenames + 1 ),
+		     (uint16_t) ( safe_number_of_filenames + 1 ),
 		     UINT16_MAX,
 		     segment_file_type,
 		     format,
@@ -1122,11 +1154,9 @@ int libewf_glob_wide(
 
 			break;
 		}
-		*number_of_filenames += 1;
-
 		reallocation = memory_reallocate(
-		                *filenames,
-		                sizeof( wchar_t * ) * *number_of_filenames );
+		                safe_filenames,
+		                sizeof( wchar_t * ) * ( safe_number_of_filenames + 1 ) );
 
 		if( reallocation == NULL )
 		{
@@ -1139,9 +1169,11 @@ int libewf_glob_wide(
 
 			goto on_error;
 		}
-		*filenames = (wchar_t **) reallocation;
+		safe_filenames = (wchar_t **) reallocation;
 
-		( *filenames )[ *number_of_filenames - 1 ] = segment_filename;
+		safe_filenames[ safe_number_of_filenames ] = segment_filename;
+
+		safe_number_of_filenames += 1;
 	}
 	if( libbfio_handle_free(
 	     &file_io_handle,
@@ -1156,6 +1188,9 @@ int libewf_glob_wide(
 
 		goto on_error;
 	}
+	*filenames           = safe_filenames;
+	*number_of_filenames = safe_number_of_filenames;
+
 	return( 1 );
 
 on_error:
@@ -1168,6 +1203,13 @@ on_error:
 	{
 		libbfio_handle_free(
 		 &file_io_handle,
+		 NULL );
+	}
+	if( safe_filenames != NULL )
+	{
+		libewf_glob_wide_free(
+		 safe_filenames,
+		 safe_number_of_filenames,
 		 NULL );
 	}
 	return( -1 );

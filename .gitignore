@@ -1,6 +1,6 @@
 # Files to ignore by git
 #
-# Version: 20251129
+# Version: 20260604
 
 # Generic auto-generated build files
 *~
@@ -138,7 +138,12 @@ stamp-h[1-9]
 /ewftools/ewfmount
 /ewftools/ewfrecover
 /ewftools/ewfverify
+/tests/*.dir
 /tests/*.exe
+/tests/*.log
+/tests/*.tmp
+/tests/atconfig
+/tests/atlocal
 /tests/ewf_test_bit_stream
 /tests/ewf_test_checksum
 /tests/ewf_test_chunk_data
@@ -187,6 +192,14 @@ stamp-h[1-9]
 /tests/input_raw_more
 /tests/input_raw_optical
 /tests/notify_stream.log
+/tests/package.m4
+/tests/test_inputs_*.at
+/tests/test_library
+/tests/test_library_write
+/tests/test_manpages
+/tests/test_python_module
+/tests/test_tools
+/tests/test_tools_write
 /tests/tmp*
 
 # Local library dependencies specific files

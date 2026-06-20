@@ -20,7 +20,11 @@
  */
 
 #include <common.h>
+#include <file_stream.h>
+#include <narrow_string.h>
+#include <system_string.h>
 #include <types.h>
+#include <wide_string.h>
 
 #if defined( HAVE_STDLIB_H ) || defined( WINAPI )
 #include <stdlib.h>
@@ -28,8 +32,10 @@
 
 #include <stdio.h>
 
+#include "ewf_test_getopt.h"
 #include "ewf_test_libcerror.h"
 #include "ewf_test_libewf.h"
+#include "ewf_test_macros.h"
 
 /* Define to make ewf_test_seek generate verbose output
 #define EWF_TEST_SEEK_VERBOSE
@@ -44,33 +50,10 @@ int ewf_test_seek_offset(
      int input_whence,
      off64_t expected_offset )
 {
-	libcerror_error_t *error  = NULL;
-	const char *whence_string = NULL;
-	static char *function     = "ewf_test_seek_offset";
-	off64_t result_offset     = 0;
-	int result                = 0;
-
-	if( input_whence == SEEK_CUR )
-	{
-		whence_string = "SEEK_CUR";
-	}
-	else if( input_whence == SEEK_END )
-	{
-		whence_string = "SEEK_END";
-	}
-	else if( input_whence == SEEK_SET )
-	{
-		whence_string = "SEEK_SET";
-	}
-	else
-	{
-		whence_string = "UNKNOWN";
-	}
-	fprintf(
-	 stdout,
-	 "Testing seek of offset: %" PRIi64 " and whence: %s\t",
-	 input_offset,
-	 whence_string );
+	libcerror_error_t *error = NULL;
+	static char *function    = "ewf_test_seek_offset";
+	off64_t result_offset    = 0;
+	int result               = 0;
 
 	result_offset = libewf_handle_seek_offset(
 	                 handle,
@@ -102,22 +85,6 @@ int ewf_test_seek_offset(
 		}
 		result = 1;
 	}
-	if( result != 0 )
-	{
-		fprintf(
-		 stdout,
-		 "(PASS)" );
-	}
-	else
-	{
-		fprintf(
-		 stdout,
-		 "(FAIL)" );
-	}
-	fprintf(
-	 stdout,
-	 "\n" );
-
 	if( result == -1 )
 	{
 		libcerror_error_backtrace_fprint(
@@ -146,17 +113,36 @@ int wmain( int argc, wchar_t * const argv[] )
 int main( int argc, char * const argv[] )
 #endif
 {
-	libcerror_error_t *error = NULL;
-	libewf_handle_t *handle  = NULL;
-	size64_t media_size      = 0;
+	libcerror_error_t *error       = NULL;
+	libewf_handle_t *handle        = NULL;
+	system_character_t **filenames = NULL;
+	system_character_t *source     = NULL;
+	system_integer_t option        = 0;
+	size64_t media_size            = 0;
+	size_t string_length           = 0;
+	int number_of_filenames        = 0;
+	int result                     = 0;
 
-	if( argc < 2 )
+	while( ( option = ewf_test_getopt(
+	                   argc,
+	                   argv,
+	                   _SYSTEM_STRING( "" ) ) ) != (system_integer_t) -1 )
 	{
-		fprintf(
-		 stderr,
-		 "Missing filename(s).\n" );
+		switch( option )
+		{
+			case (system_integer_t) '?':
+			default:
+				fprintf(
+				 stderr,
+				 "Invalid argument: %" PRIs_SYSTEM ".\n",
+				 argv[ optind - 1 ] );
 
-		return( EXIT_FAILURE );
+				return( EXIT_FAILURE );
+		}
+	}
+	if( optind < argc )
+	{
+		source = argv[ optind ];
 	}
 #if defined( HAVE_DEBUG_OUTPUT ) && defined( EWF_TEST_SEEK_VERBOSE )
 	libewf_notify_set_verbose(
@@ -165,6 +151,48 @@ int main( int argc, char * const argv[] )
 	 stderr,
 	 NULL );
 #endif
+	EWF_TEST_ASSERT_IS_NOT_NULL(
+	 "source",
+	 source );
+
+	string_length = system_string_length(
+	                 source );
+
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
+	result = libewf_glob_wide(
+	          source,
+	          string_length,
+	          LIBEWF_FORMAT_UNKNOWN,
+	          &filenames,
+	          &number_of_filenames,
+	          &error );
+#else
+	result = libewf_glob(
+	          source,
+	          string_length,
+	          LIBEWF_FORMAT_UNKNOWN,
+	          &filenames,
+	          &number_of_filenames,
+	          &error );
+#endif
+	EWF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	EWF_TEST_ASSERT_IS_NOT_NULL(
+	 "filenames",
+	 filenames );
+
+	EWF_TEST_ASSERT_GREATER_THAN_INT(
+	 "number_of_filenames",
+	 number_of_filenames,
+	 0 );
+
+	EWF_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
 	/* Initialization
 	 */
 	if( libewf_handle_initialize(
@@ -486,6 +514,27 @@ int main( int argc, char * const argv[] )
 
 		goto on_error;
 	}
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
+	result = libewf_glob_wide_free(
+	          filenames,
+	          number_of_filenames,
+	          &error );
+#else
+	result = libewf_glob_free(
+	          filenames,
+	          number_of_filenames,
+	          &error );
+#endif
+
+	EWF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	EWF_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
 	return( EXIT_SUCCESS );
 
 on_error:
@@ -505,6 +554,20 @@ on_error:
 		libewf_handle_free(
 		 &handle,
 		 NULL );
+	}
+	if( filenames != NULL )
+	{
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
+		libewf_glob_wide_free(
+		 filenames,
+		 number_of_filenames,
+		 NULL );
+#else
+		libewf_glob_free(
+		 filenames,
+		 number_of_filenames,
+		 NULL );
+#endif
 	}
 	return( EXIT_FAILURE );
 }

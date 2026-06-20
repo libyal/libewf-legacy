@@ -20,8 +20,12 @@
  */
 
 #include <common.h>
+#include <file_stream.h>
 #include <memory.h>
+#include <narrow_string.h>
+#include <system_string.h>
 #include <types.h>
+#include <wide_string.h>
 
 #if defined( HAVE_STDLIB_H ) || defined( WINAPI )
 #include <stdlib.h>
@@ -30,8 +34,10 @@
 #include <stdio.h>
 
 #include "ewf_test_definitions.h"
+#include "ewf_test_getopt.h"
 #include "ewf_test_libcerror.h"
 #include "ewf_test_libewf.h"
+#include "ewf_test_macros.h"
 
 /* Define to make ewf_test_read generate verbose output
 #define EWF_TEST_READ_VERBOSE
@@ -304,33 +310,9 @@ int ewf_test_read_buffer_at_offset(
      off64_t expected_offset,
      size64_t expected_size )
 {
-	libcerror_error_t *error   = NULL;
-	uint8_t *buffer           = NULL;
-	const char *whence_string = NULL;
-	int result                = 0;
-
-	if( input_whence == SEEK_CUR )
-	{
-		whence_string = "SEEK_CUR";
-	}
-	else if( input_whence == SEEK_END )
-	{
-		whence_string = "SEEK_END";
-	}
-	else if( input_whence == SEEK_SET )
-	{
-		whence_string = "SEEK_SET";
-	}
-	else
-	{
-		whence_string = "UNKNOWN";
-	}
-	fprintf(
-	 stdout,
-	 "Testing reading range with offset: %" PRIi64 ", whence: %s and size: %" PRIu64 "\t",
-	 input_offset,
-	 whence_string,
-	 input_size );
+	libcerror_error_t *error = NULL;
+	uint8_t *buffer          = NULL;
+	int result               = 0;
 
 	buffer = (uint8_t *) memory_allocate(
 	                      EWF_TEST_BUFFER_SIZE );
@@ -368,22 +350,6 @@ int ewf_test_read_buffer_at_offset(
 	memory_free(
 	 buffer );
 
-	if( result != 0 )
-	{
-		fprintf(
-		 stdout,
-		 "(PASS)" );
-	}
-	else
-	{
-		fprintf(
-		 stdout,
-		 "(FAIL)" );
-	}
-	fprintf(
-	 stdout,
-	 "\n" );
-
 	if( result == -1 )
 	{
 		libcerror_error_backtrace_fprint(
@@ -408,13 +374,12 @@ int ewf_test_read_chunk_at_offset(
      off64_t expected_offset,
      size64_t expected_size )
 {
-	libcerror_error_t *error   = NULL;
-	uint8_t *chunk_buffer     = NULL;
-	uint8_t *data_buffer      = NULL;
-	const char *whence_string = NULL;
-	size_t chunk_buffer_size  = 0;
-	size_t data_buffer_size   = 0;
-	int result                = 0;
+	libcerror_error_t *error = NULL;
+	uint8_t *chunk_buffer    = NULL;
+	uint8_t *data_buffer     = NULL;
+	size_t chunk_buffer_size = 0;
+	size_t data_buffer_size  = 0;
+	int result               = 0;
 
 	if( chunk_size == 0 )
 	{
@@ -426,29 +391,6 @@ int ewf_test_read_chunk_at_offset(
 		return( -1 );
 	}
 #endif
-	if( input_whence == SEEK_CUR )
-	{
-		whence_string = "SEEK_CUR";
-	}
-	else if( input_whence == SEEK_END )
-	{
-		whence_string = "SEEK_END";
-	}
-	else if( input_whence == SEEK_SET )
-	{
-		whence_string = "SEEK_SET";
-	}
-	else
-	{
-		whence_string = "UNKNOWN";
-	}
-	fprintf(
-	 stdout,
-	 "Testing reading range with offset: %" PRIi64 ", whence: %s and size: %" PRIu64 "\t",
-	 input_offset,
-	 whence_string,
-	 input_size );
-
 	result = ewf_test_seek_offset(
 	          handle,
 	          input_offset,
@@ -498,22 +440,6 @@ int ewf_test_read_chunk_at_offset(
 			          &error );
 		}
 	}
-	if( result != 0 )
-	{
-		fprintf(
-		 stdout,
-		 "(PASS)" );
-	}
-	else
-	{
-		fprintf(
-		 stdout,
-		 "(FAIL)" );
-	}
-	fprintf(
-	 stdout,
-	 "\n" );
-
 	if( result == -1 )
 	{
 		libcerror_error_backtrace_fprint(
@@ -534,20 +460,39 @@ int wmain( int argc, wchar_t * const argv[] )
 int main( int argc, char * const argv[] )
 #endif
 {
-	libcerror_error_t *error = NULL;
-	libewf_handle_t *handle = NULL;
-	off64_t read_offset     = 0;
-	size64_t media_size     = 0;
-	size64_t read_size      = 0;
-	size32_t chunk_size     = 0;
+	libcerror_error_t *error       = NULL;
+	libewf_handle_t *handle        = NULL;
+	system_character_t **filenames = NULL;
+	system_character_t *source     = NULL;
+	system_integer_t option        = 0;
+	off64_t read_offset            = 0;
+	size64_t media_size            = 0;
+	size64_t read_size             = 0;
+	size32_t chunk_size            = 0;
+	size_t string_length           = 0;
+	int number_of_filenames        = 0;
+	int result                     = 0;
 
-	if( argc < 2 )
+	while( ( option = ewf_test_getopt(
+	                   argc,
+	                   argv,
+	                   _SYSTEM_STRING( "" ) ) ) != (system_integer_t) -1 )
 	{
-		fprintf(
-		 stderr,
-		 "Missing filename(s).\n" );
+		switch( option )
+		{
+			case (system_integer_t) '?':
+			default:
+				fprintf(
+				 stderr,
+				 "Invalid argument: %" PRIs_SYSTEM ".\n",
+				 argv[ optind - 1 ] );
 
-		return( EXIT_FAILURE );
+				return( EXIT_FAILURE );
+		}
+	}
+	if( optind < argc )
+	{
+		source = argv[ optind ];
 	}
 #if defined( HAVE_DEBUG_OUTPUT ) && defined( EWF_TEST_READ_VERBOSE )
 	libewf_notify_set_verbose(
@@ -556,6 +501,48 @@ int main( int argc, char * const argv[] )
 	 stderr,
 	 NULL );
 #endif
+	EWF_TEST_ASSERT_IS_NOT_NULL(
+	 "source",
+	 source );
+
+	string_length = system_string_length(
+	                 source );
+
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
+	result = libewf_glob_wide(
+	          source,
+	          string_length,
+	          LIBEWF_FORMAT_UNKNOWN,
+	          &filenames,
+	          &number_of_filenames,
+	          &error );
+#else
+	result = libewf_glob(
+	          source,
+	          string_length,
+	          LIBEWF_FORMAT_UNKNOWN,
+	          &filenames,
+	          &number_of_filenames,
+	          &error );
+#endif
+	EWF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	EWF_TEST_ASSERT_IS_NOT_NULL(
+	 "filenames",
+	 filenames );
+
+	EWF_TEST_ASSERT_GREATER_THAN_INT(
+	 "number_of_filenames",
+	 number_of_filenames,
+	 0 );
+
+	EWF_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
 	/* Initialization
 	 */
 	if( libewf_handle_initialize(
@@ -571,15 +558,15 @@ int main( int argc, char * const argv[] )
 #if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libewf_handle_open_wide(
 	     handle,
-	     &( argv[ 1 ] ),
-	     argc - 1,
+	     filenames,
+	     number_of_filenames,
 	     LIBEWF_OPEN_READ,
 	     &error ) != 1 )
 #else
 	if( libewf_handle_open(
 	     handle,
-	     &( argv[ 1 ] ),
-	     argc - 1,
+	     filenames,
+	     number_of_filenames,
 	     LIBEWF_OPEN_READ,
 	     &error ) != 1 )
 #endif
@@ -628,11 +615,6 @@ int main( int argc, char * const argv[] )
 
 		goto on_error;
 	}
-	fprintf(
-	 stdout,
-	 "Media size: %" PRIu64 " bytes\n",
-	 media_size );
-
 	/* Case 0: test full read
 	 */
 
@@ -785,11 +767,6 @@ int main( int argc, char * const argv[] )
 			goto on_error;
 		}
 	}
-	fprintf(
-	 stdout,
-	 "\nChunk size: %" PRIu32 " bytes\n",
-	 chunk_size );
-
 	/* Case 0: test full read
 	 */
 
@@ -1007,6 +984,27 @@ int main( int argc, char * const argv[] )
 
 		goto on_error;
 	}
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
+	result = libewf_glob_wide_free(
+	          filenames,
+	          number_of_filenames,
+	          &error );
+#else
+	result = libewf_glob_free(
+	          filenames,
+	          number_of_filenames,
+	          &error );
+#endif
+
+	EWF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	EWF_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
 	return( EXIT_SUCCESS );
 
 on_error:
@@ -1026,6 +1024,20 @@ on_error:
 		libewf_handle_free(
 		 &handle,
 		 NULL );
+	}
+	if( filenames != NULL )
+	{
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
+		libewf_glob_wide_free(
+		 filenames,
+		 number_of_filenames,
+		 NULL );
+#else
+		libewf_glob_free(
+		 filenames,
+		 number_of_filenames,
+		 NULL );
+#endif
 	}
 	return( EXIT_FAILURE );
 }

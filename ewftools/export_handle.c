@@ -1831,7 +1831,7 @@ int export_handle_finalize_integrity_hash(
 		     calculated_sha256_hash,
 		     LIBHMAC_SHA256_HASH_SIZE,
 		     export_handle->calculated_sha256_hash_string,
-		     41,
+		     65,
 		     error ) != 1 )
 		{
 			libcerror_error_set(
@@ -3007,6 +3007,7 @@ int export_handle_set_output_format(
 
 			return( -1 );
 		}
+		export_handle->output_format = EXPORT_HANDLE_OUTPUT_FORMAT_EWF;
 	}
 	return( result );
 }

@@ -2633,6 +2633,7 @@ int info_handle_media_information_fprint(
 		}
 		else
 		{
+/* TODO disabled for now
 #if defined( HAVE_VERBOSE_OUTPUT )
 			if( info_handle->output_format == INFO_HANDLE_OUTPUT_FORMAT_TEXT )
 			{
@@ -2642,6 +2643,7 @@ int info_handle_media_information_fprint(
 				 media_flags );
 			}
 #endif
+*/
 			if( info_handle_section_value_boolean_fprint(
 			     info_handle,
 			     "is_physical",
@@ -2773,6 +2775,7 @@ int info_handle_media_information_fprint(
 				result = -1;
 			}
 		}
+/* TODO disabled for now
 #if defined( HAVE_DEBUG_OUTPUT )
 		if( libewf_handle_get_chunk_size(
 		     info_handle->input_handle,
@@ -2809,6 +2812,7 @@ int info_handle_media_information_fprint(
 			}
 		}
 #endif
+*/
 	}
 	if( libewf_handle_get_media_size(
 	     info_handle->input_handle,
