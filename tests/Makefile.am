@@ -21,40 +21,24 @@ AM_CPPFLAGS = \
 	@LIBSMDEV_CPPFLAGS@ \
 	@LIBSMRAW_CPPFLAGS@
 
-AM_TESTS_ENVIRONMENT = \
-	export TESTS_USE_WINAPI="@TESTS_USE_WINAPI@";
-
 BUILT_SOURCES = package.m4
-
-if HAVE_WRITE_TESTS
-TESTS_WRITE = \
-	test_read_write.sh \
-	test_read_write_delta.sh
-endif
-
-TESTS = \
-	test_glob.sh
 
 check_AUTOTESTS = \
 	test_library \
+	test_glob \
 	test_tools
 
 if HAVE_WRITE_TESTS
-check_AUTOTESTS += test_library_write
+check_AUTOTESTS += \
+	test_library_write \
+	test_tools_write
 endif
 if HAVE_PYTHON_TESTS
 check_AUTOTESTS += test_python_module
 endif
-if HAVE_WRITE_TESTS
-check_AUTOTESTS += test_tools_write
-endif
 
 check_SCRIPTS = \
-	pyewf_test_support.py \
-	test_glob.sh \
-	test_read_write.sh \
-	test_read_write_delta.sh \
-	test_runner.sh
+	pyewf_test_support.py
 
 check_PROGRAMS = \
 	ewf_test_bit_stream \
@@ -601,6 +585,11 @@ test_inputs_ewfacquire_optical.at: generate_test_inputs.sh
 test_inputs_ewfacquirestream.at: generate_test_inputs.sh
 	$(SHELL) $(srcdir)/generate_test_inputs.sh $(PACKAGE_NAME) ewfacquirestream
 
+test_glob: \
+	package.m4 \
+	test_glob.at \
+	test_macros.at
+
 test_library: \
 	package.m4 \
 	test_inputs_libewf_legacy.at \
@@ -639,17 +628,17 @@ test_tools_write: \
 
 EXTRA_DIST = \
 	$(check_AUTOTESTS:=.at) \
+	generate_test_inputs.sh \
 	package.m4 \
 	pyewf_test_support.py \
-	test_glob.sh \
-	test_macros.at \
-	test_runner.sh
+	test_macros.at
 
 CLEANFILES = \
 	$(check_AUTOTESTS) \
 	*.exe \
 	*.tmp \
-	notify_stream.log
+	notify_stream.log \
+	test_inputs_*.at
 
 DISTCLEANFILES = \
 	*.log \

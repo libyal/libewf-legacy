@@ -3,7 +3,7 @@ AC_PREREQ([2.71])
 AC_INIT(
   [libewf],
   [20140817],
-  [joachim.metz@gmail.com])
+  [https://github.com/libyal/libewf-legacy/issues])
 
 AC_CONFIG_SRCDIR(
   [include/libewf.h.in])

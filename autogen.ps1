@@ -21,7 +21,7 @@ Get-Content -Path "common\types.h.in" |
 If (Test-Path "include\${PackageName}.h.in")
 {
 	Get-Content -Path "include\${PackageName}.h.in" |
-		_ -Replace "@HAVE_V1_API@ \|\| ","" } |
+		% { $_ -Replace "@HAVE_V1_API@ \|\| ","" } |
 		Out-File -Encoding ascii "include\${PackageName}.h"
 	Get-Content -Path "include\${PackageName}\definitions.h.in" |
 		% { $_ -Replace "@VERSION@","${PackageVersion}" } |

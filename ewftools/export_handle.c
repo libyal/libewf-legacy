@@ -858,7 +858,7 @@ int export_handle_open_output(
 }
 
 /* Closes the export handle
- * Returns the 0 if succesful or -1 on error
+ * Returns the 0 if successful or -1 on error
  */
 int export_handle_close(
      export_handle_t *export_handle,

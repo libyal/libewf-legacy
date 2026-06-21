@@ -778,7 +778,7 @@ int imaging_handle_open_secondary_output(
 }
 
 /* Closes the imaging handle
- * Returns the 0 if succesful or -1 on error
+ * Returns the 0 if successful or -1 on error
  */
 int imaging_handle_close(
      imaging_handle_t *imaging_handle,

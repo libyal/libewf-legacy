@@ -37,10 +37,5 @@ RUN_TEST_BINARIES(
 
 RUN_TEST_BINARIES_WITH_INPUT(
   [SKIP_LIBRARY_TESTS],
-  [handle support],
-  test_inputs_libewf_legacy)
-
-RUN_TEST_BINARIES_WITH_INPUT(
-  [SKIP_LIBRARY_TESTS],
-  [read seek],
+  [handle read seek support],
   test_inputs_libewf_legacy)
