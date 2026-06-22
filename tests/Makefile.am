@@ -26,6 +26,7 @@ BUILT_SOURCES = package.m4
 check_AUTOTESTS = \
 	test_library \
 	test_glob \
+	test_manpages \
 	test_tools
 
 if HAVE_WRITE_TESTS
@@ -600,6 +601,10 @@ test_library_write: \
 	package.m4 \
 	test_library_write.at \
 	test_macros.at
+
+test_manpages: \
+	package.m4 \
+	test_manpages.at
 
 test_python_module: \
 	package.m4 \
