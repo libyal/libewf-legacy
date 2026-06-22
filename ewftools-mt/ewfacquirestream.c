@@ -39,20 +39,22 @@
 #include <io.h>
 #endif
 
-#include "byte_size_string.h"
-#include "ewfcommon.h"
-#include "ewfinput.h"
-#include "ewftools_getopt.h"
-#include "ewftools_libcerror.h"
-#include "ewftools_libclocale.h"
-#include "ewftools_libcnotify.h"
-#include "ewftools_libewf.h"
-#include "ewftools_output.h"
-#include "ewftools_signal.h"
-#include "imaging_handle.h"
-#include "log_handle.h"
-#include "process_status.h"
-#include "storage_media_buffer.h"
+#include "../ewftools/byte_size_string.h"
+#include "../ewftools/ewfcommon.h"
+#include "../ewftools/ewfinput.h"
+#include "../ewftools/ewftools_getopt.h"
+#include "../ewftools/ewftools_libcerror.h"
+#include "../ewftools/ewftools_libclocale.h"
+#include "../ewftools/ewftools_libcnotify.h"
+#include "../ewftools/ewftools_libewf.h"
+#include "../ewftools/ewftools_output.h"
+#include "../ewftools/ewftools_signal.h"
+#include "../ewftools/ewftools_unused.h"
+#include "../ewftools/imaging_handle.h"
+#include "../ewftools/log_handle.h"
+#include "../ewftools/process_status.h"
+#include "../ewftools/storage_media_buffer.h"
+
 #include "threading.hpp"
 
 imaging_handle_t *ewfacquirestream_imaging_handle = NULL;
@@ -193,12 +195,12 @@ void usage_fprint(
 /* Signal handler for ewfacquire
  */
 void ewfacquirestream_signal_handler(
-      ewftools_signal_t signal LIBCSYSTEM_ATTRIBUTE_UNUSED )
+      ewftools_signal_t signal EWFTOOLS_ATTRIBUTE_UNUSED )
 {
 	libcerror_error_t *error = NULL;
 	static char *function   = "ewfacquirestream_signal_handler";
 
-	LIBCSYSTEM_UNREFERENCED_PARAMETER( signal )
+	EWFTOOLS_UNREFERENCED_PARAMETER( signal )
 
 	ewfacquirestream_abort = 1;
 
@@ -605,12 +607,11 @@ int ewfacquirestream_read_input(
 		read_size = process_buffer_size;
 
 		// Create a new buffer
-		storage_media_buffer = NULL;
 		if( storage_media_buffer_initialize(
-			 &storage_media_buffer,
-			 storage_media_buffer_mode,
-			 process_buffer_size,
-			 error ) != 1 )
+		     &storage_media_buffer,
+		     storage_media_buffer_mode,
+		     process_buffer_size,
+		     error ) != 1 )
 		{
 			libcerror_error_set(
 			 error,
@@ -621,7 +622,6 @@ int ewfacquirestream_read_input(
 
 			goto on_error;
 		}
-
 		/* Align with acquiry offset if necessary
 		 */
 		if( ( imaging_handle->acquiry_offset != 0 )
@@ -759,6 +759,8 @@ int ewfacquirestream_read_input(
 
 			goto on_error;
 		}
+		storage_media_buffer = NULL;
+
 		acquiry_count += read_count;
 
 		 if( process_status_update_unknown_total(
@@ -788,7 +790,7 @@ int ewfacquirestream_read_input(
 	}
 	else
 	{
-		// wait till all threads finished processing their data
+		// wait untill all threads finished processing their data
 		if( join_threads_and_cleanup_threading_data(
 		     threading_data,
 		     error ) == -1 )
@@ -836,6 +838,22 @@ int ewfacquirestream_read_input(
 	if( ewfacquirestream_abort != 0 )
 	{
 		status = PROCESS_STATUS_ABORTED;
+	}
+	if( storage_media_buffer != NULL )
+	{
+		if( storage_media_buffer_free(
+		     &storage_media_buffer,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
+			 "%s: unable to free storage media buffer.",
+			 function );
+
+			goto on_error;
+		}
 	}
 	if( process_status_stop(
 	     process_status,
@@ -903,8 +921,8 @@ int ewfacquirestream_read_input(
 
 on_error:
 	terminate_threads_and_cleanup_threading_data(
-		&threading_data,
-		error );
+	 &threading_data,
+	 error );
 
 	if( process_status != NULL )
 	{
@@ -1241,6 +1259,9 @@ int main( int argc, char * const argv[] )
 
 		goto on_error;
 	}
+#if defined( __clang_analyzer__ )
+	__builtin_assume( ewfacquirestream_imaging_handle != NULL );
+#endif
 	if( option_header_codepage != NULL )
 	{
 		result = imaging_handle_set_header_codepage(

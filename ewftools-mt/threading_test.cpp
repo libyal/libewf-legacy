@@ -79,7 +79,7 @@ void reader(
 {
 	storage_media_buffer_t *mybuffer = NULL;
 	libcerror_error_t *error = NULL;
-		
+
 	std::cout << "reader startup..." << std::endl;
 
 	if( storage_media_buffer_initialize(
@@ -93,7 +93,7 @@ void reader(
 		std::cerr << "reader: error on init" << std::endl; exit(1);
 	}
 	std::cout << "reader buffer:" << (void*)mybuffer << " raw_buffer: " << (void*)mybuffer->raw_buffer << " compression_buffer: " << (void*)mybuffer->compression_buffer << std::endl;
-	
+
 	int runningDummy = 42;
 	uint8_t block_id = 0;
 	for(int i = 0; i < compressorThreadsCount * readerPackagePerCompressorCount; i++)
@@ -108,7 +108,7 @@ void reader(
 		}
 		// Overwrite first value with the block_id
 		mybuffer->raw_buffer[0] = block_id;
-		
+
 		std::cout << "reader depositing " << (int)block_id << " ..." << std::endl;
 		int writeside_shutdown_mode = 0;
 		if(!fifoReadToCompress.deposit_with_generated_id(mybuffer, &writeside_shutdown_mode, &error))
@@ -186,7 +186,7 @@ void compressor(int compressorId, fifo_queue& fifoIn, fifo_queue& fifoOut)
 		if (data != slot_id)
 		{
 			if (error) libcnotify_print_error_backtrace( error );
-			if (error) libcerror_error_free( &error );			
+			if (error) libcerror_error_free( &error );
 			std::cerr << "compressor " << compressorId << " slot_id " << (int)slot_id << " has wrong id from reader in blockdata(raw_buffer): " << (int)data << std::endl; exit(1);
 		}
 		data = mybuffer->compression_buffer[0];
@@ -212,7 +212,7 @@ void compressor(int compressorId, fifo_queue& fifoIn, fifo_queue& fifoOut)
 		{
 			std::cout << "compressor " << compressorId << " fetched block with id " << (int)slot_id << " runningValue: " << (int)runningValue << " nowait " << std::endl;
 		}
-		
+
 		std::cout << "compressor " << compressorId << " depositing package id " << (int)slot_id << "..." << std::endl;
 		int writeside_shutdown_mode = 0;
 		if (!fifoOut.deposit(slot_id, mybuffer, &writeside_shutdown_mode, &error))
@@ -232,7 +232,7 @@ void compressor(int compressorId, fifo_queue& fifoIn, fifo_queue& fifoOut)
 		if (error) libcerror_error_free( &error );
 		std::cerr << "compressor " << compressorId << " : error on cleanup" << std::endl; exit(1);
 	}
-	
+
 }
 
 void writer(
@@ -285,7 +285,7 @@ void writer(
 			if (error) libcerror_error_free( &error );
 			std::cerr << "writer: wrong order, expected " << i << ", got " << (int)slot_id << std::endl; exit(1);
 		}
-		
+
 		// check the buffer data
 		uint8_t value = mybuffer->compression_buffer[0]; // id is first
 		uint8_t compressor_id = mybuffer->compression_buffer[1]; // compressor is second
@@ -309,11 +309,11 @@ void writer(
 			}
 			runningDummy++;
 		}
-		
-		
+
+
 		std::cout << "writer written " << (int)value << " with id " << (int)slot_id << std::endl;
 		if(!noSleep) std::this_thread::sleep_for(std::chrono::milliseconds(10));
-		
+
 		i++;
 	}
 	std::cout << "writer done." << std::endl;
@@ -364,8 +364,8 @@ int start_threads_testing()
 	 }
 	return -1;
 */
-	
-	
+
+
 	if( libclocale_initialize(
 	     "ewftools",
 	     &error ) != 1 )
@@ -397,11 +397,11 @@ int start_threads_testing()
 		if (error) libcnotify_print_error_backtrace( error );
 		if (error) libcerror_error_free( &error );
 	}
-	
+
 	src = fifoReadToCompress.buffers[5];
 	mid = fifoReadToCompress.buffers[3];
 	target = fifoReadToCompress.buffers[0];
-	
+
 	for (size_t i = 0; i < src->raw_buffer_size; i++)
 	{
 		src->raw_buffer[i] = running;
@@ -418,9 +418,9 @@ int start_threads_testing()
 		if (error) libcerror_error_free( &error );
 		std::cerr << "error on copy" << std::endl; exit(1);
 	}
-	
-	memory_copy( target->raw_buffer, mid->raw_buffer, sizeof( uint8_t ) * mid->raw_buffer_size );	
-		
+
+	memory_copy( target->raw_buffer, mid->raw_buffer, sizeof( uint8_t ) * mid->raw_buffer_size );
+
 	// now check the values
 	running = 0;
 	for (size_t i = 0; i < src->raw_buffer_size; i++)
@@ -432,10 +432,10 @@ int start_threads_testing()
 		}
 		running++;
 	}
-	
+
 	std::cout << "simple copy test done" << std::endl;
-	
-	
+
+
 	fifo_queue fifoCompressToWrite(queueSizeWriter);
 	if (!fifoCompressToWrite.init(buffer_size, &error)) {
 		std::cerr << "Unable to init fifoCompressToWrite" << std::endl;
@@ -446,7 +446,7 @@ int start_threads_testing()
 	std::list<std::thread*> compressorThreads;
 	for (int i=0; i < compressorThreadsCount; i++)
 		compressorThreads.push_back(new std::thread(compressor, i, std::ref(fifoReadToCompress), std::ref(fifoCompressToWrite)));
-		
+
 	std::thread w1(writer, std::ref(fifoCompressToWrite));
 	std::thread r1(reader, std::ref(fifoReadToCompress), queueSizeReader);
 
@@ -455,7 +455,7 @@ int start_threads_testing()
 	// reader is already done, tell compressor threads that no more data is expectable
 	std::cout << "reader: signal no more data on reader_to_compressor_queue" << std::endl;
 	fifoReadToCompress.set_shutdown_mode(1);
-	
+
 	for (std::thread* comp: compressorThreads)
 	{
 		comp->join();

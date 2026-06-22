@@ -34,6 +34,10 @@ check_AUTOTESTS += \
 	test_library_write \
 	test_tools_write
 endif
+if HAVE_EWFTOOLS_MT
+check_AUTOTESTS += \
+	test_tools_mt
+endif
 if HAVE_PYTHON_TESTS
 check_AUTOTESTS += test_python_module
 endif
@@ -621,6 +625,12 @@ test_tools: \
 	test_inputs_ewfverify_logical_legacy.at \
 	test_macros.at \
 	test_tools.at
+
+test_tools_mt: \
+	package.m4 \
+	test_inputs_ewfacquirestream.at \
+	test_macros.at \
+	test_tools_mt.at
 
 test_tools_write: \
 	package.m4 \

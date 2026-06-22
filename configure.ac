@@ -163,6 +163,12 @@ AM_CONDITIONAL(
   HAVE_WRITE_TESTS,
   [test "x$ac_cv_uncompress" = xzlib])
 
+dnl Disabled for now
+AM_CONDITIONAL(
+  HAVE_EWFTOOLS_MT,
+  [test 0 -eq 1])
+dnl  [test "x$ac_cv_uncompress" = xzlib && test "$HAVE_CXX11" = "1"])
+
 dnl Check if libewf should be build with version 1 API
 AX_LIBEWF_CHECK_ENABLE_V1_API
 
@@ -261,6 +267,7 @@ AC_CONFIG_FILES([libodraw/Makefile])
 AC_CONFIG_FILES([libsmdev/Makefile])
 AC_CONFIG_FILES([libsmraw/Makefile])
 AC_CONFIG_FILES([ewftools/Makefile])
+AC_CONFIG_FILES([ewftools-mt/Makefile])
 AC_CONFIG_FILES([po/Makefile.in])
 AC_CONFIG_FILES([po/Makevars])
 AC_CONFIG_FILES([documents/Makefile])

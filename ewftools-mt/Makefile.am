@@ -1,4 +1,6 @@
-if HAVE_CXX11
+AUTOMAKE_OPTIONS = subdir-objects
+
+if HAVE_EWFTOOLS_MT
 AM_CPPFLAGS = \
 	-I../include -I$(top_srcdir)/include \
 	-I../common -I$(top_srcdir)/common \
@@ -23,24 +25,20 @@ AM_CPPFLAGS = \
 	@LIBSMRAW_CPPFLAGS@ \
 	@LIBFUSE_CPPFLAGS@ \
 	@LIBEWF_DLL_IMPORT@ \
-	@PTHREAD_CPPFLAGS@ \
-	-I../ewftools
+	@PTHREAD_CPPFLAGS@
 
 AM_CXXFLAGS = -std=c++11
 AM_LDFLAGS = @STATIC_LDFLAGS@
 
-bin_PROGRAMS = \
+noinst_PROGRAMS = \
 	ewfacquirestream
 
 ewfacquirestream_SOURCES = \
 	../ewftools/byte_size_string.c ../ewftools/byte_size_string.h \
 	../ewftools/digest_hash.c ../ewftools/digest_hash.h \
-	ewfacquirestream.c \
-	threading.cpp threading.hpp \
-	fifo_queue.cpp fifo_queue.hpp \
 	../ewftools/ewfcommon.h \
 	../ewftools/ewfinput.c ../ewftools/ewfinput.h \
-	../ewftools/ewfoutput.c ../ewftools/ewfoutput.h \
+	../ewftools/ewftools_output.c ../ewftools/ewftools_output.h \
 	../ewftools/ewftools_libcdatetime.h \
 	../ewftools/ewftools_libcerror.h \
 	../ewftools/ewftools_libclocale.h \
@@ -54,18 +52,24 @@ ewfacquirestream_SOURCES = \
 	../ewftools/ewftools_libsmraw.h \
 	../ewftools/ewftools_libuna.h \
 	../ewftools/ewftools_signal.c ../ewftools/ewftools_signal.h \
+	../ewftools/ewftools_system_string.c ../ewftools/ewftools_system_string.h \
+	../ewftools/ewftools_unused.h \
 	../ewftools/guid.c ../ewftools/guid.h \
 	../ewftools/imaging_handle.c ../ewftools/imaging_handle.h \
 	../ewftools/log_handle.c ../ewftools/log_handle.h \
 	../ewftools/platform.c ../ewftools/platform.h \
 	../ewftools/process_status.c ../ewftools/process_status.h \
-	../ewftools/storage_media_buffer.c ../ewftools/storage_media_buffer.h
+	../ewftools/storage_media_buffer.c ../ewftools/storage_media_buffer.h \
+	ewfacquirestream.c \
+	threading.cpp threading.hpp \
+	fifo_queue.cpp fifo_queue.hpp
 
 ewfacquirestream_LDADD = \
 	@LIBUUID_LIBADD@ \
 	@LIBHMAC_LIBADD@ \
 	@LIBCRYPTO_LIBADD@ \
 	@LIBDL_LIBADD@ \
+	@LIBUNA_LIBADD@ \
 	@LIBCSPLIT_LIBADD@ \
 	@LIBCDATETIME_LIBADD@ \
 	../libewf/libewf.la \

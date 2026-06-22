@@ -138,6 +138,7 @@ stamp-h[1-9]
 /ewftools/ewfmount
 /ewftools/ewfrecover
 /ewftools/ewfverify
+/ewftools-mt/ewfacquirestream
 /tests/*.dir
 /tests/*.exe
 /tests/*.log
@@ -200,6 +201,7 @@ stamp-h[1-9]
 /tests/test_manpages
 /tests/test_python_module
 /tests/test_tools
+/tests/test_tools_mt
 /tests/test_tools_write
 /tests/tmp*
 

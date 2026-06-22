@@ -18,16 +18,20 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
-#if !defined( _THREADING_H )
-#define _THREADING_H
+
+#if !defined( _EWFTOOLS_MT_THREADING_H )
+#define _EWFTOOLS_MT_THREADING_H
+
+#include <common.h>
 
 #ifdef __cplusplus
 #include <list>
 #include <thread>
 #endif
 
+#include "../ewftools/imaging_handle.h"
+
 #include "fifo_queue.hpp"
-#include "imaging_handle.h"
 
 typedef struct threading_support_data threading_support_data_t;
 
@@ -46,20 +50,20 @@ struct threading_support_data
 extern "C" {
 #endif
 
-// just for ewffifotest
 int start_threads_testing();
 
-/* created the queues and initializes the compressor- and writer- threads
- * returns -1 on error
+/* Creates the queues and initializes the compressor and writer threads
+ * Returns -1 on error
  */
 int init_threading_data_and_start_threads(
      imaging_handle_t *imaging_handle,
      size_t storage_media_buffer_size,
      threading_support_data_t **threading_data,
+     int verbose_messages,
      libcerror_error_t **error );
 
-/* returns -1 on error
- */ 
+/* Returns -1 on error
+ */
 int join_threads_and_cleanup_threading_data(
      threading_support_data_t *threading_data,
      libcerror_error_t **error );
@@ -68,11 +72,12 @@ void terminate_threads_and_cleanup_threading_data(
       threading_support_data_t **threading_data,
       libcerror_error_t **error );
 
-/* Adding a buffer with data to the queue -> the compressing threads will fetch them -> the writer threads writes them to the disk
- * Returns the resulting chunk size or -1 on error (to be compatible with the function imaging_handle_prepare_write_buffer())
+/* Adds a buffer with data to the queue
+ * The compressing threads will fetch them and the writer threads writes them to the disk
+ * Returns the resulting chunk size or -1 on error
  */
 ssize_t add_buffer_to_queue(
-         storage_media_buffer_t *storage_media_buffer, 
+         storage_media_buffer_t *storage_media_buffer,
          threading_support_data_t *threading_data,
          libcerror_error_t **error );
 
@@ -80,5 +85,5 @@ ssize_t add_buffer_to_queue(
 }
 #endif
 
-#endif /* _THREADING_H */
+#endif /* !defined( _EWFTOOLS_MT_THREADING_H ) */
 

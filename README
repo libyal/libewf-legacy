@@ -10,13 +10,11 @@ Project information:
 Read or write supported EWF formats:
 
 * SMART .s01 (EWF-S01)
-* EnCase
-  * .E01 (EWF-E01)
+* EnCase .E01 (EWF-E01)
 
 Read-only supported EWF formats:
 
-* Logical Evidence File (LEF)
-  * .L01 (EWF-L01)
+* Logical Evidence File (LEF) .L01 (EWF-L01)
 
 Not supported:
 
@@ -28,14 +26,6 @@ Other features:
 * empty-block compression
 * read/write access using delta (or shadow) files
 * write resume
-
-Work in progress:
-
-* https://github.com/libyal/libewf
-
-Planned:
-
-* write EWF-L01 and EWF2-Lx01 (long-term)
 
 The libewf package contains the following tools:
 
@@ -50,7 +40,7 @@ The libewf package contains the following tools:
 
 For the experimental / development release see:
 
-* https://github.com/libyal/libewf-legacy
+* https://github.com/libyal/libewf
 
 For previous project contributions see:
 

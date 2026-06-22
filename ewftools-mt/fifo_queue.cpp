@@ -21,19 +21,20 @@
 
 #include <common.h>
 
-#include "ewftools_libcerror.h"
-#include "fifo_queue.hpp"
-
 #include <iostream>
 
-fifo_queue::fifo_queue(int capacity) : 
-						slot_count(capacity), 
-						front(0), 
-						rear(0), 
-						fill_count(0), 
-						next_read_id(0), 
-						current_front_id(0), 
-						shutdown_mode(0) 
+#include "../ewftools/ewftools_libcerror.h"
+
+#include "fifo_queue.hpp"
+
+fifo_queue::fifo_queue(int capacity) :
+	slot_count(capacity),
+	front(0),
+	rear(0),
+	fill_count(0),
+	next_read_id(0),
+	current_front_id(0),
+	shutdown_mode(0)
 {
 }
 
@@ -46,8 +47,6 @@ bool fifo_queue::init(
       size_t process_buffer_size,
       libcerror_error_t **error )
 {
-	static char *function          = "fifo_queue::init";
-	
 	while( buffers.size() < slot_count )
 	{
 		buffers.push_back( NULL );
@@ -58,7 +57,7 @@ bool fifo_queue::init(
 void fifo_queue::set_shutdown_mode(int mode)
 {
 	shutdown_mode = mode;
-	
+
 	// notify all, because it could be that all threads are waiting for a condition
 	not_empty.notify_all();
 	not_full.notify_all();
@@ -73,8 +72,6 @@ bool fifo_queue::deposit_with_generated_id(
       int *current_shutdown_mode,
       libcerror_error_t **error )
 {
-	static char *function = "fifo_queue::deposit_with_generated_id";
-
 	// queuewide lock is needed in wait() below, mutex releases on function exit
 	std::unique_lock<std::mutex> l(lock);
 
@@ -114,8 +111,6 @@ bool fifo_queue::deposit(
       int *current_shutdown_mode,
       libcerror_error_t **error )
 {
-	static char *function = "fifo_queue::deposit";
-
 	std::unique_lock<std::mutex> l(lock); // queuewide lock is needed in wait() below, mutex releases on function exit
 
 	// wait, till conditon is set, the lambda function prevents "spurious wakeup" and if the id is not the correct one.
@@ -152,7 +147,7 @@ bool fifo_queue::fetch(
       int *current_shutdown_mode,
       libcerror_error_t **error )
 {
-	static char *function = "fifo_queue::fetch";
+	const char *function = "fifo_queue::fetch";
 
 	// queuewide lock is needed in wait() below, mutex releases on function exit
 	std::unique_lock<std::mutex> l(lock);
@@ -174,12 +169,13 @@ bool fifo_queue::fetch(
 			 LIBCERROR_ERROR_DOMAIN_MEMORY,
 			 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
 			 "%s: buffer which should contain data is empty.",
-			 function );		
+			 function );
+
 			return false;
 		}
 		// get the slot id of the buffer
 		*read_slot_id = current_front_id;
-				
+
 		// update position of the next slot with data
 		front = (front + 1) % slot_count;
 		// update next the id od the next slot
@@ -209,3 +205,4 @@ bool fifo_queue::fetch(
 		return false;
 	}
 }
+

@@ -24,6 +24,7 @@ SUBDIRS = \
 	libsmdev \
 	libsmraw \
 	ewftools \
+	ewftools-mt \
 	ewf.net \
 	pyewf \
 	po \

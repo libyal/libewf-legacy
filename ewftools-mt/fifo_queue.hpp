@@ -18,8 +18,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
-#if !defined( _FIFO_QUEUE_H )
-#define _FIFO_QUEUE_H
+
+#if !defined( _EWFTOOLS_MT_FIFO_QUEUE_H )
+#define _EWFTOOLS_MT_FIFO_QUEUE_H
+
+#include <common.h>
 
 #ifdef __cplusplus
 #include <atomic>
@@ -28,22 +31,23 @@
 #include <vector>
 #endif
 
-#include "storage_media_buffer.h"
+#include "../ewftools/storage_media_buffer.h"
 
 #ifdef __cplusplus
+
 // Thread safe FiFo-Queue which supports ordered filling with multiple producers
-class fifo_queue 
+class fifo_queue
 {
 	public:
 		fifo_queue( int slot_count );
 		virtual ~fifo_queue();
-		
+
 		bool init(
 		      size_t process_buffer_size,
 		      libcerror_error_t **error );
 
 		// One thread is only allowed to use ONE of the functions below, otherwise the locking will not work
-		
+
 		// deposit to a specific slot to allow ordered processing
 		bool deposit(
 		      uint8_t required_slot_id,
@@ -90,9 +94,10 @@ class fifo_queue
 		std::condition_variable not_full;
 		std::condition_variable not_empty;
 };
-#endif
+
+#endif // __cplusplus
 
 extern int verbose_mt;
 
-#endif // _FIFO_QUEUE_H
+#endif /* !defined( _EWFTOOLS_MT_FIFO_QUEUE_H ) */
 
