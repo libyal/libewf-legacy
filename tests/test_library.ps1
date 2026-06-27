@@ -1,7 +1,7 @@
 # Tests library functions and types.
 
-$LibraryTests = ""
-$LibraryTestsWithInput = ""
+$LibraryTests = "bit_stream checksum chunk_data chunk_table compression date_time date_time_values deflate empty_block error file_entry filename hash_sections hash_values huffman_tree io_handle media_values notify read_io_handle sector_range segment_table single_files write_io_handle"
+$LibraryTestsWithInput = "handle read seek support"
 $OptionSets = "" -split " "
 
 . .\test_functions.ps1
@@ -15,7 +15,7 @@ If (-Not (Test-Path ${TestExecutablesDirectory}))
 	Exit ${ExitFailure}
 }
 
-$Result = ${ExitIgnore}
+$Result = ${ExitSuccess}
 
 Foreach (${TestName} in ${LibraryTests} -split " ")
 {
@@ -24,15 +24,15 @@ Foreach (${TestName} in ${LibraryTests} -split " ")
 	{
 		Continue
 	}
-	$Result = RunTestBinary ${TestExecutablesDirectory} "ewf_test_${TestName}"
+	$ResultRun = RunTestBinary ${TestExecutablesDirectory} "ewf_test_${TestName}"
 
-	If ((${Result} -ne ${ExitSuccess}) -And (${Result} -ne ${ExitIgnore}))
+	If ((${ResultRun} -ne ${ExitSuccess}) -And (${ResultRun} -ne ${ExitIgnore}))
 	{
-		Break
+		$Result = ${ResultRun}
 	}
 }
 
-$TestInputs = GenerateTestInputs "libewf" ${OptionSets}
+$TestInputs = GenerateTestInputs "libewf_legacy" ${OptionSets}
 
 Foreach (${TestName} in ${LibraryTestsWithInput} -split " ")
 {
@@ -43,16 +43,12 @@ Foreach (${TestName} in ${LibraryTestsWithInput} -split " ")
 	}
 	ForEach ($TestInput in ${TestInputs})
 	{
-		$Result = RunTestBinaryWithInput ${TestExecutablesDirectory} "ewf_test_${TestName}" ${TestInput}
+		$ResultRun = RunTestBinaryWithInput ${TestExecutablesDirectory} "ewf_test_${TestName}" ${TestInput}
 
-		If ((${Result} -ne ${ExitSuccess}) -And (${Result} -ne ${ExitIgnore}))
+		If ((${ResultRun} -ne ${ExitSuccess}) -And (${ResultRun} -ne ${ExitIgnore}))
 		{
-			Break
+			$Result = ${ResultRun}
 		}
-	}
-	If ((${Result} -ne ${ExitSuccess}) -And (${Result} -ne ${ExitIgnore}))
-	{
-		Break
 	}
 }
 
