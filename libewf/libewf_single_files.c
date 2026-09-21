@@ -575,6 +575,7 @@ int libewf_single_files_parse_file_entries(
 			     &line_index,
 			     types,
 			     format,
+			     0,
 			     error ) != 1 )
 			{
 				libcerror_error_set(
@@ -1000,6 +1001,7 @@ int libewf_single_files_parse_file_entry(
      int *line_index,
      libfvalue_split_utf8_string_t *types,
      uint8_t *format,
+     int recursion_depth,
      libcerror_error_t **error )
 {
 	libewf_single_file_entry_t *single_file_entry = NULL;
@@ -1050,6 +1052,18 @@ int libewf_single_files_parse_file_entry(
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
 		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
 		 "%s: invalid format.",
+		 function );
+
+		return( -1 );
+	}
+	if( ( recursion_depth < 0 )
+	 || ( recursion_depth > LIBEWF_MAXIMUM_RECURSION_DEPTH ) )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
+		 "%s: invalid recursion depth value out of bounds.",
 		 function );
 
 		return( -1 );
@@ -1783,6 +1797,7 @@ int libewf_single_files_parse_file_entry(
 		     line_index,
 		     types,
 		     format,
+		     recursion_depth + 1,
 		     error ) != 1 )
 		{
 			libcerror_error_set(

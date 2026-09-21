@@ -95,6 +95,7 @@ int libewf_single_files_parse_file_entry(
      int *line_iterator,
      libfvalue_split_utf8_string_t *types,
      uint8_t *format,
+     int recursion_depth,
      libcerror_error_t **error );
 
 int libewf_single_files_parse_file_entry_number_of_sub_entries(
